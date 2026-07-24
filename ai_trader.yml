@@ -1,0 +1,49 @@
+name: AI Trader Bot
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write Revolut private key
+        run: |
+          mkdir -p ~/.config/revolut-x
+          echo "${{ secrets.REVOLUT_PRIVATE_KEY }}" | base64 -d > ~/.config/revolut-x/private.pem
+          chmod 600 ~/.config/revolut-x/private.pem
+
+      - name: Run AI Trader
+        env:
+          RUN_ONCE: "true"
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.GROQ_API_KEY }}
+          ANTHROPIC_BASE_URL: "https://api.groq.com/openai/v1"
+          LLM_MODEL: "llama-3.3-70b-versatile"
+          REVOLUT_X_API_KEY: ${{ secrets.REVOLUT_X_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          PORTFOLIO_FILE: ./ai_trader_portfolio.json
+          DECISION_LOG: ./ai_trader_decisions.jsonl
+        run: python ai_trader.py
+
+      - name: Save state back to repo
+        if: always()
+        run: |
+          git config user.name "AI Trader Bot"
+          git config user.email "bot@github-actions"
+          git add ai_trader_portfolio.json ai_trader_decisions.jsonl
+          git diff --cached --quiet || git commit -m "Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
