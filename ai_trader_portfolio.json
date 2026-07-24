@@ -1,16 +1,8 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 7480.036620322047,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-07-24T10:27:20.368578+00:00",
-      "entry_price": 57030.08,
-      "current_price": 57142.74,
-      "value_eur": 2500.0
-    }
-  ],
+  "current_cash_eur": 9987.1797805631,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "ETH-EUR",
@@ -31,10 +23,20 @@
       "pnl_eur": -4.90862407491295,
       "pnl_pct": -0.1963449629965197,
       "reasoning": "SOL-EUR 15m trend bearish with RSI at 21.4, 5m downtrend with high volume, and 1m showing continued decline, suggesting further downside risk on the existing position."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-07-24T10:27:20.368578+00:00",
+      "exit_time": "2026-07-24T12:27:16.943842+00:00",
+      "entry_price": 57030.08,
+      "exit_price": 57193.03,
+      "pnl_eur": 7.143160241051646,
+      "pnl_pct": 0.285726409642062,
+      "reasoning": "15m and 1h indicate bearish medium momentum, 5m shows no clear bullish pattern, 1m flat; take profit on existing BTC long."
     }
   ],
   "total_trades": 3,
-  "win_rate": 0.0,
-  "total_pnl_eur": -19.963379677952616,
-  "total_pnl_percent": -25.19963379677953
+  "win_rate": 33.33333333333333,
+  "total_pnl_eur": -12.82021943690097,
+  "total_pnl_percent": -0.12820219436900926
 }
