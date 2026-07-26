@@ -300,56 +300,80 @@ Rules:
 - position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}"""
 
     try:
-        if LLM_API_FORMAT == "openai":
-            # OpenAI-compatible API (Groq, Cerebras, OpenRouter, etc.)
-            response = requests.post(
-                f"{ANTHROPIC_BASE_URL}/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": LLM_MODEL,
-                    "max_tokens": LLM_MAX_TOKENS,
-                    "messages": [{"role": "user", "content": prompt}]
-                },
-                timeout=180
-            )
+        text = None
+        max_retries = 3
+        for attempt in range(max_retries):
+            if attempt > 0:
+                wait = 10 * attempt
+                print(f"   Retry {attempt}/{max_retries} in {wait}s...")
+                time.sleep(wait)
 
-            if response.status_code != 200:
-                print(f"⚠️ LLM API error: {response.status_code} {response.text[:200]}")
-                return None
+            if LLM_API_FORMAT == "openai":
+                response = requests.post(
+                    f"{ANTHROPIC_BASE_URL}/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": LLM_MODEL,
+                        "max_tokens": LLM_MAX_TOKENS,
+                        "messages": [{"role": "user", "content": prompt}]
+                    },
+                    timeout=180
+                )
 
-            result = response.json()
-            text = result['choices'][0]['message']['content'].strip()
-        else:
-            # Native Anthropic API
-            response = requests.post(
-                f"{ANTHROPIC_BASE_URL}/messages",
-                headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
-                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
-                    "anthropic-version": "2023-06-01",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": LLM_MODEL,
-                    "max_tokens": LLM_MAX_TOKENS,
-                    "messages": [{"role": "user", "content": prompt}]
-                },
-                timeout=180
-            )
+                if response.status_code == 429 or response.status_code >= 500:
+                    print(f"⚠️ LLM API transient error: {response.status_code} {response.text[:200]}")
+                    continue  # retry
 
-            if response.status_code != 200:
-                print(f"⚠️ Claude API error: {response.status_code} {response.text[:200]}")
-                return None
+                if response.status_code != 200:
+                    print(f"⚠️ LLM API error: {response.status_code} {response.text[:200]}")
+                    return None
 
-            result = response.json()
-            text = ""
-            for block in result.get('content', []):
-                if block.get('type') == 'text' and block.get('text', '').strip():
-                    text = block['text'].strip()
-                    break
+                result = response.json()
+                if 'choices' not in result:
+                    print(f"⚠️ Unexpected API response (no 'choices'): {json.dumps(result)[:300]}")
+                    continue  # retry — might be transient
+                text = result['choices'][0]['message']['content'].strip()
+                break  # success
+            else:
+                # Native Anthropic API
+                response = requests.post(
+                    f"{ANTHROPIC_BASE_URL}/messages",
+                    headers={
+                        "x-api-key": ANTHROPIC_API_KEY,
+                        "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                        "anthropic-version": "2023-06-01",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": LLM_MODEL,
+                        "max_tokens": LLM_MAX_TOKENS,
+                        "messages": [{"role": "user", "content": prompt}]
+                    },
+                    timeout=180
+                )
+
+                if response.status_code == 429 or response.status_code >= 500:
+                    print(f"⚠️ Claude API transient error: {response.status_code} {response.text[:200]}")
+                    continue  # retry
+
+                if response.status_code != 200:
+                    print(f"⚠️ Claude API error: {response.status_code} {response.text[:200]}")
+                    return None
+
+                result = response.json()
+                text = ""
+                for block in result.get('content', []):
+                    if block.get('type') == 'text' and block.get('text', '').strip():
+                        text = block['text'].strip()
+                        break
+                break  # success
+
+        if text is None:
+            print(f"⚠️ LLM API failed after {max_retries} attempts")
+            return None
 
         if not text:
             print("⚠️ No text content in LLM response")
