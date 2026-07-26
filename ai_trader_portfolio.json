@@ -1,13 +1,20 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 7487.1797805630995,
+  "current_cash_eur": 4987.1797805630995,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-07-26T20:12:17.510246+00:00",
       "entry_price": 56732.33,
-      "current_price": 56709.66,
+      "current_price": 56887.62,
+      "value_eur": 2500.0
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-07-26T21:57:09.399551+00:00",
+      "entry_price": 66.446,
+      "current_price": 66.446,
       "value_eur": 2500.0
     }
   ],
@@ -43,7 +50,7 @@
       "reasoning": "15m and 1h indicate bearish medium momentum, 5m shows no clear bullish pattern, 1m flat; take profit on existing BTC long."
     }
   ],
-  "total_trades": 4,
+  "total_trades": 5,
   "win_rate": 33.33333333333333,
   "total_pnl_eur": -12.82021943690097,
   "total_pnl_percent": -0.12820219436900926
