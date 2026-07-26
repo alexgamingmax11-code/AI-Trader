@@ -21,7 +21,7 @@ if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-API_KEY = os.environ.get("REVOLUT_X_API_KEY", "KavAnfSVkBrxYPixZVItrWOMvDTzeHtY20pjw2KSHUxZONX3HB6G7t4s8paQBJNH")
+API_KEY = os.environ.get("REVOLUT_X_API_KEY", "")
 PRIVATE_KEY_PATH = os.environ.get("REVOLUT_X_PRIVATE_KEY_PATH", os.path.expanduser("~/.config/revolut-x/private.pem"))
 BASE_URL = "https://revx.revolut.com"
 PORTFOLIO_FILE = os.environ.get("PORTFOLIO_FILE", os.path.join(os.path.expanduser("~"), "ai_trader_portfolio.json"))
@@ -696,11 +696,10 @@ def run_cycle(portfolio, trades_today):
         elif action == 'HOLD':
             print(f"   Holding — {reasoning}")
 
-        log_decision(action, symbol, reasoning, price)
     else:
         print("⚠️ Could not get AI decision — will retry next cycle")
 
-    return trades_today
+    return trades_today, market_data
 
 
 def main():
@@ -742,7 +741,7 @@ def main():
         except FileNotFoundError:
             pass
 
-        trades_today = run_cycle(portfolio, trades_today)
+        trades_today, _ = run_cycle(portfolio, trades_today)
         save_portfolio(portfolio)
         print(f"\n✅ Cycle complete — exiting (cloud mode)")
         return
@@ -761,7 +760,7 @@ def main():
                 current_day = today
                 print(f"\n📅 New day: {today} — trade counter reset to 0")
 
-            trades_today = run_cycle(portfolio, trades_today)
+            trades_today, market_data = run_cycle(portfolio, trades_today)
 
             if time.time() - last_status_email >= 3600:
                 send_status_email(portfolio, market_data)
