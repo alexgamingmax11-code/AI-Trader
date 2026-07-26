@@ -192,7 +192,6 @@ def get_market_summary(candles, label):
         "bb_pct_b": bb_pct_b,
         "bb_width": bb_width,
     }
-    }
 
 
 # ── LLM Trading Decision ──────────────────────────────────────────────────────
