@@ -1,16 +1,8 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 7586.992218493053,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-07-27T21:09:53.642572+00:00",
-      "entry_price": 1711.55,
-      "current_price": 1711.37,
-      "value_eur": 2500.0
-    }
-  ],
+  "current_cash_eur": 10084.319202805518,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "ETH-EUR",
@@ -81,10 +73,20 @@
       "pnl_eur": 20.040231710452645,
       "pnl_pct": 0.801609268418102,
       "reasoning": "15m trend shows slight down, 5m candles indicate consolidation after recent rally, existing SOL-EUR long is +0.8% profit; taking profit aligns with weakening short-term momentum"
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-07-27T21:09:53.642572+00:00",
+      "exit_time": "2026-07-27T21:29:13.162979+00:00",
+      "entry_price": 1711.55,
+      "exit_price": 1709.72,
+      "pnl_eur": -2.673015687534644,
+      "pnl_pct": -0.10692062750138343,
+      "reasoning": "15m trend is marginally up but 5m and 1m candles show a steady decline with price at recent low and no BB_lower bounce; exiting the ETH position to avoid further downside."
     }
   ],
   "total_trades": 8,
-  "win_rate": 71.42857142857143,
-  "total_pnl_eur": 86.9922184930524,
-  "total_pnl_percent": 0.8699221849305383
+  "win_rate": 62.5,
+  "total_pnl_eur": 84.31920280551776,
+  "total_pnl_percent": 0.8431920280551841
 }
