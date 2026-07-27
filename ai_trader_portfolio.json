@@ -1,16 +1,8 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 7517.843778395926,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-07-26T20:12:17.510246+00:00",
-      "entry_price": 56732.33,
-      "current_price": 57286.82,
-      "value_eur": 2500.0
-    }
-  ],
+  "current_cash_eur": 10040.61386381283,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "ETH-EUR",
@@ -51,10 +43,20 @@
       "pnl_eur": 30.66399783282668,
       "pnl_pct": 1.2265599133130634,
       "reasoning": "15m RSI 89.2 and BB%b 1.08 show SOL is severely overbought; 5m candles show a pullback and flattening, 1m flat, indicating exhaustion; existing long is +1.2% and ready for profit-taking."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-07-26T20:12:17.510246+00:00",
+      "exit_time": "2026-07-27T00:05:54.668691+00:00",
+      "entry_price": 56732.33,
+      "exit_price": 57249.05,
+      "pnl_eur": 22.770085416904294,
+      "pnl_pct": 0.9108034166761758,
+      "reasoning": "1h/15m show overbought RSI (68\u201175) and price near upper Bollinger Band; 5m displays a sharp drop to low with low volume; 1m consolidation at the low suggests near\u2011term weakness, making profit\u2011taking on the existing long prudent."
     }
   ],
   "total_trades": 5,
-  "win_rate": 50.0,
-  "total_pnl_eur": 17.84377839592571,
-  "total_pnl_percent": -24.82156221604074
+  "win_rate": 60.0,
+  "total_pnl_eur": 40.613863812830004,
+  "total_pnl_percent": 0.4061386381283061
 }
