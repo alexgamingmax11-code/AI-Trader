@@ -1,0 +1,12 @@
+# Secrets - NEVER commit
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+
+# State files (committed separately by workflow)
+# ai_trader_portfolio.json
+# ai_trader_decisions.jsonl

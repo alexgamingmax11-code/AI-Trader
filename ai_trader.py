@@ -16,12 +16,33 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from cryptography.hazmat.primitives import serialization
 
+# ── Load .env file if present (no dependency needed) ─────────────────────────
+def _load_dotenv():
+    """Load KEY=VALUE pairs from .env into os.environ (without overwriting existing)."""
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if not os.path.isfile(env_path):
+        return
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+_load_dotenv()
+
 # Fix Windows console encoding
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-API_KEY = os.environ.get("REVOLUT_X_API_KEY", "")
+API_KEY = os.environ.get("REVOLUT_X_API_KEY", "KavAnfSVkBrxYPixZVItrWOMvDTzeHtY20pjw2KSHUxZONX3HB6G7t4s8paQBJNH")
 PRIVATE_KEY_PATH = os.environ.get("REVOLUT_X_PRIVATE_KEY_PATH", os.path.expanduser("~/.config/revolut-x/private.pem"))
 BASE_URL = "https://revx.revolut.com"
 PORTFOLIO_FILE = os.environ.get("PORTFOLIO_FILE", os.path.join(os.path.expanduser("~"), "ai_trader_portfolio.json"))
@@ -31,12 +52,28 @@ DECISION_LOG = os.environ.get("DECISION_LOG", os.path.join(os.path.expanduser("~
 # Supported providers: Groq, Cerebras, OpenRouter, Anthropic, or any OpenAI-compatible
 # Set ANTHROPIC_BASE_URL and LLM_MODEL env vars to switch providers
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://api.groq.com/openai/v1")
-LLM_MODEL = os.environ.get("LLM_MODEL", "nvidia/nemotron-3-super-120b-a12b:free")
+ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1")
+BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (GitHub Actions)
+
+# Local uses the best free model (550B, 1M context); cloud stays on lighter model
+_DEFAULT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free" if BOT_SOURCE == "local" else "nvidia/nemotron-3-super-120b-a12b:free"
+LLM_MODEL = os.environ.get("LLM_MODEL", _DEFAULT_MODEL)
 LLM_MAX_TOKENS = 16000
 # Detect API format: "openai" for Groq/Cerebras/OpenRouter, "anthropic" for native Anthropic
 LLM_API_FORMAT = os.environ.get("LLM_API_FORMAT", "openai" if "/openai" in ANTHROPIC_BASE_URL or "/v1" in ANTHROPIC_BASE_URL else "anthropic")
-BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (GitHub Actions)
+
+# Model fallback chain — try each in order, last one is always the original nemotron
+if BOT_SOURCE == "local":
+    LLM_MODEL_CHAIN = [
+        "deepseek/deepseek-chat-v3-0324:free",     # DeepSeek V3 — strong reasoning, free
+        "meta-llama/llama-4-maverick:free",          # Meta Llama 4 — latest generation
+        "nvidia/nemotron-3-ultra-550b-a55b:free",   # Nemotron 550B — reliable fallback
+    ]
+else:
+    # Cloud: stick with nemotron (cheaper, faster for 15-min cron)
+    LLM_MODEL_CHAIN = [
+        "nvidia/nemotron-3-super-120b-a12b:free",
+    ]
 
 # Email (Gmail SMTP)
 GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "alexgamingmax11@gmail.com")
@@ -299,84 +336,74 @@ Rules:
 - HOLD: only allowed if you already traded today (trades_today >= {MIN_DAILY_TRADES})
 - position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}"""
 
+    # Try each model in the chain — fall back on failure
+    for model_name in LLM_MODEL_CHAIN:
+        print(f"🧠 Trying {model_name}...")
+        result = _call_llm(model_name, prompt)
+        if result is not None:
+            print(f"✅ {model_name} responded successfully")
+            return result
+        print(f"⚠️ {model_name} failed — trying next model...")
+
+    print("⚠️ All models in chain failed")
+    return None
+
+
+def _call_llm(model_name, prompt):
+    """Call a single LLM model. Returns parsed decision dict or None on failure."""
+    text = ""
     try:
-        text = None
-        max_retries = 3
-        for attempt in range(max_retries):
-            if attempt > 0:
-                wait = 10 * attempt
-                print(f"   Retry {attempt}/{max_retries} in {wait}s...")
-                time.sleep(wait)
+        if LLM_API_FORMAT == "openai":
+            response = requests.post(
+                f"{ANTHROPIC_BASE_URL}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model_name,
+                    "max_tokens": LLM_MAX_TOKENS,
+                    "messages": [{"role": "user", "content": prompt}]
+                },
+                timeout=180
+            )
 
-            if LLM_API_FORMAT == "openai":
-                response = requests.post(
-                    f"{ANTHROPIC_BASE_URL}/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
-                        "Content-Type": "application/json"
-                    },
-                    json={
-                        "model": LLM_MODEL,
-                        "max_tokens": LLM_MAX_TOKENS,
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
-                    timeout=180
-                )
+            if response.status_code != 200:
+                print(f"⚠️ LLM API error ({model_name}): {response.status_code} {response.text[:200]}")
+                return None
 
-                if response.status_code == 429 or response.status_code >= 500:
-                    print(f"⚠️ LLM API transient error: {response.status_code} {response.text[:200]}")
-                    continue  # retry
+            result = response.json()
+            text = result['choices'][0]['message']['content'].strip()
+        else:
+            response = requests.post(
+                f"{ANTHROPIC_BASE_URL}/messages",
+                headers={
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model_name,
+                    "max_tokens": LLM_MAX_TOKENS,
+                    "messages": [{"role": "user", "content": prompt}]
+                },
+                timeout=180
+            )
 
-                if response.status_code != 200:
-                    print(f"⚠️ LLM API error: {response.status_code} {response.text[:200]}")
-                    return None
+            if response.status_code != 200:
+                print(f"⚠️ Claude API error ({model_name}): {response.status_code} {response.text[:200]}")
+                return None
 
-                result = response.json()
-                if 'choices' not in result:
-                    print(f"⚠️ Unexpected API response (no 'choices'): {json.dumps(result)[:300]}")
-                    continue  # retry — might be transient
-                text = result['choices'][0]['message']['content'].strip()
-                break  # success
-            else:
-                # Native Anthropic API
-                response = requests.post(
-                    f"{ANTHROPIC_BASE_URL}/messages",
-                    headers={
-                        "x-api-key": ANTHROPIC_API_KEY,
-                        "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
-                        "anthropic-version": "2023-06-01",
-                        "Content-Type": "application/json"
-                    },
-                    json={
-                        "model": LLM_MODEL,
-                        "max_tokens": LLM_MAX_TOKENS,
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
-                    timeout=180
-                )
-
-                if response.status_code == 429 or response.status_code >= 500:
-                    print(f"⚠️ Claude API transient error: {response.status_code} {response.text[:200]}")
-                    continue  # retry
-
-                if response.status_code != 200:
-                    print(f"⚠️ Claude API error: {response.status_code} {response.text[:200]}")
-                    return None
-
-                result = response.json()
-                text = ""
-                for block in result.get('content', []):
-                    if block.get('type') == 'text' and block.get('text', '').strip():
-                        text = block['text'].strip()
-                        break
-                break  # success
-
-        if text is None:
-            print(f"⚠️ LLM API failed after {max_retries} attempts")
-            return None
+            result = response.json()
+            text = ""
+            for block in result.get('content', []):
+                if block.get('type') == 'text' and block.get('text', '').strip():
+                    text = block['text'].strip()
+                    break
 
         if not text:
-            print("⚠️ No text content in LLM response")
+            print(f"⚠️ No text content from {model_name}")
             return None
 
         # Parse JSON from response (handle potential markdown fences)
@@ -389,17 +416,18 @@ Rules:
         decision = json.loads(text)
 
         if decision.get('action') not in ('BUY', 'SELL', 'HOLD'):
-            print(f"⚠️ Invalid action from Claude: {decision.get('action')}")
+            print(f"⚠️ Invalid action from {model_name}: {decision.get('action')}")
             return None
 
         return decision
 
     except json.JSONDecodeError as e:
-        print(f"⚠️ Failed to parse Claude response as JSON: {e}")
-        print(f"   Raw response: {text[:300]}")
+        print(f"⚠️ Failed to parse {model_name} response as JSON: {e}")
+        if text:
+            print(f"   Raw response: {text[:300]}")
         return None
     except Exception as e:
-        print(f"⚠️ Claude API call failed: {e}")
+        print(f"⚠️ LLM call failed ({model_name}): {e}")
         return None
 
 
@@ -452,7 +480,7 @@ def send_email(subject, body):
         msg = MIMEMultipart()
         msg['From'] = GMAIL_ADDRESS
         msg['To'] = GMAIL_ADDRESS
-        msg['Subject'] = subject
+        msg['Subject'] = f"[{BOT_SOURCE}] {subject}" if BOT_SOURCE and f"[{BOT_SOURCE}]" not in subject else subject
         msg.attach(MIMEText(body, 'plain'))
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
@@ -469,11 +497,11 @@ def send_email(subject, body):
 def send_startup_email(portfolio):
     """Send startup notification"""
     tf_desc = ", ".join(f"{c['label']}({c['limit']}×)" for c in CANDLE_CONFIGS)
-    subject = "🤖 AI Trader Started (Multi-Timeframe LLM)"
+    subject = f"🤖 [{BOT_SOURCE}] AI Trader Started (Multi-Timeframe LLM)"
     body = f"""AI Trader is running with LLM-powered decisions.
 
 Mode: Claude AI discretion (no hardcoded rules)
-Model: {LLM_MODEL}
+Models: {' → '.join(LLM_MODEL_CHAIN)}
 Capital: EUR {portfolio['starting_capital_eur']:.2f}
 Symbols: {', '.join(SYMBOLS)}
 Check interval: {CHECK_INTERVAL // 60} minutes
@@ -533,7 +561,7 @@ def send_status_email(portfolio, market_data):
     current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
     total_value = portfolio['current_cash_eur'] + current_exposure
 
-    subject = f"📊 AI Trader Status | EUR {total_value:.2f}"
+    subject = f"📊 [{BOT_SOURCE}] AI Trader Status | EUR {total_value:.2f}"
     body = f"""AI Trader - Hourly Status
 {'='*40}
 
@@ -670,7 +698,7 @@ def print_status(portfolio, market_data):
 # ── Main Loop ──────────────────────────────────────────────────────────────────
 
 def run_cycle(portfolio, trades_today):
-    """Run a single trading cycle. Returns updated trades_today."""
+    """Run a single trading cycle. Returns (trades_today, market_data)."""
     # Reset daily trade counter at midnight UTC
     today = datetime.now(timezone.utc).date()
 
@@ -719,7 +747,7 @@ def run_cycle(portfolio, trades_today):
             trades_today += 1
         elif action == 'HOLD':
             print(f"   Holding — {reasoning}")
-
+            log_decision(action, symbol, reasoning, price)
     else:
         print("⚠️ Could not get AI decision — will retry next cycle")
 
@@ -731,7 +759,7 @@ def main():
 
     print("🤖 AI TRADER — Starting (LLM-Powered, Multi-Timeframe)")
     print(f"📅 {datetime.now(timezone.utc).isoformat()}")
-    print(f"🧠 Model: {LLM_MODEL}")
+    print(f"🧠 Models: {' → '.join(LLM_MODEL_CHAIN)}")
     print(f"💰 Capital: EUR 10,000")
     print(f"📧 Alerts: {GMAIL_ADDRESS}")
     print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} minutes")
@@ -775,6 +803,7 @@ def main():
     last_status_email = time.time()
     trades_today = 0
     current_day = datetime.now(timezone.utc).date()
+    market_data = {}
 
     while True:
         try:
