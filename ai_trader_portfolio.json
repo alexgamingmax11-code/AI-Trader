@@ -1,16 +1,8 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 7540.6138638128305,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-07-27T04:02:42.751483+00:00",
-      "entry_price": 1708.55,
-      "current_price": 1708.55,
-      "value_eur": 2500.0
-    }
-  ],
+  "current_cash_eur": 10066.9519867826,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "ETH-EUR",
@@ -61,10 +53,20 @@
       "pnl_eur": 22.770085416904294,
       "pnl_pct": 0.9108034166761758,
       "reasoning": "1h/15m show overbought RSI (68\u201175) and price near upper Bollinger Band; 5m displays a sharp drop to low with low volume; 1m consolidation at the low suggests near\u2011term weakness, making profit\u2011taking on the existing long prudent."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-07-27T04:02:42.751483+00:00",
+      "exit_time": "2026-07-27T07:49:33.274800+00:00",
+      "entry_price": 1708.55,
+      "exit_price": 1726.55,
+      "pnl_eur": 26.338122969769756,
+      "pnl_pct": 1.0535249187907825,
+      "reasoning": "1h RSI overbought (76.8) and BB%b near upper band (0.90) indicating exhaustion; 5m shows strong up candle at 07:45 but 1m shows a small pullback after rapid rise, suggesting short\u2011term top; aligning timeframes advise taking profit."
     }
   ],
   "total_trades": 6,
-  "win_rate": 60.0,
-  "total_pnl_eur": 40.613863812830004,
-  "total_pnl_percent": 0.4061386381283061
+  "win_rate": 66.66666666666666,
+  "total_pnl_eur": 66.95198678259976,
+  "total_pnl_percent": 0.6695198678259962
 }
