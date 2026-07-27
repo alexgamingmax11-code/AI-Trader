@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
+    inputs:
+      model:
+        description: 'LLM model override (leave empty for default nemotron)'
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: write
@@ -11,6 +17,7 @@ permissions:
 jobs:
   trade:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,6 +26,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -38,11 +46,13 @@ jobs:
           REVOLUT_PRIVATE_KEY: ${{ secrets.REVOLUT_PRIVATE_KEY }}
 
       - name: Run AI Trader
+        id: trade
         env:
           RUN_ONCE: "true"
+          BOT_SOURCE: "cloud"
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
           ANTHROPIC_BASE_URL: "https://openrouter.ai/api/v1"
-          LLM_MODEL: "nvidia/nemotron-3-super-120b-a12b:free"
+          LLM_MODEL: ${{ inputs.model || 'nvidia/nemotron-3-super-120b-a12b:free' }}
           REVOLUT_X_API_KEY: ${{ secrets.REVOLUT_X_API_KEY }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -56,5 +66,9 @@ jobs:
           git config user.name "AI Trader Bot"
           git config user.email "bot@github-actions"
           git add ai_trader_portfolio.json ai_trader_decisions.jsonl
-          git diff --cached --quiet || git commit -m "Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push
+          if git diff --cached --quiet; then
+            echo "No state changes to commit"
+          else
+            git commit -m "Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi
