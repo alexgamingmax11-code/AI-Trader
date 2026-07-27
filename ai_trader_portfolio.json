@@ -1,8 +1,16 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 10084.319202805518,
-  "positions": [],
+  "current_cash_eur": 7584.319202805518,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-07-27T23:19:45.438400+00:00",
+      "entry_price": 56101.19,
+      "current_price": 56101.19,
+      "value_eur": 2500.0
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "ETH-EUR",
@@ -85,7 +93,7 @@
       "reasoning": "15m trend is marginally up but 5m and 1m candles show a steady decline with price at recent low and no BB_lower bounce; exiting the ETH position to avoid further downside."
     }
   ],
-  "total_trades": 8,
+  "total_trades": 9,
   "win_rate": 62.5,
   "total_pnl_eur": 84.31920280551776,
   "total_pnl_percent": 0.8431920280551841
