@@ -62,17 +62,19 @@ LLM_MAX_TOKENS = 16000
 # Detect API format: "openai" for Groq/Cerebras/OpenRouter, "anthropic" for native Anthropic
 LLM_API_FORMAT = os.environ.get("LLM_API_FORMAT", "openai" if "/openai" in ANTHROPIC_BASE_URL or "/v1" in ANTHROPIC_BASE_URL else "anthropic")
 
-# Model fallback chain — try each in order, last one is always the original nemotron
+# Model fallback chain — try each in order; all free on OpenRouter
 if BOT_SOURCE == "local":
     LLM_MODEL_CHAIN = [
-        "deepseek/deepseek-chat-v3-0324:free",     # DeepSeek V3 — strong reasoning, free
-        "meta-llama/llama-4-maverick:free",          # Meta Llama 4 — latest generation
+        "deepseek/deepseek-chat-v3-0324:free",     # DeepSeek V3 — 660B MoE, best free reasoning
         "nvidia/nemotron-3-ultra-550b-a55b:free",   # Nemotron 550B — reliable fallback
+        "meta-llama/llama-4-maverick:free",          # Meta Llama 4 — 400B MoE, if others rate-limited
+        "inclusionai/ling-3.0-flash:free",           # Flash tier — fast, last resort
     ]
 else:
-    # Cloud: stick with nemotron (cheaper, faster for 15-min cron)
+    # Cloud: faster/lighter for 15-min cron cycles
     LLM_MODEL_CHAIN = [
-        "nvidia/nemotron-3-super-120b-a12b:free",
+        "deepseek/deepseek-chat-v3-0324:free",      # DeepSeek V3 — best reasoning even on cloud
+        "nvidia/nemotron-3-super-120b-a12b:free",    # Nemotron 120B — lightweight fallback
     ]
 
 # Email (Gmail SMTP)
