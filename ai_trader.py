@@ -82,15 +82,14 @@ GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 # Trading
 SYMBOLS = ["BTC-EUR", "ETH-EUR", "SOL-EUR"]
 CANDLE_CONFIGS = [
-    {"interval": 60,   "limit": 48, "label": "1h"},    # 2 days of hourly (trend)
-    {"interval": 15,   "limit": 24, "label": "15m"},   # 6h of 15-min (momentum)
+    {"interval": 15,   "limit": 48, "label": "15m"},   # 12h of 15-min (trend + momentum)
     {"interval": 5,    "limit": 12, "label": "5m"},    # 1h of 5-min (entry patterns)
     {"interval": 1,    "limit": 6,  "label": "1m"},    # 6m of 1-min (timing)
 ]
-CHECK_INTERVAL = 900      # 15 minutes between checks (LLM takes ~2min per call)
+CHECK_INTERVAL = 300      # 5 minutes between checks (responsive to intraday moves)
+OPPORTUNITY_INTERVAL = 60 # 60s fast-poll when a dip is detected
 POSITION_SIZE_PCT = 0.25  # Max 25% per position
 MAX_EXPOSURE_PCT = 0.75   # Max 75% total deployed
-MIN_DAILY_TRADES = 1      # At least 1 trade per day
 
 # ── Revolut X API ──────────────────────────────────────────────────────────────
 
@@ -142,7 +141,7 @@ def format_candles_for_llm(candles, symbol, label):
         return f"{symbol} ({label}): No data available"
 
     # Show appropriate number of candles per timeframe
-    max_per_tf = {"1h": 12, "15m": 12, "5m": 8, "1m": 4}
+    max_per_tf = {"15m": 12, "5m": 8, "1m": 4}
     limit = max_per_tf.get(label, 12)
     rows = []
     for c in candles[-limit:]:
@@ -231,6 +230,25 @@ def get_market_summary(candles, label):
     }
 
 
+# ── Opportunity Detector ──────────────────────────────────────────────────────
+
+def detect_dip_opportunity(market_data):
+    """Check if any symbol is near the lower Bollinger Band (opportunity zone).
+    Returns True if we should fast-poll on the next cycle.
+    """
+    for symbol, tf_data in market_data.items():
+        candles = tf_data.get("5m")
+        if not candles or len(candles) < 20:
+            continue
+        summary = get_market_summary(candles, "5m")
+        if summary:
+            bb_pct_b = summary.get("bb_pct_b")
+            if bb_pct_b is not None and bb_pct_b < 0.15:
+                print(f"   🔍 {symbol} 5m BB%b={bb_pct_b:.2f} — dip detected, staying alert")
+                return True
+    return False
+
+
 # ── LLM Trading Decision ──────────────────────────────────────────────────────
 
 def get_llm_decision(market_data_list, portfolio, trades_today=0):
@@ -251,8 +269,7 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
   Total Value: EUR {total_value:.2f}
   Open Positions: {len(portfolio['positions'])}
   Total P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
-  Win Rate: {portfolio['win_rate']:.1f}% ({portfolio['total_trades']} trades total)
-  Trades today so far: {trades_today} / minimum {MIN_DAILY_TRADES}"""
+  Win Rate: {portfolio['win_rate']:.1f}% ({portfolio['total_trades']} trades total)"""
 
     if portfolio['positions']:
         portfolio_text += "\n  Open positions:"
@@ -260,29 +277,28 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
             pnl = ((p.get('current_price', p['entry_price']) / p['entry_price']) - 1) * 100
             portfolio_text += f"\n    - {p['symbol']}: EUR {p['value_eur']:.2f} @ EUR {p['entry_price']:.2f} ({pnl:+.1f}%)"
 
-    # Build multi-timeframe data: summaries for higher TFs, raw candles for lower TFs
+    # Build multi-timeframe data: summaries for higher TF, raw candles for lower TFs
     market_text_parts = []
     for symbol, tf_data in market_data_list.items():
         market_text_parts.append(f"\n{'='*40}\n{symbol}:")
 
-        # 1h and 15m: summaries only (too many candles for raw)
-        for label in ["1h", "15m"]:
-            candles = tf_data.get(label)
-            if candles:
-                summary = get_market_summary(candles, label)
-                if summary:
-                    bb_text = ""
-                    if summary.get('bb_pct_b') is not None:
-                        bb_text = f", BB%b={summary['bb_pct_b']:.2f}"
-                    market_text_parts.append(
-                        f"  {label} summary: price={summary['current_price']:.2f}, "
-                        f"recent={summary.get('recent_pct', 0):+.2f}%, "
-                        f"medium={summary.get('medium_pct', 0):+.2f}%, "
-                        f"range={summary.get('full_range_pct', 0):.2f}%, "
-                        f"RSI={summary.get('rsi_14', '?')}, "
-                        f"vol={summary.get('volume_ratio', '?')}x"
-                        f"{bb_text}"
-                    )
+        # 15m: summary only (trend + momentum context)
+        candles_15m = tf_data.get("15m")
+        if candles_15m:
+            summary = get_market_summary(candles_15m, "15m")
+            if summary:
+                bb_text = ""
+                if summary.get('bb_pct_b') is not None:
+                    bb_text = f", BB%b={summary['bb_pct_b']:.2f}"
+                market_text_parts.append(
+                    f"  15m summary: price={summary['current_price']:.2f}, "
+                    f"recent={summary.get('recent_pct', 0):+.2f}%, "
+                    f"medium={summary.get('medium_pct', 0):+.2f}%, "
+                    f"range={summary.get('full_range_pct', 0):.2f}%, "
+                    f"RSI={summary.get('rsi_14', '?')}, "
+                    f"vol={summary.get('volume_ratio', '?')}x"
+                    f"{bb_text}"
+                )
 
         # 5m and 1m: raw candles for precise entry analysis
         for label in ["5m", "1m"]:
@@ -292,21 +308,11 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
 
     market_text = "\n".join(market_text_parts) if market_text_parts else "No market data available"
 
-    # Daily minimum enforcement
-    enforce_trade = trades_today < MIN_DAILY_TRADES
-    enforcement_note = ""
-    if enforce_trade:
-        enforcement_note = f"""
-*** IMPORTANT: You have NOT met the daily minimum of {MIN_DAILY_TRADES} trade(s) today.
-You MUST return BUY or SELL — do NOT return HOLD.
-Pick the best opportunity available, even if it's not perfect. A reasonable entry is better than no trade. ***"""
-
     prompt = f"""You are an experienced cryptocurrency day trader. Analyze the MULTI-TIMEFRAME data below and decide.
 
 TIMEFRAMES (use all of them):
-- 1h: overall structure, trend direction, support/resistance (summary only)
-- 15m: momentum, patterns, entry zones (summary only)
-- 5m: recent candles — look for patterns, consolidation, breakouts
+- 15m: trend direction, momentum, support/resistance, entry zones (summary only)
+- 5m: recent candles — look for patterns, consolidation, breakouts, reversals
 - 1m: latest candles — pinpoint entry timing, immediate momentum
 
 {portfolio_text}
@@ -318,22 +324,21 @@ MARKET DATA (multi-timeframe):
 {market_text}
 
 Current UTC time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}
-{enforcement_note}
 
-Analyze all timeframes together. Look for:
-- BB bounce: price hits BB_lower (%b near 0), next candle doesn't go lower — buy first recovery on 5m/1m
-- Alignment: do 15m trend, 5m pattern, and 1m timing all agree?
-- Entries: where does the 1m chart show the best entry within a 5m/15m trend?
-- Risk/reward: is there a clear stop level from the 5m chart?
-- Existing positions: still valid on the 15m trend, or time to exit?
+Analyze ALL timeframes together. Look for:
+- BB bounce: price hits BB_lower (%b near 0), next candle shows recovery — buy the first pullback-to-band
+- Reversal: 5m/1m showing bullish structure (higher lows, momentum shift) against 15m oversold
+- Pullback entry: uptrend on 15m, price pulls back to 5m BB_middle or EMA — buy continuation
+- Volume confirmation: increasing volume on reversal candles
+- Existing positions: is the thesis still valid on the 15m trend?
 
 Respond with ONLY a JSON object (no markdown, no code fences):
-{{"action": "BUY" or "SELL" or "HOLD", "symbol": "BTC-EUR" or "ETH-EUR" or null, "reasoning": "your 1-2 sentence analysis referencing specific timeframes", "position_size_eur": number or null}}
+{{"action": "BUY" or "SELL" or "HOLD", "symbol": "BTC-EUR" or "ETH-EUR" or "SOL-EUR" or null, "reasoning": "your 1-2 sentence analysis referencing specific timeframes", "position_size_eur": number or null}}
 
 Rules:
-- BUY: you see a concrete entry with aligned timeframes
-- SELL: an existing position should be closed
-- HOLD: only allowed if you already traded today (trades_today >= {MIN_DAILY_TRADES})
+- BUY: you see a concrete entry setup with aligned timeframes
+- SELL: an existing position should be closed (trend invalidated or profit target reached)
+- HOLD: no compelling entry or exit — wait
 - position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}"""
 
     # Try each model in the chain — fall back on failure
@@ -504,9 +509,9 @@ Mode: Claude AI discretion (no hardcoded rules)
 Models: {' → '.join(LLM_MODEL_CHAIN)}
 Capital: EUR {portfolio['starting_capital_eur']:.2f}
 Symbols: {', '.join(SYMBOLS)}
-Check interval: {CHECK_INTERVAL // 60} minutes
+Check interval: {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip detection)
 Timeframes: {tf_desc}
-Min trades/day: {MIN_DAILY_TRADES}
+No minimum trades — patient entries only
 
 Every decision is made by Claude analyzing 15m/5m/1m candle data.
 Check ai_trader_decisions.jsonl for full decision history.
@@ -548,13 +553,13 @@ def send_status_email(portfolio, market_data):
     """Periodic status email so you know the bot is alive. market_data: symbol -> {label: candles}"""
     market_lines = []
     for symbol, tf in market_data.items():
-        candles = tf.get('1h')
+        candles = tf.get('15m')
         if candles:
-            summary = get_market_summary(candles, "1h")
+            summary = get_market_summary(candles, "15m")
             if summary:
                 market_lines.append(
                     f"  {symbol}: EUR {summary['current_price']:.2f} "
-                    f"| 1h: {summary.get('recent_pct', 0):+.2f}% "
+                    f"| 15m: {summary.get('recent_pct', 0):+.2f}% "
                     f"| RSI: {summary.get('rsi_14', '?')}"
                 )
 
@@ -579,7 +584,7 @@ Market:
 {chr(10).join(market_lines) if market_lines else "  No data"}
 
 Time: {datetime.now(timezone.utc).isoformat()}
-Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes.
+Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip).
 """
     send_email(subject, body)
 
@@ -593,6 +598,12 @@ def execute_buy(symbol, price, reasoning, portfolio):
 
     if position_value < 100:
         print(f"⚠️ Insufficient cash (EUR {portfolio['current_cash_eur']:.2f})")
+        return False
+
+    # Check if already holding this symbol — if so, skip (single position per symbol)
+    existing = next((p for p in portfolio['positions'] if p['symbol'] == symbol), None)
+    if existing:
+        print(f"⚠️ Already holding {symbol} — skipping second position")
         return False
 
     position = {
@@ -674,7 +685,7 @@ def print_status(portfolio, market_data):
         print(f"\n📊 Positions:")
         for pos in portfolio['positions']:
             tf = market_data.get(pos['symbol'], {})
-            candles = tf.get('5m') or tf.get('1h')
+            candles = tf.get('5m') or tf.get('15m')
             if candles:
                 current = float(candles[-1]['close'])
                 pnl = ((current / pos['entry_price']) - 1) * 100
@@ -686,11 +697,11 @@ def print_status(portfolio, market_data):
 
     print(f"\n📈 Market:")
     for symbol, tf in market_data.items():
-        candles = tf.get('1h')
+        candles = tf.get('15m')
         if candles:
-            s = get_market_summary(candles, "1h")
+            s = get_market_summary(candles, "15m")
             if s:
-                print(f"   {symbol}: EUR {s['current_price']:.2f} | 1h: {s.get('recent_pct', 0):+.2f}% | RSI: {s.get('rsi_14', '?')}")
+                print(f"   {symbol}: EUR {s['current_price']:.2f} | 15m: {s.get('recent_pct', 0):+.2f}% | RSI: {s.get('rsi_14', '?')}")
 
     print(f"\n📊 Stats: {portfolio['total_trades']} trades | Win Rate: {portfolio['win_rate']:.1f}% | P&L: EUR {portfolio['total_pnl_eur']:+.2f}")
 
@@ -721,7 +732,7 @@ def run_cycle(portfolio, trades_today):
             pos['current_price'] = float(candles[-1]['close'])
 
     # Ask Claude for a decision
-    print(f"\n🧠 Asking {LLM_MODEL} for analysis... (trades today: {trades_today}/{MIN_DAILY_TRADES})")
+    print(f"\n🧠 Asking LLM for analysis... (trades today: {trades_today})")
     decision = get_llm_decision(market_data, portfolio, trades_today=trades_today)
 
     if decision:
@@ -762,11 +773,11 @@ def main():
     print(f"🧠 Models: {' → '.join(LLM_MODEL_CHAIN)}")
     print(f"💰 Capital: EUR 10,000")
     print(f"📧 Alerts: {GMAIL_ADDRESS}")
-    print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} minutes")
-    print(f"📊 Timeframes: 1h+15m (summaries), 5m+1m (raw candles)")
+    print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} min (fast-poll: {OPPORTUNITY_INTERVAL}s on dip)")
+    print(f"📊 Timeframes: 15m (summary), 5m+1m (raw candles)")
     print(f"🎯 Decision maker: Claude (no hardcoded rules)")
     print(f"🆔 Source: {BOT_SOURCE}")
-    print(f"📈 Min trades/day: {MIN_DAILY_TRADES}")
+    print(f"📈 Min trades: none — patient entries only")
     if run_once:
         print(f"☁️ Cloud mode: RUN_ONCE enabled — will exit after one cycle\n")
     else:
@@ -819,8 +830,13 @@ def main():
                 send_status_email(portfolio, market_data)
                 last_status_email = time.time()
 
-            print(f"\n⏳ Next scan in {CHECK_INTERVAL // 60} min... (trades today: {trades_today})")
-            time.sleep(CHECK_INTERVAL)
+            # Check for dip opportunity — if price is near lower BB, fast-poll
+            if detect_dip_opportunity(market_data):
+                print(f"   ⚡ Dip opportunity detected — next check in {OPPORTUNITY_INTERVAL}s")
+                time.sleep(OPPORTUNITY_INTERVAL)
+            else:
+                print(f"\n⏳ Next scan in {CHECK_INTERVAL // 60} min... (trades today: {trades_today})")
+                time.sleep(CHECK_INTERVAL)
 
         except KeyboardInterrupt:
             print("\n\n🛑 Trader stopped by user")
