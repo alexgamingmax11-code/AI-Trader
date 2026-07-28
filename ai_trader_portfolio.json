@@ -1,20 +1,27 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 5070.397483854458,
+  "current_cash_eur": 2570.397483854458,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-07-28T00:55:18.061663+00:00",
       "entry_price": 64.847,
-      "current_price": 64.544,
+      "current_price": 64.34,
       "value_eur": 2500.0
     },
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-07-28T03:58:04.727744+00:00",
       "entry_price": 64.319,
-      "current_price": 64.544,
+      "current_price": 64.34,
+      "value_eur": 2500.0
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-07-28T11:35:21.830059+00:00",
+      "entry_price": 1649.73,
+      "current_price": 1649.73,
       "value_eur": 2500.0
     }
   ],
@@ -110,7 +117,7 @@
       "reasoning": "15m RSI 72.9 overbought and BB%b 0.82 near upper band signals near-term pullback, while 1h oversold suggests longer-term bounce but short-term risk warrants exiting the losing BTC position."
     }
   ],
-  "total_trades": 11,
+  "total_trades": 12,
   "win_rate": 55.55555555555556,
   "total_pnl_eur": 70.39748385445773,
   "total_pnl_percent": -49.29602516145542
