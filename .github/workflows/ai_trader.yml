@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
+
+concurrency:
+  group: ai-trader-state
+  cancel-in-progress: false
     inputs:
       model:
         description: 'LLM model override (leave empty for default nemotron)'
@@ -52,7 +56,8 @@ jobs:
           BOT_SOURCE: "cloud"
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
           ANTHROPIC_BASE_URL: "https://openrouter.ai/api/v1"
-          LLM_MODEL: ${{ inputs.model || 'nvidia/nemotron-3-super-120b-a12b:free' }}
+          LLM_MODEL: ${{ inputs.model || 'nvidia/nemotron-3-ultra-550b-a55b:free' }}
+          STARTING_CAPITAL: "500"
           REVOLUT_X_API_KEY: ${{ secrets.REVOLUT_X_API_KEY }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -70,5 +75,6 @@ jobs:
             echo "No state changes to commit"
           else
             git commit -m "Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            git push
+            git pull --rebase origin main || echo "Rebase skipped"
+            git push || git push
           fi
