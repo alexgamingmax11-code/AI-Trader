@@ -1,20 +1,13 @@
 {
   "initialized_at": "2026-07-22T09:26:11.698Z",
   "starting_capital_eur": 10000,
-  "current_cash_eur": 5089.326655597176,
+  "current_cash_eur": 7636.076729851751,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-07-28T03:58:04.727744+00:00",
       "entry_price": 64.319,
-      "current_price": 64.873,
-      "value_eur": 2500.0
-    },
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-07-28T11:35:21.830059+00:00",
-      "entry_price": 1649.73,
-      "current_price": 1682.19,
+      "current_price": 64.942,
       "value_eur": 2500.0
     }
   ],
@@ -118,10 +111,20 @@
       "pnl_eur": 18.9291717427177,
       "pnl_pct": 0.7571668697087031,
       "reasoning": "15m RSI 70.3 and BB%b 1.19 show overbought conditions; 5m candles display tight range and low volume, with 1m showing no follow\u2011through, indicating a likely short\u2011term pullback and a good point to lock in profit."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-07-28T11:35:21.830059+00:00",
+      "exit_time": "2026-07-29T07:31:54.300713+00:00",
+      "entry_price": 1649.73,
+      "exit_price": 1680.58,
+      "pnl_eur": 46.75007425457534,
+      "pnl_pct": 1.8700029701830045,
+      "reasoning": "15m overbought (RSI 92.8) with slight negative recent momentum; 5m shows a strong down candle followed by weak up, indicating exhaustion; 1m shows a pullback after hitting high, suggesting short-term reversal."
     }
   ],
   "total_trades": 12,
-  "win_rate": 60.0,
-  "total_pnl_eur": 89.32665559717543,
-  "total_pnl_percent": -49.10673344402824
+  "win_rate": 63.63636363636363,
+  "total_pnl_eur": 136.07672985175077,
+  "total_pnl_percent": -23.63923270148249
 }
