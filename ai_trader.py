@@ -55,27 +55,18 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHR
 ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1")
 BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (GitHub Actions)
 
-# Local uses the best free model (550B, 1M context); cloud stays on lighter model
-_DEFAULT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free" if BOT_SOURCE == "local" else "nvidia/nemotron-3-super-120b-a12b:free"
+# Local uses the best free model available
+_DEFAULT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free"
 LLM_MODEL = os.environ.get("LLM_MODEL", _DEFAULT_MODEL)
 LLM_MAX_TOKENS = 16000
 # Detect API format: "openai" for Groq/Cerebras/OpenRouter, "anthropic" for native Anthropic
 LLM_API_FORMAT = os.environ.get("LLM_API_FORMAT", "openai" if "/openai" in ANTHROPIC_BASE_URL or "/v1" in ANTHROPIC_BASE_URL else "anthropic")
 
-# Model fallback chain — try each in order; all free on OpenRouter
-if BOT_SOURCE == "local":
-    LLM_MODEL_CHAIN = [
-        "deepseek/deepseek-chat-v3-0324:free",     # DeepSeek V3 — 660B MoE, best free reasoning
-        "nvidia/nemotron-3-ultra-550b-a55b:free",   # Nemotron 550B — reliable fallback
-        "meta-llama/llama-4-maverick:free",          # Meta Llama 4 — 400B MoE, if others rate-limited
-        "inclusionai/ling-3.0-flash:free",           # Flash tier — fast, last resort
-    ]
-else:
-    # Cloud: faster/lighter for 15-min cron cycles
-    LLM_MODEL_CHAIN = [
-        "deepseek/deepseek-chat-v3-0324:free",      # DeepSeek V3 — best reasoning even on cloud
-        "nvidia/nemotron-3-super-120b-a12b:free",    # Nemotron 120B — lightweight fallback
-    ]
+# Model fallback chain — try each in order
+LLM_MODEL_CHAIN = [
+    "nvidia/nemotron-3-ultra-550b-a55b:free",   # 550B — best free general reasoning
+    "inclusionai/ling-3.0-flash:free",           # Flash tier — fast fallback
+]
 
 # Email (Gmail SMTP)
 GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "alexgamingmax11@gmail.com")
@@ -92,6 +83,8 @@ CHECK_INTERVAL = 300      # 5 minutes between checks (responsive to intraday mov
 OPPORTUNITY_INTERVAL = 60 # 60s fast-poll when a dip is detected
 POSITION_SIZE_PCT = 0.25  # Max 25% per position
 MAX_EXPOSURE_PCT = 0.75   # Max 75% total deployed
+TRADING_FEE_PCT = 0.001   # 0.1% taker fee (Revolut X standard for crypto)
+STARTING_CAPITAL = float(os.environ.get("STARTING_CAPITAL", "500"))  # Default €500
 
 # ── Revolut X API ──────────────────────────────────────────────────────────────
 
@@ -271,6 +264,7 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
   Total Value: EUR {total_value:.2f}
   Open Positions: {len(portfolio['positions'])}
   Total P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
+  Fees Paid: EUR {portfolio.get('total_fees_paid_eur', 0):.2f}
   Win Rate: {portfolio['win_rate']:.1f}% ({portfolio['total_trades']} trades total)"""
 
     if portfolio['positions']:
@@ -341,7 +335,8 @@ Rules:
 - BUY: you see a concrete entry setup with aligned timeframes
 - SELL: an existing position should be closed (trend invalidated or profit target reached)
 - HOLD: no compelling entry or exit — wait
-- position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}"""
+- position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}
+- NOTE: Each trade costs {TRADING_FEE_PCT * 100:.1f}% taker fee each way (buy + sell = {TRADING_FEE_PCT * 200:.1f}% round-trip). Factor this into your risk/reward."""
 
     # Try each model in the chain — fall back on failure
     for model_name in LLM_MODEL_CHAIN:
@@ -448,14 +443,15 @@ def load_portfolio():
     except:
         return {
             "initialized_at": datetime.now(timezone.utc).isoformat(),
-            "starting_capital_eur": 10000,
-            "current_cash_eur": 10000,
+            "starting_capital_eur": STARTING_CAPITAL,
+            "current_cash_eur": STARTING_CAPITAL,
             "positions": [],
             "closed_trades": [],
             "total_trades": 0,
             "win_rate": 0,
             "total_pnl_eur": 0,
-            "total_pnl_percent": 0
+            "total_pnl_percent": 0,
+            "total_fees_paid_eur": 0
         }
 
 
@@ -523,7 +519,7 @@ Time: {datetime.now(timezone.utc).isoformat()}
     send_email(subject, body)
 
 
-def send_trade_email(action, symbol, price, reasoning, portfolio):
+def send_trade_email(action, symbol, price, reasoning, portfolio, pnl_eur=None, net_pnl=None, fee=None):
     """Send trade execution email"""
     if action == 'BUY':
         subject = f"🟢 [{BOT_SOURCE}] BUY: {symbol} @ EUR {price:.2f}"
@@ -540,10 +536,30 @@ Action: {action}
 AI Reasoning:
 {reasoning}
 
-Portfolio:
+"""
+    if action == 'BUY':
+        last_pos = portfolio['positions'][-1] if portfolio['positions'] else None
+        if last_pos:
+            pos_fee = last_pos.get('fee_paid', 0)
+            pos_size = last_pos['value_eur']
+            body += f"""Trade Details:
+  Position Size: EUR {pos_size:.2f}
+  Fee: EUR {pos_fee:.2f} ({pos_fee / pos_size * 100:.1f}%)
+
+"""
+    elif action == 'SELL' and net_pnl is not None:
+        body += f"""Trade Details:
+  Gross P&L: EUR {pnl_eur:+.2f}
+  Fee: EUR {fee:.2f}
+  Net P&L: EUR {net_pnl:+.2f}
+
+"""
+
+    body += f"""Portfolio:
   Cash: EUR {portfolio['current_cash_eur']:.2f}
   Positions: {len(portfolio['positions'])}
-  P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
+  Total P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
+  Fees Paid: EUR {portfolio.get('total_fees_paid_eur', 0):.2f}
   Trades: {portfolio['total_trades']}
 
 Time: {datetime.now(timezone.utc).isoformat()}
@@ -577,6 +593,7 @@ Portfolio:
   Exposure: EUR {current_exposure:.2f}
   Total Value: EUR {total_value:.2f}
   P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
+  Fees Paid: EUR {portfolio.get('total_fees_paid_eur', 0):.2f}
   Trades: {portfolio['total_trades']} | Win Rate: {portfolio['win_rate']:.1f}%
 
 Open Positions:
@@ -594,12 +611,18 @@ Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes (fast-
 # ── Trade Execution ────────────────────────────────────────────────────────────
 
 def execute_buy(symbol, price, reasoning, portfolio):
-    """Execute a buy order"""
+    """Execute a buy order — deducts taker fee from cash"""
     max_position = portfolio['starting_capital_eur'] * POSITION_SIZE_PCT
     position_value = min(max_position, portfolio['current_cash_eur'])
+    fee = round(position_value * TRADING_FEE_PCT, 2)
+    total_cost = position_value + fee
 
     if position_value < 100:
         print(f"⚠️ Insufficient cash (EUR {portfolio['current_cash_eur']:.2f})")
+        return False
+
+    if total_cost > portfolio['current_cash_eur']:
+        print(f"⚠️ Cannot afford position + fee (need EUR {total_cost:.2f}, have EUR {portfolio['current_cash_eur']:.2f})")
         return False
 
     # Check if already holding this symbol — if so, skip (single position per symbol)
@@ -614,13 +637,15 @@ def execute_buy(symbol, price, reasoning, portfolio):
         'entry_price': price,
         'current_price': price,
         'value_eur': position_value,
+        'fee_paid': fee,
     }
 
     portfolio['positions'].append(position)
-    portfolio['current_cash_eur'] -= position_value
+    portfolio['current_cash_eur'] -= total_cost  # position + fee
     portfolio['total_trades'] += 1
+    portfolio['total_fees_paid_eur'] = portfolio.get('total_fees_paid_eur', 0) + fee
 
-    print(f"\n🟢 BUY {symbol} @ EUR {price:.2f} | Size: EUR {position_value:.2f}")
+    print(f"\n🟢 BUY {symbol} @ EUR {price:.2f} | Size: EUR {position_value:.2f} | Fee: EUR {fee:.2f}")
     print(f"   Reasoning: {reasoning}")
 
     send_trade_email('BUY', symbol, price, reasoning, portfolio)
@@ -630,20 +655,30 @@ def execute_buy(symbol, price, reasoning, portfolio):
 
 
 def execute_sell(symbol, price, reasoning, portfolio):
-    """Execute a sell order"""
+    """Execute a sell order — deducts taker fee, reports net P&L"""
     position = next((p for p in portfolio['positions'] if p['symbol'] == symbol), None)
     if not position:
         print(f"⚠️ No position found for {symbol}")
         return False
 
     entry_price = position['entry_price']
+    buy_fee = position.get('fee_paid', 0)
     exit_value = position['value_eur'] * (price / entry_price)
-    pnl_eur = exit_value - position['value_eur']
-    pnl_pct = ((price / entry_price) - 1) * 100
+    sell_fee = round(exit_value * TRADING_FEE_PCT, 2)
+    cash_returned = exit_value - sell_fee
+
+    # Gross P&L (price movement only)
+    pnl_eur = round(exit_value - position['value_eur'], 2)
+    pnl_pct = round(((price / entry_price) - 1) * 100, 2)
+
+    # Net P&L (after both buy and sell fees)
+    net_pnl = round(pnl_eur - buy_fee - sell_fee, 2)
+    total_fee = round(buy_fee + sell_fee, 2)
 
     portfolio['positions'].remove(position)
-    portfolio['current_cash_eur'] += exit_value
-    portfolio['total_pnl_eur'] += pnl_eur
+    portfolio['current_cash_eur'] += cash_returned
+    portfolio['total_pnl_eur'] += net_pnl  # track net P&L
+    portfolio['total_fees_paid_eur'] = portfolio.get('total_fees_paid_eur', 0) + sell_fee
 
     portfolio['closed_trades'].append({
         'symbol': symbol,
@@ -653,19 +688,22 @@ def execute_sell(symbol, price, reasoning, portfolio):
         'exit_price': price,
         'pnl_eur': pnl_eur,
         'pnl_pct': pnl_pct,
+        'fee_paid': total_fee,
+        'net_pnl_eur': net_pnl,
         'reasoning': reasoning
     })
 
-    wins = sum(1 for t in portfolio['closed_trades'] if t['pnl_eur'] > 0)
+    wins = sum(1 for t in portfolio['closed_trades'] if t.get('net_pnl_eur', t['pnl_eur']) > 0)
     portfolio['win_rate'] = wins / len(portfolio['closed_trades']) * 100
     total_value = portfolio['current_cash_eur']
-    portfolio['total_pnl_percent'] = ((total_value / portfolio['starting_capital_eur']) - 1) * 100
+    portfolio['total_pnl_percent'] = round(((total_value / portfolio['starting_capital_eur']) - 1) * 100, 2)
 
-    emoji = "💰" if pnl_eur > 0 else "❌"
-    print(f"\n{emoji} SELL {symbol} @ EUR {price:.2f} | P&L: EUR {pnl_eur:+.2f} ({pnl_pct:+.2f}%)")
+    emoji = "💰" if net_pnl > 0 else "❌"
+    print(f"\n{emoji} SELL {symbol} @ EUR {price:.2f}")
+    print(f"   Gross P&L: EUR {pnl_eur:+.2f} ({pnl_pct:+.2f}%) | Fee: EUR {total_fee:.2f} | Net: EUR {net_pnl:+.2f}")
     print(f"   Reasoning: {reasoning}")
 
-    send_trade_email('SELL', symbol, price, reasoning, portfolio)
+    send_trade_email('SELL', symbol, price, reasoning, portfolio, pnl_eur=pnl_eur, net_pnl=net_pnl, fee=total_fee)
     log_decision('SELL', symbol, reasoning, price)
     save_portfolio(portfolio)
     return True
@@ -705,7 +743,7 @@ def print_status(portfolio, market_data):
             if s:
                 print(f"   {symbol}: EUR {s['current_price']:.2f} | 15m: {s.get('recent_pct', 0):+.2f}% | RSI: {s.get('rsi_14', '?')}")
 
-    print(f"\n📊 Stats: {portfolio['total_trades']} trades | Win Rate: {portfolio['win_rate']:.1f}% | P&L: EUR {portfolio['total_pnl_eur']:+.2f}")
+    print(f"\n📊 Stats: {portfolio['total_trades']} trades | Win Rate: {portfolio['win_rate']:.1f}% | P&L: EUR {portfolio['total_pnl_eur']:+.2f} | Fees: EUR {portfolio.get('total_fees_paid_eur', 0):.2f}")
 
 
 # ── Main Loop ──────────────────────────────────────────────────────────────────
@@ -773,11 +811,12 @@ def main():
     print("🤖 AI TRADER — Starting (LLM-Powered, Multi-Timeframe)")
     print(f"📅 {datetime.now(timezone.utc).isoformat()}")
     print(f"🧠 Models: {' → '.join(LLM_MODEL_CHAIN)}")
-    print(f"💰 Capital: EUR 10,000")
+    print(f"💰 Capital: EUR {STARTING_CAPITAL:,.0f}")
     print(f"📧 Alerts: {GMAIL_ADDRESS}")
     print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} min (fast-poll: {OPPORTUNITY_INTERVAL}s on dip)")
     print(f"📊 Timeframes: 15m (summary), 5m+1m (raw candles)")
     print(f"🎯 Decision maker: Claude (no hardcoded rules)")
+    print(f"💰 Fee: {TRADING_FEE_PCT * 100:.1f}% taker per trade ({TRADING_FEE_PCT * 200:.1f}% round-trip)")
     print(f"🆔 Source: {BOT_SOURCE}")
     print(f"📈 Min trades: none — patient entries only")
     if run_once:
