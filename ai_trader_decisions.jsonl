@@ -1,0 +1,1 @@
+{"timestamp": "2026-07-29T13:16:21.386817+00:00", "action": "HOLD", "symbol": null, "price": null, "source": "cloud", "reasoning": "All three assets are near lower Bollinger bands (BB%b < 0.20) with oversold RSI, but 5m and 1m candles show indecisive flat price action with no volume confirmation or reversal structure, so no aligned timeframe entry signal is present."}
