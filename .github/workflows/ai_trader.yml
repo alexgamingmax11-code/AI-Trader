@@ -4,16 +4,16 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
-
-concurrency:
-  group: ai-trader-state
-  cancel-in-progress: false
     inputs:
       model:
         description: 'LLM model override (leave empty for default nemotron)'
         required: false
         default: ''
         type: string
+
+concurrency:
+  group: ai-trader-state
+  cancel-in-progress: false
 
 permissions:
   contents: write
