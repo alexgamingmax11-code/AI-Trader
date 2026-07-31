@@ -58,7 +58,9 @@ BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (G
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
 ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1")
 LLM_MODEL = os.environ.get("LLM_MODEL", "").strip()  # manual override (workflow_dispatch)
-LLM_MAX_TOKENS = 16000
+# Output cap for a decision JSON is tiny; keep well under Groq free TPM limits
+# (70b:12K TPM, 8b:6K TPM) so the request isn't rejected as "too large".
+LLM_MAX_TOKENS = 2000
 # Detect API format: "openai" for Groq/Cerebras/OpenRouter, "anthropic" for native Anthropic
 LLM_API_FORMAT = os.environ.get("LLM_API_FORMAT", "openai" if "/openai" in ANTHROPIC_BASE_URL or "/v1" in ANTHROPIC_BASE_URL else "anthropic")
 
