@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: 'LLM model override (leave empty for default nemotron)'
+        description: 'LLM model override (leave empty for default chain: Groq free → OpenRouter free)'
         required: false
         default: ''
         type: string
@@ -54,9 +54,11 @@ jobs:
         env:
           RUN_ONCE: "true"
           BOT_SOURCE: "cloud"
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
           ANTHROPIC_BASE_URL: "https://openrouter.ai/api/v1"
-          LLM_MODEL: ${{ inputs.model || 'nvidia/nemotron-3-ultra-550b-a55b:free' }}
+          LLM_MODEL: ${{ inputs.model }}
           STARTING_CAPITAL: "500"
           REVOLUT_X_API_KEY: ${{ secrets.REVOLUT_X_API_KEY }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}

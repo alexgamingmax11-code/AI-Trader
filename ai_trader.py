@@ -48,25 +48,52 @@ BASE_URL = "https://revx.revolut.com"
 PORTFOLIO_FILE = os.environ.get("PORTFOLIO_FILE", os.path.join(os.path.expanduser("~"), "ai_trader_portfolio.json"))
 DECISION_LOG = os.environ.get("DECISION_LOG", os.path.join(os.path.expanduser("~"), "ai_trader_decisions.jsonl"))
 
-# LLM API — defaults to Groq (free tier, Llama 3.3 70B)
-# Supported providers: Groq, Cerebras, OpenRouter, Anthropic, or any OpenAI-compatible
-# Set ANTHROPIC_BASE_URL and LLM_MODEL env vars to switch providers
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1")
+# LLM API — multi-provider free chain. Each entry has its own base URL + key
+# env var, so the bot fails over across independent free quotas instead of dying
+# when one provider's free tier is exhausted (OpenRouter caps at 50 req/day;
+# Groq gives 1K–14.4K req/day and needs no credit card).
 BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (GitHub Actions)
 
-# Local uses the best free model available
-_DEFAULT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free"
-LLM_MODEL = os.environ.get("LLM_MODEL", _DEFAULT_MODEL)
+# Legacy single-provider config (still used by the manual "model" override)
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
+ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api/v1")
+LLM_MODEL = os.environ.get("LLM_MODEL", "").strip()  # manual override (workflow_dispatch)
 LLM_MAX_TOKENS = 16000
 # Detect API format: "openai" for Groq/Cerebras/OpenRouter, "anthropic" for native Anthropic
 LLM_API_FORMAT = os.environ.get("LLM_API_FORMAT", "openai" if "/openai" in ANTHROPIC_BASE_URL or "/v1" in ANTHROPIC_BASE_URL else "anthropic")
 
-# Model fallback chain — try each in order
-LLM_MODEL_CHAIN = [
-    "nvidia/nemotron-3-ultra-550b-a55b:free",   # 550B — best free general reasoning
-    "inclusionai/ling-3.0-flash:free",           # Flash tier — fast fallback
-]
+# Email toggles (default ON — you chose all three)
+EMAIL_ON_HOLD = os.environ.get("EMAIL_ON_HOLD", "true").lower() in ("1", "true", "yes")
+EMAIL_ON_FAILURE = os.environ.get("EMAIL_ON_FAILURE", "true").lower() in ("1", "true", "yes")
+EMAIL_DAILY_DIGEST = os.environ.get("EMAIL_DAILY_DIGEST", "true").lower() in ("1", "true", "yes")
+
+
+def _api_key_for(key_env):
+    """Resolve an API key for a chain entry (empty string = skip that provider)."""
+    if key_env == "GROQ_API_KEY":
+        return os.environ.get("GROQ_API_KEY", "")
+    if key_env == "OPENROUTER_API_KEY":
+        return os.environ.get("OPENROUTER_API_KEY", "") or ANTHROPIC_API_KEY
+    return os.environ.get(key_env, "") or ANTHROPIC_API_KEY
+
+
+def _build_model_chain():
+    """Build the model fallback chain — tried in order. A manual LLM_MODEL
+    override (workflow_dispatch) goes first; otherwise Groq free tier is primary
+    and OpenRouter free is the last-resort fallback."""
+    chain = []
+    if LLM_MODEL:
+        chain.append({"model": LLM_MODEL, "base_url": ANTHROPIC_BASE_URL, "key_env": "LEGACY", "format": LLM_API_FORMAT})
+    chain.extend([
+        {"model": "llama-3.3-70b-versatile", "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},          # Groq free: 1K req/day
+        {"model": "llama-3.1-8b-instant",    "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},          # Groq free: 14.4K req/day
+        {"model": "nvidia/nemotron-3-ultra-550b-a55b:free", "base_url": "https://openrouter.ai/api/v1", "key_env": "OPENROUTER_API_KEY", "format": "openai"},  # OpenRouter free: 50 req/day
+        {"model": "inclusionai/ling-3.0-flash:free",        "base_url": "https://openrouter.ai/api/v1", "key_env": "OPENROUTER_API_KEY", "format": "openai"},  # OpenRouter free
+    ])
+    return chain
+
+
+LLM_MODEL_CHAIN = _build_model_chain()
 
 # Email (Gmail SMTP)
 GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "alexgamingmax11@gmail.com")
@@ -251,8 +278,8 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
     Ask Claude to analyze multi-timeframe market data and decide on a trade.
     No rules, no thresholds — pure AI judgment.
     """
-    if not ANTHROPIC_API_KEY:
-        print("⚠️ ANTHROPIC_API_KEY not set — cannot make AI decisions")
+    if not any(_api_key_for(entry["key_env"]) for entry in LLM_MODEL_CHAIN):
+        print("⚠️ No LLM API key configured (set GROQ_API_KEY or OPENROUTER_API_KEY) — cannot make AI decisions")
         return None
 
     current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
@@ -338,10 +365,16 @@ Rules:
 - position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}
 - NOTE: Each trade costs {TRADING_FEE_PCT * 100:.1f}% taker fee each way (buy + sell = {TRADING_FEE_PCT * 200:.1f}% round-trip). Factor this into your risk/reward."""
 
-    # Try each model in the chain — fall back on failure
-    for model_name in LLM_MODEL_CHAIN:
+    # Try each provider in the chain — fall back on failure. Skip providers
+    # whose API key isn't configured (e.g. no GROQ_API_KEY set yet).
+    for entry in LLM_MODEL_CHAIN:
+        model_name = entry["model"]
+        api_key = _api_key_for(entry["key_env"])
+        if not api_key:
+            print(f"⏭️ Skipping {model_name} (no key for {entry['key_env']})")
+            continue
         print(f"🧠 Trying {model_name}...")
-        result = _call_llm(model_name, prompt)
+        result = _call_llm(entry, prompt, api_key)
         if result is not None:
             print(f"✅ {model_name} responded successfully")
             return result
@@ -351,15 +384,19 @@ Rules:
     return None
 
 
-def _call_llm(model_name, prompt):
-    """Call a single LLM model. Returns parsed decision dict or None on failure."""
+def _call_llm(entry, prompt, api_key):
+    """Call a single LLM provider. entry is a dict with model/base_url/format.
+    Returns parsed decision dict or None on failure."""
+    model_name = entry["model"]
+    base_url = entry["base_url"].rstrip("/")
+    api_format = entry.get("format", LLM_API_FORMAT)
     text = ""
     try:
-        if LLM_API_FORMAT == "openai":
+        if api_format == "openai":
             response = requests.post(
-                f"{ANTHROPIC_BASE_URL}/chat/completions",
+                f"{base_url}/chat/completions",
                 headers={
-                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json"
                 },
                 json={
@@ -378,10 +415,10 @@ def _call_llm(model_name, prompt):
             text = result['choices'][0]['message']['content'].strip()
         else:
             response = requests.post(
-                f"{ANTHROPIC_BASE_URL}/messages",
+                f"{base_url}/messages",
                 headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
-                    "Authorization": f"Bearer {ANTHROPIC_API_KEY}",
+                    "x-api-key": api_key,
+                    "Authorization": f"Bearer {api_key}",
                     "anthropic-version": "2023-06-01",
                     "Content-Type": "application/json"
                 },
@@ -504,7 +541,7 @@ def send_startup_email(portfolio):
     body = f"""AI Trader is running with LLM-powered decisions.
 
 Mode: Claude AI discretion (no hardcoded rules)
-Models: {' → '.join(LLM_MODEL_CHAIN)}
+Models: {' → '.join(m['model'] for m in LLM_MODEL_CHAIN)}
 Capital: EUR {portfolio['starting_capital_eur']:.2f}
 Symbols: {', '.join(SYMBOLS)}
 Check interval: {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip detection)
@@ -604,6 +641,59 @@ Market:
 
 Time: {datetime.now(timezone.utc).isoformat()}
 Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip).
+"""
+    send_email(subject, body)
+
+
+def send_hold_email(symbol, reasoning, portfolio):
+    """Email the AI's HOLD decision so you know the bot is alive and thinking."""
+    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
+    total_value = portfolio['current_cash_eur'] + current_exposure
+    subject = f"⏸ [{BOT_SOURCE}] HOLD — no trade this cycle"
+    body = f"""AI Trader - HOLD Decision
+{'='*40}
+
+Symbol: {symbol or 'none'}
+Reasoning: {reasoning}
+
+Portfolio:
+  Cash: EUR {portfolio['current_cash_eur']:.2f}
+  Exposure: EUR {current_exposure:.2f}
+  Total Value: EUR {total_value:.2f}
+  P&L: EUR {portfolio['total_pnl_eur']:+.2f} ({portfolio['total_pnl_percent']:+.2f}%)
+  Trades: {portfolio['total_trades']} | Win Rate: {portfolio['win_rate']:.1f}%
+
+Time: {datetime.now(timezone.utc).isoformat()}
+"""
+    send_email(subject, body)
+
+
+def send_failure_email(portfolio, models_tried):
+    """Alert when every LLM provider failed (rate-limited / outage). Throttled to
+    once per hour so a quota-exhausted day doesn't flood your inbox."""
+    now = time.time()
+    last = portfolio.get('last_failure_email_ts', 0)
+    if now - last < 3600:
+        print("⏳ Failure email throttled (already sent this hour)")
+        return
+    portfolio['last_failure_email_ts'] = now
+
+    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
+    total_value = portfolio['current_cash_eur'] + current_exposure
+    subject = f"🚨 [{BOT_SOURCE}] AI Trader: All models failed"
+    body = f"""AI Trader could not reach any LLM provider this cycle.
+
+Models tried: {' → '.join(models_tried)}
+Likely cause: free API rate limit (OpenRouter ~50 req/day, Groq free tier) or outage.
+
+Portfolio:
+  Cash: EUR {portfolio['current_cash_eur']:.2f}
+  Exposure: EUR {current_exposure:.2f}
+  Total Value: EUR {total_value:.2f}
+  Trades: {portfolio['total_trades']}
+
+Next retry in {CHECK_INTERVAL // 60} minutes.
+Time: {datetime.now(timezone.utc).isoformat()}
 """
     send_email(subject, body)
 
@@ -799,8 +889,12 @@ def run_cycle(portfolio, trades_today):
         elif action == 'HOLD':
             print(f"   Holding — {reasoning}")
             log_decision(action, symbol, reasoning, price)
+            if EMAIL_ON_HOLD:
+                send_hold_email(symbol, reasoning, portfolio)
     else:
         print("⚠️ Could not get AI decision — will retry next cycle")
+        if EMAIL_ON_FAILURE:
+            send_failure_email(portfolio, [entry["model"] for entry in LLM_MODEL_CHAIN])
 
     return trades_today, market_data
 
@@ -810,7 +904,7 @@ def main():
 
     print("🤖 AI TRADER — Starting (LLM-Powered, Multi-Timeframe)")
     print(f"📅 {datetime.now(timezone.utc).isoformat()}")
-    print(f"🧠 Models: {' → '.join(LLM_MODEL_CHAIN)}")
+    print(f"🧠 Models: {' → '.join(m['model'] for m in LLM_MODEL_CHAIN)}")
     print(f"💰 Capital: EUR {STARTING_CAPITAL:,.0f}")
     print(f"📧 Alerts: {GMAIL_ADDRESS}")
     print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} min (fast-poll: {OPPORTUNITY_INTERVAL}s on dip)")
@@ -824,15 +918,16 @@ def main():
     else:
         print()
 
-    if not ANTHROPIC_API_KEY:
-        print("⚠️ WARNING: ANTHROPIC_API_KEY not set!")
-        print("   Set it as an environment variable or in the script.")
+    if not any(_api_key_for(entry["key_env"]) for entry in LLM_MODEL_CHAIN):
+        print("⚠️ WARNING: No LLM API key configured!")
+        print("   Set GROQ_API_KEY or OPENROUTER_API_KEY as an environment variable or in the script.")
         print("   The bot will run but cannot make trading decisions.\n")
 
     portfolio = load_portfolio()
 
     if run_once:
-        # Cloud mode: single cycle, no email, no loop
+        # Cloud mode: single cycle — run the analysis, save state, and send a
+        # once-per-day status digest (trades + HOLD/failure alerts fire in run_cycle).
         trades_today = 0
         today = datetime.now(timezone.utc).date()
         # Count today's trades from decision log
@@ -845,8 +940,20 @@ def main():
         except FileNotFoundError:
             pass
 
-        trades_today, _ = run_cycle(portfolio, trades_today)
+        trades_today, market_data = run_cycle(portfolio, trades_today)
         save_portfolio(portfolio)
+
+        # Daily digest — once per UTC day. Persist last-digest-date in the
+        # portfolio file so the next cloud run knows it already emailed today.
+        if EMAIL_DAILY_DIGEST:
+            today_iso = today.isoformat()
+            if portfolio.get('last_digest_date') != today_iso:
+                send_status_email(portfolio, market_data)
+                portfolio['last_digest_date'] = today_iso
+                save_portfolio(portfolio)
+            else:
+                print(f"⏳ Daily digest already sent today ({today_iso})")
+
         print(f"\n✅ Cycle complete — exiting (cloud mode)")
         return
 
