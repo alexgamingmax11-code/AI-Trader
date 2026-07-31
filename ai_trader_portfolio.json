@@ -1,12 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 500,
-  "positions": [],
+  "current_cash_eur": 374.88,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-07-31T08:35:20.827318+00:00",
+      "entry_price": 55506.4,
+      "current_price": 55506.4,
+      "value_eur": 125.0,
+      "fee_paid": 0.12
+    }
+  ],
   "closed_trades": [],
-  "total_trades": 0,
+  "total_trades": 1,
   "win_rate": 0,
   "total_pnl_eur": 0,
   "total_pnl_percent": 0,
-  "total_fees_paid_eur": 0
+  "total_fees_paid_eur": 0.12
 }
