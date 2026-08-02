@@ -3,6 +3,8 @@ name: AI Trader Bot
 on:
   schedule:
     - cron: '*/15 * * * *'
+  repository_dispatch:
+    types: [run-trader]   # external pinger (e.g. cron-job.org) can force a run every 15 min
   workflow_dispatch:
     inputs:
       model:
@@ -21,7 +23,7 @@ permissions:
 jobs:
   trade:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

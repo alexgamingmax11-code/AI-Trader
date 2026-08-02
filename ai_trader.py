@@ -495,9 +495,13 @@ def load_portfolio():
 
 
 def save_portfolio(portfolio):
-    """Save portfolio state to JSON"""
-    with open(PORTFOLIO_FILE, 'w') as f:
+    """Save portfolio state to JSON — atomic write (temp + replace) so a runner
+    killed mid-write can't leave a truncated file that would silently reset
+    the portfolio on the next run."""
+    tmp_file = PORTFOLIO_FILE + ".tmp"
+    with open(tmp_file, 'w') as f:
         json.dump(portfolio, f, indent=2)
+    os.replace(tmp_file, PORTFOLIO_FILE)
 
 
 def log_decision(action, symbol, reasoning, price=None):
@@ -648,7 +652,15 @@ Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes (fast-
 
 
 def send_hold_email(symbol, reasoning, portfolio):
-    """Email the AI's HOLD decision so you know the bot is alive and thinking."""
+    """Email the AI's HOLD decision so you know the bot is alive and thinking.
+    Throttled to once per hour — at a true 15-min check cadence an email every
+    cycle would flood the inbox (~96/day). Trades and failures always email."""
+    now = time.time()
+    if now - portfolio.get('last_hold_email_ts', 0) < 3600:
+        print("⏳ HOLD email throttled (already sent this hour)")
+        return
+    portfolio['last_hold_email_ts'] = now
+
     current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
     total_value = portfolio['current_cash_eur'] + current_exposure
     subject = f"⏸ [{BOT_SOURCE}] HOLD — no trade this cycle"
@@ -936,14 +948,31 @@ def main():
         try:
             with open(DECISION_LOG, 'r') as f:
                 for line in f:
-                    entry = json.loads(line.strip())
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        entry = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue  # skip partial/corrupt lines from killed runs
                     if entry.get('timestamp', '').startswith(today.isoformat()):
                         trades_today += 1
         except FileNotFoundError:
             pass
 
-        trades_today, market_data = run_cycle(portfolio, trades_today)
-        save_portfolio(portfolio)
+        try:
+            trades_today, market_data = run_cycle(portfolio, trades_today)
+            save_portfolio(portfolio)
+        except Exception as e:
+            # Unattended cloud run — make the crash visible by email before dying
+            import traceback
+            traceback.print_exc()
+            send_email(f"🚨 [{BOT_SOURCE}] AI Trader CRASHED: {type(e).__name__}",
+                       f"The trading cycle crashed with an unexpected error.\n\n"
+                       f"{type(e).__name__}: {e}\n\n"
+                       f"The next scheduled run will retry automatically.\n"
+                       f"Time: {datetime.now(timezone.utc).isoformat()}")
+            raise
 
         # Daily digest — once per UTC day. Persist last-digest-date in the
         # portfolio file so the next cloud run knows it already emailed today.
