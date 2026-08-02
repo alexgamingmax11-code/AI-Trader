@@ -42,7 +42,7 @@ if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-API_KEY = os.environ.get("REVOLUT_X_API_KEY", "KavAnfSVkBrxYPixZVItrWOMvDTzeHtY20pjw2KSHUxZONX3HB6G7t4s8paQBJNH")
+API_KEY = os.environ.get("REVOLUT_X_API_KEY", "")  # no default — never commit live keys (repo is public)
 PRIVATE_KEY_PATH = os.environ.get("REVOLUT_X_PRIVATE_KEY_PATH", os.path.expanduser("~/.config/revolut-x/private.pem"))
 BASE_URL = "https://revx.revolut.com"
 PORTFOLIO_FILE = os.environ.get("PORTFOLIO_FILE", os.path.join(os.path.expanduser("~"), "ai_trader_portfolio.json"))
@@ -406,7 +406,7 @@ def _call_llm(entry, prompt, api_key):
                     "max_tokens": LLM_MAX_TOKENS,
                     "messages": [{"role": "user", "content": prompt}]
                 },
-                timeout=180
+                timeout=90
             )
 
             if response.status_code != 200:
@@ -429,7 +429,7 @@ def _call_llm(entry, prompt, api_key):
                     "max_tokens": LLM_MAX_TOKENS,
                     "messages": [{"role": "user", "content": prompt}]
                 },
-                timeout=180
+                timeout=90
             )
 
             if response.status_code != 200:
@@ -475,11 +475,17 @@ def _call_llm(entry, prompt, api_key):
 # ── Portfolio Management ───────────────────────────────────────────────────────
 
 def load_portfolio():
-    """Load portfolio state from JSON"""
+    """Load portfolio state from JSON. A missing file starts fresh; a CORRUPT
+    file is preserved (.corrupt) and raises — the crash handler emails you —
+    instead of silently resetting positions/P&L and trading on phantom state."""
     try:
         with open(PORTFOLIO_FILE, 'r') as f:
             return json.load(f)
-    except:
+    except json.JSONDecodeError as e:
+        corrupt_path = PORTFOLIO_FILE + ".corrupt"
+        os.replace(PORTFOLIO_FILE, corrupt_path)
+        raise RuntimeError(f"Portfolio file corrupt — preserved at {corrupt_path}: {e}")
+    except FileNotFoundError:
         return {
             "initialized_at": datetime.now(timezone.utc).isoformat(),
             "starting_capital_eur": STARTING_CAPITAL,
@@ -529,7 +535,7 @@ def send_email(subject, body):
         msg['Subject'] = f"[{BOT_SOURCE}] {subject}" if BOT_SOURCE and f"[{BOT_SOURCE}]" not in subject else subject
         msg.attach(MIMEText(body, 'plain'))
 
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=20) as server:
             server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
             server.send_message(msg)
 
@@ -648,7 +654,7 @@ Market:
 Time: {datetime.now(timezone.utc).isoformat()}
 Bot is running and analyzing markets every {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip).
 """
-    send_email(subject, body)
+    return send_email(subject, body)
 
 
 def send_hold_email(symbol, reasoning, portfolio):
@@ -659,7 +665,6 @@ def send_hold_email(symbol, reasoning, portfolio):
     if now - portfolio.get('last_hold_email_ts', 0) < 3600:
         print("⏳ HOLD email throttled (already sent this hour)")
         return
-    portfolio['last_hold_email_ts'] = now
 
     current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
     total_value = portfolio['current_cash_eur'] + current_exposure
@@ -679,7 +684,8 @@ Portfolio:
 
 Time: {datetime.now(timezone.utc).isoformat()}
 """
-    send_email(subject, body)
+    if send_email(subject, body):
+        portfolio['last_hold_email_ts'] = now  # only throttle after a successful send
 
 
 def send_failure_email(portfolio, models_tried):
@@ -875,6 +881,19 @@ def run_cycle(portfolio, trades_today):
         if candles:
             pos['current_price'] = float(candles[-1]['close'])
 
+    # If every candle fetch failed (Revolut outage / revoked key), don't ask the
+    # LLM to hallucinate a decision about nothing — treat it as a data outage.
+    any_candles = any(
+        candles
+        for tf_data in market_data.values()
+        for candles in tf_data.values()
+    )
+    if not any_candles:
+        print("⚠️ No market data at all — skipping LLM decision this cycle")
+        if EMAIL_ON_FAILURE:
+            send_failure_email(portfolio, ["Revolut X market data"])
+        return trades_today, market_data
+
     # Ask Claude for a decision
     print(f"\n🧠 Asking LLM for analysis... (trades today: {trades_today})")
     decision = get_llm_decision(market_data, portfolio, trades_today=trades_today)
@@ -905,6 +924,11 @@ def run_cycle(portfolio, trades_today):
             log_decision(action, symbol, reasoning, price)
             if EMAIL_ON_HOLD:
                 send_hold_email(symbol, reasoning, portfolio)
+        else:
+            # LLM signalled BUY/SELL but we have no usable price (candle fetch
+            # failed for that symbol) — don't lose the signal silently.
+            print(f"⚠️ {action} {symbol} signal dropped — no price data available")
+            log_decision(f"DROPPED_{action}", symbol, f"{action} dropped: no price/data. {reasoning}", price)
     else:
         print("⚠️ Could not get AI decision — will retry next cycle")
         if EMAIL_ON_FAILURE:
@@ -937,7 +961,19 @@ def main():
         print("   Set GROQ_API_KEY or OPENROUTER_API_KEY as an environment variable or in the script.")
         print("   The bot will run but cannot make trading decisions.\n")
 
-    portfolio = load_portfolio()
+    try:
+        portfolio = load_portfolio()
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        if run_once:
+            send_email(f"🚨 [{BOT_SOURCE}] AI Trader CRASHED: {type(e).__name__}",
+                       f"Could not load portfolio state — refusing to trade on a reset portfolio.\n\n"
+                       f"{type(e).__name__}: {e}\n\n"
+                       f"The corrupt file was preserved next to the portfolio (suffix .corrupt).\n"
+                       f"Restore it and the next run will recover.\n"
+                       f"Time: {datetime.now(timezone.utc).isoformat()}")
+        raise
 
     if run_once:
         # Cloud mode: single cycle — run the analysis, save state, and send a
@@ -955,7 +991,7 @@ def main():
                         entry = json.loads(line)
                     except json.JSONDecodeError:
                         continue  # skip partial/corrupt lines from killed runs
-                    if entry.get('timestamp', '').startswith(today.isoformat()):
+                    if entry.get('action') in ('BUY', 'SELL') and entry.get('timestamp', '').startswith(today.isoformat()):
                         trades_today += 1
         except FileNotFoundError:
             pass
@@ -979,9 +1015,11 @@ def main():
         if EMAIL_DAILY_DIGEST:
             today_iso = today.isoformat()
             if portfolio.get('last_digest_date') != today_iso:
-                send_status_email(portfolio, market_data)
-                portfolio['last_digest_date'] = today_iso
-                save_portfolio(portfolio)
+                if send_status_email(portfolio, market_data):
+                    portfolio['last_digest_date'] = today_iso
+                    save_portfolio(portfolio)
+                else:
+                    print("⚠️ Digest email failed — will retry next run")
             else:
                 print(f"⏳ Daily digest already sent today ({today_iso})")
 
