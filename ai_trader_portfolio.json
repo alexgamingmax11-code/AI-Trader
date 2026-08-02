@@ -1,23 +1,31 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 374.88,
+  "current_cash_eur": 249.76,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-07-31T08:35:20.827318+00:00",
       "entry_price": 55506.4,
-      "current_price": 54944.17,
+      "current_price": 54940.02,
+      "value_eur": 125.0,
+      "fee_paid": 0.12
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-02T19:01:16.103942+00:00",
+      "entry_price": 1625.09,
+      "current_price": 1625.09,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
   ],
   "closed_trades": [],
-  "total_trades": 1,
+  "total_trades": 2,
   "win_rate": 0,
   "total_pnl_eur": 0,
   "total_pnl_percent": 0,
-  "total_fees_paid_eur": 0.12,
+  "total_fees_paid_eur": 0.24,
   "last_digest_date": "2026-08-02",
   "last_hold_email_ts": 1785693682.436584
 }
