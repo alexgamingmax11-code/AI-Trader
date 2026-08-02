@@ -7,7 +7,7 @@
       "symbol": "BTC-EUR",
       "entry_time": "2026-07-31T08:35:20.827318+00:00",
       "entry_price": 55506.4,
-      "current_price": 54772.62,
+      "current_price": 54765.17,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
@@ -19,5 +19,5 @@
   "total_pnl_percent": 0,
   "total_fees_paid_eur": 0.12,
   "last_digest_date": "2026-08-02",
-  "last_hold_email_ts": 1785686474.4367232
+  "last_hold_email_ts": 1785690075.5210946
 }
