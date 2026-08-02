@@ -1,21 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 124.63999999999999,
+  "current_cash_eur": 248.07554945015346,
   "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-07-31T08:35:20.827318+00:00",
-      "entry_price": 55506.4,
-      "current_price": 54940.28,
-      "value_eur": 125.0,
-      "fee_paid": 0.12
-    },
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-02T19:01:16.103942+00:00",
       "entry_price": 1625.09,
-      "current_price": 1631.13,
+      "current_price": 1626.36,
       "value_eur": 125.0,
       "fee_paid": 0.12
     },
@@ -23,17 +15,30 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-02T19:15:58.705603+00:00",
       "entry_price": 63.693,
-      "current_price": 63.794,
+      "current_price": 63.663,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
   ],
-  "closed_trades": [],
+  "closed_trades": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-07-31T08:35:20.827318+00:00",
+      "exit_time": "2026-08-02T23:01:08.911405+00:00",
+      "entry_price": 55506.4,
+      "exit_price": 54864.99,
+      "pnl_eur": -1.44,
+      "pnl_pct": -1.16,
+      "fee_paid": 0.24,
+      "net_pnl_eur": -1.68,
+      "reasoning": "The recent candles on the 1m timeframe show an established price stagnation, while the 15m and 5m timeframes indicate a potential sell setup due to a bearish structure forming."
+    }
+  ],
   "total_trades": 3,
-  "win_rate": 0,
-  "total_pnl_eur": 0,
-  "total_pnl_percent": 0,
-  "total_fees_paid_eur": 0.36,
+  "win_rate": 0.0,
+  "total_pnl_eur": -1.68,
+  "total_pnl_percent": -50.38,
+  "total_fees_paid_eur": 0.48,
   "last_digest_date": "2026-08-02",
   "last_hold_email_ts": 1785708075.1344042
 }
