@@ -1,8 +1,17 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 497.25908128089577,
-  "positions": [],
+  "current_cash_eur": 372.13908128089577,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-03T06:01:27.712499+00:00",
+      "entry_price": 54404.91,
+      "current_price": 54404.91,
+      "value_eur": 125.0,
+      "fee_paid": 0.12
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -41,11 +50,11 @@
       "reasoning": "Existing position SOL-EUR's thesis still valid on the 15m trend, and the 5m/1m candles no longer show bullish structure."
     }
   ],
-  "total_trades": 3,
+  "total_trades": 4,
   "win_rate": 33.33333333333333,
   "total_pnl_eur": -2.73,
   "total_pnl_percent": -0.55,
-  "total_fees_paid_eur": 0.73,
+  "total_fees_paid_eur": 0.85,
   "last_digest_date": "2026-08-03",
   "last_hold_email_ts": 1785733277.7383666
 }
