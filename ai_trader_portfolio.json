@@ -1,17 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 373.33091272234145,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-02T19:15:58.705603+00:00",
-      "entry_price": 63.693,
-      "current_price": 63.192,
-      "value_eur": 125.0,
-      "fee_paid": 0.12
-    }
-  ],
+  "current_cash_eur": 497.25908128089577,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -36,13 +27,25 @@
       "fee_paid": 0.25,
       "net_pnl_eur": 0.14,
       "reasoning": "The ETH-EUR position at 15m oversold is invalid due to reversal structure in the 5m and 1m timeframes. Time to close this underperforming position."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-02T19:15:58.705603+00:00",
+      "exit_time": "2026-08-03T04:31:06.192838+00:00",
+      "entry_price": 63.693,
+      "exit_price": 63.208,
+      "pnl_eur": -0.95,
+      "pnl_pct": -0.76,
+      "fee_paid": 0.24,
+      "net_pnl_eur": -1.19,
+      "reasoning": "Existing position SOL-EUR's thesis still valid on the 15m trend, and the 5m/1m candles no longer show bullish structure."
     }
   ],
   "total_trades": 3,
-  "win_rate": 50.0,
-  "total_pnl_eur": -1.54,
-  "total_pnl_percent": -25.33,
-  "total_fees_paid_eur": 0.61,
+  "win_rate": 33.33333333333333,
+  "total_pnl_eur": -2.73,
+  "total_pnl_percent": -0.55,
+  "total_fees_paid_eur": 0.73,
   "last_digest_date": "2026-08-03",
   "last_hold_email_ts": 1785728750.587524
 }
