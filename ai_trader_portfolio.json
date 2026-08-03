@@ -7,7 +7,7 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-02T19:15:58.705603+00:00",
       "entry_price": 63.693,
-      "current_price": 63.264,
+      "current_price": 63.233,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
@@ -44,5 +44,5 @@
   "total_pnl_percent": -25.33,
   "total_fees_paid_eur": 0.61,
   "last_digest_date": "2026-08-03",
-  "last_hold_email_ts": 1785724273.2488472
+  "last_hold_email_ts": 1785728750.587524
 }
