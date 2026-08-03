@@ -1,19 +1,31 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 434.1211526228213,
+  "current_cash_eur": 323.45115262282127,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 63.86,
+      "current_price": 63.864,
       "value_eur": 62.5,
       "fee_paid": 0.06,
       "peak_price": 63.985,
       "trough_price": 62.961,
       "tp1_done": true,
       "invalidation": 59.81
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-03T16:31:13.829041+00:00",
+      "entry_price": 1623.22,
+      "current_price": 1623.22,
+      "peak_price": 1623.22,
+      "trough_price": 1623.22,
+      "value_eur": 110.56,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1550.18
     }
   ],
   "closed_trades": [
@@ -78,11 +90,11 @@
       "reasoning": "ETH-EUR 15m shows bearish medium trend (-0.15%) with RSI=30.8 and BB%b=0.40, but the 5m candle at 13:25 reversed sharply from 1603.80 to 1596.43 (close at low, failed bounce), and 1m candles continue declining \u2014 the long thesis at 1602.04 is invalidated by clear bearish continuation across 5m and 1m timeframes."
     }
   ],
-  "total_trades": 6,
+  "total_trades": 7,
   "win_rate": 20.0,
   "total_pnl_eur": -3.3099999999999996,
   "total_pnl_percent": -0.48,
-  "total_fees_paid_eur": 1.3900000000000001,
+  "total_fees_paid_eur": 1.5000000000000002,
   "last_digest_date": "2026-08-03",
   "last_hold_email_ts": 1785772886.2546222,
   "cb_date": "2026-08-03",
