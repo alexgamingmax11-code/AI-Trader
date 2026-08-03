@@ -1,31 +1,19 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 323.45115262282127,
+  "current_cash_eur": 433.30040891586845,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 63.748,
+      "current_price": 63.751,
       "value_eur": 62.5,
       "fee_paid": 0.06,
       "peak_price": 64.38,
       "trough_price": 62.961,
       "tp1_done": true,
       "invalidation": 59.81
-    },
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-08-03T16:31:13.829041+00:00",
-      "entry_price": 1623.22,
-      "current_price": 1612.88,
-      "peak_price": 1626.67,
-      "trough_price": 1612.49,
-      "value_eur": 110.56,
-      "fee_paid": 0.11,
-      "tp1_done": false,
-      "invalidation": 1550.18
     }
   ],
   "closed_trades": [
@@ -88,13 +76,27 @@
       "fee_paid": 0.24,
       "net_pnl_eur": -0.68,
       "reasoning": "ETH-EUR 15m shows bearish medium trend (-0.15%) with RSI=30.8 and BB%b=0.40, but the 5m candle at 13:25 reversed sharply from 1603.80 to 1596.43 (close at low, failed bounce), and 1m candles continue declining \u2014 the long thesis at 1602.04 is invalidated by clear bearish continuation across 5m and 1m timeframes."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-03T16:31:13.829041+00:00",
+      "exit_time": "2026-08-03T23:31:20.105394+00:00",
+      "entry_price": 1623.22,
+      "exit_price": 1614.4,
+      "pnl_eur": -0.6,
+      "pnl_pct": -0.54,
+      "fee_paid": 0.22,
+      "net_pnl_eur": -0.82,
+      "mfe_pct": 0.21,
+      "mae_pct": -0.66,
+      "reasoning": "The thesis is broken on structure as the 1-day and 15-minute trend direction suggests a weakening trend, with a lower high and lower low against the existing long position on the 5-minute chart."
     }
   ],
   "total_trades": 7,
-  "win_rate": 20.0,
-  "total_pnl_eur": -3.3099999999999996,
-  "total_pnl_percent": -0.48,
-  "total_fees_paid_eur": 1.5000000000000002,
+  "win_rate": 16.666666666666664,
+  "total_pnl_eur": -4.13,
+  "total_pnl_percent": -0.68,
+  "total_fees_paid_eur": 1.6100000000000003,
   "last_digest_date": "2026-08-03",
   "last_hold_email_ts": 1785796263.392292,
   "cb_date": "2026-08-03",
