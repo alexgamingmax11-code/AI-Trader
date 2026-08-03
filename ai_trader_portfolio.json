@@ -7,10 +7,10 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 63.926,
+      "current_price": 63.967,
       "value_eur": 62.5,
       "fee_paid": 0.06,
-      "peak_price": 63.926,
+      "peak_price": 63.967,
       "trough_price": 62.961,
       "tp1_done": true,
       "invalidation": 59.81
