@@ -7,7 +7,7 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 64.02,
+      "current_price": 64.069,
       "value_eur": 62.5,
       "fee_paid": 0.06,
       "peak_price": 64.38,
@@ -19,7 +19,7 @@
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-03T16:31:13.829041+00:00",
       "entry_price": 1623.22,
-      "current_price": 1620.21,
+      "current_price": 1620.74,
       "peak_price": 1626.67,
       "trough_price": 1618.61,
       "value_eur": 110.56,
@@ -96,7 +96,7 @@
   "total_pnl_percent": -0.48,
   "total_fees_paid_eur": 1.5000000000000002,
   "last_digest_date": "2026-08-03",
-  "last_hold_email_ts": 1785788188.533827,
+  "last_hold_email_ts": 1785792661.5699522,
   "cb_date": "2026-08-03",
   "cb_day_start_value": 497.63908689959584
 }
