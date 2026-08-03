@@ -7,7 +7,7 @@
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-03T10:31:01.162116+00:00",
       "entry_price": 1602.04,
-      "current_price": 1593.49,
+      "current_price": 1594.49,
       "value_eur": 125.0,
       "fee_paid": 0.12
     },
@@ -15,7 +15,7 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 62.761,
+      "current_price": 62.792,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
