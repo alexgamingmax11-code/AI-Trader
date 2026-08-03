@@ -7,7 +7,7 @@
       "symbol": "BTC-EUR",
       "entry_time": "2026-08-03T06:01:27.712499+00:00",
       "entry_price": 54404.91,
-      "current_price": 54369.29,
+      "current_price": 54357.57,
       "value_eur": 125.0,
       "fee_paid": 0.12
     },
@@ -15,7 +15,7 @@
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-03T10:31:01.162116+00:00",
       "entry_price": 1602.04,
-      "current_price": 1602.56,
+      "current_price": 1601.43,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
