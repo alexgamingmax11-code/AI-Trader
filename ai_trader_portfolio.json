@@ -1,21 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 121.89908128089576,
+  "current_cash_eur": 246.28094149902677,
   "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-03T06:01:27.712499+00:00",
-      "entry_price": 54404.91,
-      "current_price": 54325.66,
-      "value_eur": 125.0,
-      "fee_paid": 0.12
-    },
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-03T10:31:01.162116+00:00",
       "entry_price": 1602.04,
-      "current_price": 1598.27,
+      "current_price": 1593.49,
       "value_eur": 125.0,
       "fee_paid": 0.12
     },
@@ -23,7 +15,7 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-03T11:01:15.564303+00:00",
       "entry_price": 62.961,
-      "current_price": 62.89,
+      "current_price": 62.761,
       "value_eur": 125.0,
       "fee_paid": 0.12
     }
@@ -64,13 +56,25 @@
       "fee_paid": 0.24,
       "net_pnl_eur": -1.19,
       "reasoning": "Existing position SOL-EUR's thesis still valid on the 15m trend, and the 5m/1m candles no longer show bullish structure."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-03T06:01:27.712499+00:00",
+      "exit_time": "2026-08-03T12:01:18.793515+00:00",
+      "entry_price": 54404.91,
+      "exit_price": 54188.1,
+      "pnl_eur": -0.5,
+      "pnl_pct": -0.4,
+      "fee_paid": 0.24,
+      "net_pnl_eur": -0.74,
+      "reasoning": "15m trend is no longer bullish, price has reached resistance level and existing position is in profit. 1m candles show immediate momentum is decreasing."
     }
   ],
   "total_trades": 6,
-  "win_rate": 33.33333333333333,
-  "total_pnl_eur": -2.73,
-  "total_pnl_percent": -0.55,
-  "total_fees_paid_eur": 1.0899999999999999,
+  "win_rate": 25.0,
+  "total_pnl_eur": -3.4699999999999998,
+  "total_pnl_percent": -50.74,
+  "total_fees_paid_eur": 1.21,
   "last_digest_date": "2026-08-03",
   "last_hold_email_ts": 1785757551.453603
 }
