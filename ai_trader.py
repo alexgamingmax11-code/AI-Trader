@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
 AI Day Trader - LLM-Powered Crypto Trading Bot
-Uses Claude to analyze market data and make intelligent trading decisions.
-No hardcoded rules — pure AI discretion.
+Uses an LLM to analyze market data and make trading decisions.
+The LLM owns entries and early discretionary exits; a deterministic risk
+overlay (hard stops, partial take-profits, trailing stops, time stops) runs
+before the LLM each cycle and cannot be overridden by it.
 """
 import os
 import sys
@@ -11,7 +13,7 @@ import json
 import base64
 import smtplib
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from cryptography.hazmat.primitives import serialization
@@ -104,15 +106,38 @@ GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 # Trading
 SYMBOLS = ["BTC-EUR", "ETH-EUR", "SOL-EUR"]
 CANDLE_CONFIGS = [
+    {"interval": 1440, "limit": 30, "label": "1d"},    # 30d daily (macro trend context line)
     {"interval": 15,   "limit": 48, "label": "15m"},   # 12h of 15-min (trend + momentum)
-    {"interval": 5,    "limit": 12, "label": "5m"},    # 1h of 5-min (entry patterns)
-    {"interval": 1,    "limit": 6,  "label": "1m"},    # 6m of 1-min (timing)
+    {"interval": 5,    "limit": 12, "label": "5m"},    # 1h of 5-min (entry refinement only)
+    # 1m removed: at a 15-min check cadence 1m signals are stale by execution —
+    # pure noise that invites hallucinated "timing" entries (deep analysis 2026-08-02).
 ]
 CHECK_INTERVAL = 300      # 5 minutes between checks (responsive to intraday moves)
 OPPORTUNITY_INTERVAL = 60 # 60s fast-poll when a dip is detected
-POSITION_SIZE_PCT = 0.25  # Max 25% per position
-MAX_EXPOSURE_PCT = 0.75   # Max 75% total deployed
+POSITION_SIZE_PCT = 0.25  # Legacy cap; risk-based sizing below is authoritative
+MAX_EXPOSURE_PCT = 0.75   # Legacy; enforced caps are MAX_POSITIONS / MAX_NOTIONAL_PCT below
 TRADING_FEE_PCT = 0.001   # 0.1% taker fee (Revolut X standard for crypto)
+
+# ── Deterministic risk overlay (code-enforced, LLM cannot override) ───────────
+# Parameters grounded in a 14-day volatility study of BTCEUR/ETHEUR/SOLEUR 15m
+# data (24h adverse-excursion p90: BTC 2.96%, ETH 3.32%, SOL 3.33%) — stops sit
+# ~1.2-1.5x beyond noise so only genuine trend breaks tag them.
+HARD_STOP_PCT = {"BTC-EUR": 0.035, "ETH-EUR": 0.045, "SOL-EUR": 0.050}
+SOFT_INVALIDATION_PCT = 0.02    # prompt flag: thesis broken, exit on structure
+TP1_PCT = 0.015                 # sell 50% at +1.5% (banks the observed +1.4-1.8% winners)
+TRAIL_PCT = 0.012               # trail remainder -1.2% from post-TP1 peak
+STALL_HOURS = 20                # dead-thesis exit: age >= 20h AND pnl in band…
+STALL_BAND = (-0.015, 0.0075)   # …[-1.5%, +0.75%) — frees capital for real signals
+TIME_STOP_HOURS = 48            # unconditional exit if still underwater at 48h
+COOLDOWN_HOURS = 4              # per-symbol re-entry block after an overlay exit
+RISK_PER_TRADE_PCT = 0.01       # 1% of current equity risked per trade
+MAX_POSITION_PCT = 0.30         # of current equity
+MAX_POSITIONS = 2               # BTC/ETH/SOL are 0.85-0.95 correlated: 3 = one bet
+MAX_NOTIONAL_PCT = 0.50         # total deployed, of current equity
+ONE_AT_RISK_MIN_PNL = 0.0075    # 2nd position allowed only if existing >= +0.75%
+DAILY_CIRCUIT_BREAKER_PCT = 0.05  # no new BUYs if equity -5% from UTC day start
+MAX_TRADES_PER_DAY = 10         # enforced in code (was advisory-only)
+MIN_TRADE_EUR = 50              # floor for risk-sized orders
 STARTING_CAPITAL = float(os.environ.get("STARTING_CAPITAL", "500"))  # Default €500
 
 # ── Revolut X API ──────────────────────────────────────────────────────────────
@@ -165,7 +190,7 @@ def format_candles_for_llm(candles, symbol, label):
         return f"{symbol} ({label}): No data available"
 
     # Show appropriate number of candles per timeframe
-    max_per_tf = {"15m": 12, "5m": 8, "1m": 4}
+    max_per_tf = {"15m": 12, "5m": 8}
     limit = max_per_tf.get(label, 12)
     rows = []
     for c in candles[-limit:]:
@@ -197,9 +222,9 @@ def get_market_summary(candles, label):
 
     # Candle-count lookbacks that map to ~real-time windows
     lookbacks = {
+        "1d":  {"recent": 7, "medium": 21, "full": None},   # 1w / 3w / 30d
         "15m": {"recent": 4, "medium": 16, "full": None},   # 1h / 4h / all
         "5m":  {"recent": 12, "medium": 48, "full": None},   # 1h / 4h / all
-        "1m":  {"recent": 15, "medium": 60, "full": None},   # 15m / 1h / all
     }
     lb = lookbacks.get(label, {"recent": 2, "medium": 5, "full": None})
 
@@ -273,19 +298,158 @@ def detect_dip_opportunity(market_data):
     return False
 
 
+# ── Deterministic Risk Overlay ─────────────────────────────────────────────────
+# These rules run BEFORE the LLM each cycle and cannot be overridden by it.
+# The LLM owns entries and discretionary exits; the overlay owns disaster
+# protection, profit-banking, and dead-thesis cleanup — the spots where
+# discretion demonstrably fails (disposition effect: a -1.3% position was held
+# 2 days on "thesis marginally valid" rationalizations).
+
+def portfolio_value(portfolio):
+    """Mark-to-market equity: cash + open positions at current price.
+    (The old cash-only calc is why stats showed nonsense like -24%.)"""
+    value = portfolio['current_cash_eur']
+    for p in portfolio['positions']:
+        cur = p.get('current_price', p['entry_price'])
+        value += p['value_eur'] * (cur / p['entry_price'])
+    return value
+
+
+def _position_age_hours(position):
+    try:
+        entry = datetime.fromisoformat(position['entry_time'])
+        return (datetime.now(timezone.utc) - entry).total_seconds() / 3600
+    except Exception:
+        return 0.0
+
+
+def _backfill_position(position, current_price):
+    """Older positions predate the overlay fields — fill sane defaults."""
+    entry = position['entry_price']
+    position['peak_price'] = max(position.get('peak_price', entry), current_price)
+    position['trough_price'] = min(position.get('trough_price', entry), current_price)
+    position.setdefault('tp1_done', False)
+    if not position.get('invalidation'):
+        stop = HARD_STOP_PCT.get(position['symbol'], 0.04)
+        position['invalidation'] = round(entry * (1 - stop), 2)
+
+
+def apply_risk_overlay(portfolio, market_data):
+    """Check every open position against the deterministic rules; execute exits
+    via the normal sell path (so emails/logging/state all fire). Returns the
+    list of (symbol, reason) exits performed."""
+    exits = []
+    for pos in list(portfolio['positions']):
+        symbol = pos['symbol']
+        tf = market_data.get(symbol, {})
+        candles = tf.get('5m') or tf.get('15m')
+        if not candles:
+            continue  # no data — don't act blind
+        price = float(candles[-1]['close'])
+        pos['current_price'] = price
+        _backfill_position(pos, price)
+
+        entry = pos['entry_price']
+        pnl = (price / entry) - 1
+        age_h = _position_age_hours(pos)
+        stop = HARD_STOP_PCT.get(symbol, 0.04)
+        reason = None
+        fraction = 1.0
+
+        if pnl <= -stop:
+            reason = f"HARD STOP: {pnl*100:+.1f}% breached {symbol} -{stop*100:.1f}% limit"
+        elif not pos['tp1_done'] and pnl >= TP1_PCT:
+            reason = f"TP1: +{pnl*100:.1f}% — banking 50%, trailing the rest"
+            fraction = 0.5
+        elif pos['tp1_done'] and price <= pos['peak_price'] * (1 - TRAIL_PCT):
+            reason = f"TRAILING STOP: -1.2% from post-TP1 peak {pos['peak_price']:.2f}"
+        elif age_h >= TIME_STOP_HOURS and pnl < 0:
+            reason = f"TIME STOP: underwater {age_h:.0f}h at {pnl*100:+.1f}%"
+        elif age_h >= STALL_HOURS and STALL_BAND[0] <= pnl < STALL_BAND[1]:
+            reason = f"STALL EXIT: {age_h:.0f}h old at {pnl*100:+.1f}% — thesis dead, freeing capital"
+
+        if reason:
+            print(f"\n🛡️ OVERLAY: {reason}")
+            if execute_sell(symbol, price, f"[OVERLAY] {reason}", portfolio, fraction=fraction):
+                if fraction >= 0.999:
+                    portfolio.setdefault('cooldowns', {})[symbol] = (
+                        datetime.now(timezone.utc) + timedelta(hours=COOLDOWN_HOURS)
+                    ).isoformat()
+                    # Persist NOW — execute_sell's internal save already ran, and a
+                    # crash before the cycle's final save would lose the cooldown,
+                    # letting the next run instantly re-buy the stopped-out symbol.
+                    save_portfolio(portfolio)
+                if fraction < 1:
+                    pos['tp1_done'] = True
+                    save_portfolio(portfolio)
+                exits.append((symbol, reason))
+    return exits
+
+
+def update_circuit_breaker(portfolio):
+    """Track equity at UTC day start for the daily -5% circuit breaker."""
+    today = datetime.now(timezone.utc).date().isoformat()
+    if portfolio.get('cb_date') != today:
+        portfolio['cb_date'] = today
+        portfolio['cb_day_start_value'] = portfolio_value(portfolio)
+        save_portfolio(portfolio)
+
+
+def buy_guard(symbol, portfolio, trades_today, market_data=None):
+    """Deterministic BUY blocks. Returns a reason string, or None if allowed."""
+    cd = portfolio.get('cooldowns', {}).get(symbol)
+    if cd:
+        try:
+            if datetime.now(timezone.utc) < datetime.fromisoformat(cd):
+                return f"{symbol} in {COOLDOWN_HOURS}h cooldown after overlay exit"
+        except Exception:
+            pass
+    if market_data is not None:
+        # A held symbol whose candle fetch failed this cycle is still marked at
+        # its stale persisted current_price — phantom pnl would feed the circuit
+        # breaker, one-at-risk rule and sizing below. Can't evaluate existing
+        # risk → don't add risk.
+        blind = [
+            p['symbol'] for p in portfolio['positions']
+            if not (market_data.get(p['symbol'], {}).get('5m')
+                    or market_data.get(p['symbol'], {}).get('15m'))
+        ]
+        if blind:
+            return (f"no fresh data for held {', '.join(blind)} — "
+                    "can't evaluate existing risk, no new buys this cycle")
+    if trades_today >= MAX_TRADES_PER_DAY:
+        return f"daily trade cap reached ({MAX_TRADES_PER_DAY})"
+    equity = portfolio_value(portfolio)
+    day_start = portfolio.get('cb_day_start_value')
+    if day_start and equity < day_start * (1 - DAILY_CIRCUIT_BREAKER_PCT):
+        return f"circuit breaker: equity -{DAILY_CIRCUIT_BREAKER_PCT*100:.0f}% from day start"
+    positions = portfolio['positions']
+    if len(positions) >= MAX_POSITIONS:
+        return f"max {MAX_POSITIONS} concurrent positions (BTC/ETH/SOL are one correlated bet)"
+    deployed = sum(p['value_eur'] for p in positions)
+    if deployed >= equity * MAX_NOTIONAL_PCT:
+        return f"max {MAX_NOTIONAL_PCT*100:.0f}% of equity already deployed"
+    if positions and all(
+        ((p.get('current_price', p['entry_price']) / p['entry_price']) - 1) < ONE_AT_RISK_MIN_PNL
+        for p in positions
+    ):
+        return f"one-at-risk rule: existing position must reach +{ONE_AT_RISK_MIN_PNL*100:.2f}% before adding correlated risk"
+    return None
+
+
 # ── LLM Trading Decision ──────────────────────────────────────────────────────
 
 def get_llm_decision(market_data_list, portfolio, trades_today=0):
     """
-    Ask Claude to analyze multi-timeframe market data and decide on a trade.
-    No rules, no thresholds — pure AI judgment.
+    Ask the LLM to analyze multi-timeframe market data and decide on a trade.
+    Entries and early discretionary exits only — the deterministic risk
+    overlay owns stops, take-profits, trailing, and time-based exits.
     """
     if not any(_api_key_for(entry["key_env"]) for entry in LLM_MODEL_CHAIN):
         print("⚠️ No LLM API key configured (set GROQ_API_KEY or OPENROUTER_API_KEY) — cannot make AI decisions")
         return None
 
-    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
-    total_value = portfolio['current_cash_eur'] + current_exposure
+    total_value = portfolio_value(portfolio)
 
     portfolio_text = f"""Portfolio State:
   Cash: EUR {portfolio['current_cash_eur']:.2f}
@@ -300,12 +464,38 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
         portfolio_text += "\n  Open positions:"
         for p in portfolio['positions']:
             pnl = ((p.get('current_price', p['entry_price']) / p['entry_price']) - 1) * 100
-            portfolio_text += f"\n    - {p['symbol']}: EUR {p['value_eur']:.2f} @ EUR {p['entry_price']:.2f} ({pnl:+.1f}%)"
+            age_h = _position_age_hours(p)
+            inv = p.get('invalidation')
+            flags = []
+            if pnl <= -SOFT_INVALIDATION_PCT * 100:
+                flags.append("⚠️ INVALIDATED — thesis broken, exit on structural weakness")
+            if p.get('tp1_done'):
+                flags.append("TP1 banked, trailing")
+            inv_text = f", hard stop EUR {inv:.2f}" if inv else ""
+            flag_text = f" [{'; '.join(flags)}]" if flags else ""
+            portfolio_text += (
+                f"\n    - {p['symbol']}: EUR {p['value_eur']:.2f} @ EUR {p['entry_price']:.2f} "
+                f"({pnl:+.1f}%, {age_h:.0f}h old{inv_text}){flag_text}"
+            )
 
     # Build multi-timeframe data: summaries for higher TF, raw candles for lower TFs
     market_text_parts = []
     for symbol, tf_data in market_data_list.items():
         market_text_parts.append(f"\n{'='*40}\n{symbol}:")
+
+        # 1d: macro trend context line (summary only — protects LLM token budget)
+        candles_1d = tf_data.get("1d")
+        if candles_1d:
+            s1d = get_market_summary(candles_1d, "1d")
+            if s1d:
+                off_low = ((s1d['current_price'] - s1d['full_range_low']) / s1d['full_range_low'] * 100) if s1d['full_range_low'] > 0 else 0
+                market_text_parts.append(
+                    f"  1d macro: price={s1d['current_price']:.2f}, "
+                    f"7d={s1d.get('recent_pct') or 0:+.2f}%, "
+                    f"21d={s1d.get('medium_pct') or 0:+.2f}%, "
+                    f"30d range={s1d['full_range_low']:.2f}-{s1d['full_range_high']:.2f} "
+                    f"({off_low:+.1f}% off low), daily RSI={s1d.get('rsi_14') or '?'}"
+                )
 
         # 15m: summary only (trend + momentum context)
         candles_15m = tf_data.get("15m")
@@ -325,25 +515,35 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
                     f"{bb_text}"
                 )
 
-        # 5m and 1m: raw candles for precise entry analysis
-        for label in ["5m", "1m"]:
+        # 5m: raw candles for precise entry analysis
+        for label in ["5m"]:
             candles = tf_data.get(label)
             if candles:
                 market_text_parts.append(format_candles_for_llm(candles, symbol, label))
 
     market_text = "\n".join(market_text_parts) if market_text_parts else "No market data available"
 
+    stop_list = ", ".join(f"{sym.split('-')[0]} -{pct * 100:.1f}%" for sym, pct in HARD_STOP_PCT.items())
     prompt = f"""You are an experienced cryptocurrency day trader. Analyze the MULTI-TIMEFRAME data below and decide.
 
 TIMEFRAMES (use all of them):
+- 1d: macro trend context — only buy WITH the daily trend or at clear daily-range extremes
 - 15m: trend direction, momentum, support/resistance, entry zones (summary only)
 - 5m: recent candles — look for patterns, consolidation, breakouts, reversals
-- 1m: latest candles — pinpoint entry timing, immediate momentum
 
 {portfolio_text}
 
-MAX POSITION SIZE: EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}
-MAX TOTAL EXPOSURE: {MAX_EXPOSURE_PCT * 100:.0f}%
+RISK OVERLAY (deterministic code, runs before you every cycle — you cannot override it):
+- Hard stop per symbol: {stop_list} — auto-exit, no exceptions
+- Take-profit: 50% banked automatically at +{TP1_PCT * 100:.1f}%, remainder trailed -{TRAIL_PCT * 100:.1f}% from peak
+- Dead trades are auto-exited (stalled {STALL_HOURS}h+ or underwater {TIME_STOP_HOURS}h+); a {COOLDOWN_HOURS}h re-entry cooldown follows
+- Position size is computed in code: {RISK_PER_TRADE_PCT * 100:.0f}% of equity risked vs the symbol's stop distance (max {MAX_POSITION_PCT * 100:.0f}% of equity, max {MAX_POSITIONS} positions)
+- New buys are blocked if equity drops {DAILY_CIRCUIT_BREAKER_PCT * 100:.0f}% from UTC day start
+
+Your job is ENTRIES and EARLY discretionary exits only:
+- Do NOT sell to "take profit" or "cut a small loss" — the overlay handles that
+- DO sell early only when the thesis is clearly broken on structure (e.g. lower
+  high + lower low against the position, macro trend flip) BEFORE the stop tags
 
 MARKET DATA (multi-timeframe):
 {market_text}
@@ -352,19 +552,18 @@ Current UTC time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}
 
 Analyze ALL timeframes together. Look for:
 - BB bounce: price hits BB_lower (%b near 0), next candle shows recovery — buy the first pullback-to-band
-- Reversal: 5m/1m showing bullish structure (higher lows, momentum shift) against 15m oversold
-- Pullback entry: uptrend on 15m, price pulls back to 5m BB_middle or EMA — buy continuation
+- Reversal: 5m showing bullish structure (higher lows, momentum shift) against 15m oversold
+- Pullback entry: uptrend on 1d/15m, price pulls back to 5m BB_middle — buy continuation
 - Volume confirmation: increasing volume on reversal candles
-- Existing positions: is the thesis still valid on the 15m trend?
+- Existing positions: is the thesis still valid on the 1d/15m trend? Positions flagged INVALIDATED are down over {SOFT_INVALIDATION_PCT * 100:.0f}% — their thesis is broken; exit them on structural weakness, don't re-argue the entry
 
 Respond with ONLY a JSON object (no markdown, no code fences):
-{{"action": "BUY" or "SELL" or "HOLD", "symbol": "BTC-EUR" or "ETH-EUR" or "SOL-EUR" or null, "reasoning": "your 1-2 sentence analysis referencing specific timeframes", "position_size_eur": number or null}}
+{{"action": "BUY" or "SELL" or "HOLD", "symbol": "BTC-EUR" or "ETH-EUR" or "SOL-EUR" or null, "reasoning": "your 1-2 sentence analysis referencing specific timeframes"}}
 
 Rules:
-- BUY: you see a concrete entry setup with aligned timeframes
-- SELL: an existing position should be closed (trend invalidated or profit target reached)
+- BUY: you see a concrete entry setup with aligned timeframes (position size is automatic)
+- SELL: an existing position's thesis is broken on structure — profit-taking and stop-losses are NOT your job
 - HOLD: no compelling entry or exit — wait
-- position_size_eur: only for BUY, max EUR {portfolio['starting_capital_eur'] * POSITION_SIZE_PCT:.2f}
 - NOTE: Each trade costs {TRADING_FEE_PCT * 100:.1f}% taker fee each way (buy + sell = {TRADING_FEE_PCT * 200:.1f}% round-trip). Factor this into your risk/reward."""
 
     # Try each provider in the chain — fall back on failure. Skip providers
@@ -552,7 +751,7 @@ def send_startup_email(portfolio):
     subject = f"🤖 [{BOT_SOURCE}] AI Trader Started (Multi-Timeframe LLM)"
     body = f"""AI Trader is running with LLM-powered decisions.
 
-Mode: Claude AI discretion (no hardcoded rules)
+Mode: LLM entries/exits + deterministic risk overlay (hard stops, TP1, trailing, time stops)
 Models: {' → '.join(m['model'] for m in LLM_MODEL_CHAIN)}
 Capital: EUR {portfolio['starting_capital_eur']:.2f}
 Symbols: {', '.join(SYMBOLS)}
@@ -560,7 +759,7 @@ Check interval: {CHECK_INTERVAL // 60} minutes (fast-polls at 60s on dip detecti
 Timeframes: {tf_desc}
 No minimum trades — patient entries only
 
-Every decision is made by Claude analyzing 15m/5m/1m candle data.
+Entries are made by the LLM analyzing 1d/15m/5m candle data; disaster exits are enforced by code.
 Check ai_trader_decisions.jsonl for full decision history.
 
 Time: {datetime.now(timezone.utc).isoformat()}
@@ -630,8 +829,8 @@ def send_status_email(portfolio, market_data):
                     f"| RSI: {summary.get('rsi_14', '?')}"
                 )
 
-    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
-    total_value = portfolio['current_cash_eur'] + current_exposure
+    total_value = portfolio_value(portfolio)
+    current_exposure = total_value - portfolio['current_cash_eur']
 
     subject = f"📊 [{BOT_SOURCE}] AI Trader Status | EUR {total_value:.2f}"
     body = f"""AI Trader - Hourly Status
@@ -666,8 +865,8 @@ def send_hold_email(symbol, reasoning, portfolio):
         print("⏳ HOLD email throttled (already sent this hour)")
         return
 
-    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
-    total_value = portfolio['current_cash_eur'] + current_exposure
+    total_value = portfolio_value(portfolio)
+    current_exposure = total_value - portfolio['current_cash_eur']
     subject = f"⏸ [{BOT_SOURCE}] HOLD — no trade this cycle"
     body = f"""AI Trader - HOLD Decision
 {'='*40}
@@ -698,8 +897,8 @@ def send_failure_email(portfolio, models_tried):
         return
     portfolio['last_failure_email_ts'] = now
 
-    current_exposure = sum(p['value_eur'] for p in portfolio['positions'])
-    total_value = portfolio['current_cash_eur'] + current_exposure
+    total_value = portfolio_value(portfolio)
+    current_exposure = total_value - portfolio['current_cash_eur']
     subject = f"🚨 [{BOT_SOURCE}] AI Trader: All models failed"
     body = f"""AI Trader could not reach any LLM provider this cycle.
 
@@ -721,24 +920,37 @@ Time: {datetime.now(timezone.utc).isoformat()}
 # ── Trade Execution ────────────────────────────────────────────────────────────
 
 def execute_buy(symbol, price, reasoning, portfolio):
-    """Execute a buy order — deducts taker fee from cash"""
-    max_position = portfolio['starting_capital_eur'] * POSITION_SIZE_PCT
-    position_value = min(max_position, portfolio['current_cash_eur'])
-    fee = round(position_value * TRADING_FEE_PCT, 2)
-    total_cost = position_value + fee
+    """Execute a buy order — deducts taker fee from cash.
 
-    if position_value < 100:
-        print(f"⚠️ Insufficient cash (EUR {portfolio['current_cash_eur']:.2f})")
-        return False
-
-    if total_cost > portfolio['current_cash_eur']:
-        print(f"⚠️ Cannot afford position + fee (need EUR {total_cost:.2f}, have EUR {portfolio['current_cash_eur']:.2f})")
-        return False
-
+    Sizing is deterministic (the LLM no longer picks a size): risk
+    RISK_PER_TRADE_PCT of equity against the symbol's hard-stop distance,
+    capped at MAX_POSITION_PCT of equity and by affordable cash (incl. fee),
+    floored at MIN_TRADE_EUR when affordable."""
     # Check if already holding this symbol — if so, skip (single position per symbol)
     existing = next((p for p in portfolio['positions'] if p['symbol'] == symbol), None)
     if existing:
         print(f"⚠️ Already holding {symbol} — skipping second position")
+        return False
+
+    equity = portfolio_value(portfolio)
+    stop = HARD_STOP_PCT.get(symbol, 0.04)
+    risk_size = (equity * RISK_PER_TRADE_PCT) / stop
+    max_affordable = portfolio['current_cash_eur'] / (1 + TRADING_FEE_PCT)
+    position_value = min(risk_size, equity * MAX_POSITION_PCT, max_affordable)
+
+    if position_value < MIN_TRADE_EUR:
+        if max_affordable >= MIN_TRADE_EUR:
+            position_value = MIN_TRADE_EUR  # small account: take the floor size
+        else:
+            print(f"⚠️ Insufficient cash (EUR {portfolio['current_cash_eur']:.2f}) for min trade EUR {MIN_TRADE_EUR:.0f}")
+            return False
+    position_value = round(position_value, 2)
+
+    fee = round(position_value * TRADING_FEE_PCT, 2)
+    total_cost = position_value + fee
+
+    if total_cost > portfolio['current_cash_eur']:
+        print(f"⚠️ Cannot afford position + fee (need EUR {total_cost:.2f}, have EUR {portfolio['current_cash_eur']:.2f})")
         return False
 
     position = {
@@ -746,8 +958,12 @@ def execute_buy(symbol, price, reasoning, portfolio):
         'entry_time': datetime.now(timezone.utc).isoformat(),
         'entry_price': price,
         'current_price': price,
+        'peak_price': price,
+        'trough_price': price,
         'value_eur': position_value,
         'fee_paid': fee,
+        'tp1_done': False,
+        'invalidation': round(price * (1 - stop), 2),
     }
 
     portfolio['positions'].append(position)
@@ -756,6 +972,7 @@ def execute_buy(symbol, price, reasoning, portfolio):
     portfolio['total_fees_paid_eur'] = portfolio.get('total_fees_paid_eur', 0) + fee
 
     print(f"\n🟢 BUY {symbol} @ EUR {price:.2f} | Size: EUR {position_value:.2f} | Fee: EUR {fee:.2f}")
+    print(f"   Risk basis: {RISK_PER_TRADE_PCT*100:.0f}% of EUR {equity:.2f} equity vs -{stop*100:.1f}% stop → invalidation EUR {position['invalidation']:.2f}")
     print(f"   Reasoning: {reasoning}")
 
     send_trade_email('BUY', symbol, price, reasoning, portfolio)
@@ -764,57 +981,78 @@ def execute_buy(symbol, price, reasoning, portfolio):
     return True
 
 
-def execute_sell(symbol, price, reasoning, portfolio):
-    """Execute a sell order — deducts taker fee, reports net P&L"""
+def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
+    """Execute a sell order — deducts taker fee, reports net P&L.
+    fraction < 1.0 = partial take-profit (TP1): sells that share of the
+    position's remaining value, keeps it open, and does NOT count toward
+    win rate (only full closes do)."""
     position = next((p for p in portfolio['positions'] if p['symbol'] == symbol), None)
     if not position:
         print(f"⚠️ No position found for {symbol}")
         return False
+    fraction = max(0.0, min(1.0, fraction))
 
     entry_price = position['entry_price']
-    buy_fee = position.get('fee_paid', 0)
-    exit_value = position['value_eur'] * (price / entry_price)
+    full_value = position['value_eur']
+    sell_value = full_value * fraction
+    buy_fee_full = position.get('fee_paid', 0)
+    buy_fee = round(buy_fee_full * fraction, 2)  # proportional share of entry fee
+    exit_value = sell_value * (price / entry_price)
     sell_fee = round(exit_value * TRADING_FEE_PCT, 2)
     cash_returned = exit_value - sell_fee
 
-    # Gross P&L (price movement only)
-    pnl_eur = round(exit_value - position['value_eur'], 2)
+    # Gross P&L (price movement only) on the sold portion
+    pnl_eur = round(exit_value - sell_value, 2)
     pnl_pct = round(((price / entry_price) - 1) * 100, 2)
 
     # Net P&L (after both buy and sell fees)
     net_pnl = round(pnl_eur - buy_fee - sell_fee, 2)
     total_fee = round(buy_fee + sell_fee, 2)
 
-    portfolio['positions'].remove(position)
     portfolio['current_cash_eur'] += cash_returned
     portfolio['total_pnl_eur'] += net_pnl  # track net P&L
     portfolio['total_fees_paid_eur'] = portfolio.get('total_fees_paid_eur', 0) + sell_fee
 
-    portfolio['closed_trades'].append({
-        'symbol': symbol,
-        'entry_time': position['entry_time'],
-        'exit_time': datetime.now(timezone.utc).isoformat(),
-        'entry_price': entry_price,
-        'exit_price': price,
-        'pnl_eur': pnl_eur,
-        'pnl_pct': pnl_pct,
-        'fee_paid': total_fee,
-        'net_pnl_eur': net_pnl,
-        'reasoning': reasoning
-    })
+    is_full_close = fraction >= 0.999
+    if is_full_close:
+        portfolio['positions'].remove(position)
+        peak = position.get('peak_price', entry_price)
+        trough = position.get('trough_price', entry_price)
+        portfolio['closed_trades'].append({
+            'symbol': symbol,
+            'entry_time': position['entry_time'],
+            'exit_time': datetime.now(timezone.utc).isoformat(),
+            'entry_price': entry_price,
+            'exit_price': price,
+            'pnl_eur': pnl_eur,
+            'pnl_pct': pnl_pct,
+            'fee_paid': total_fee,
+            'net_pnl_eur': net_pnl,
+            'mfe_pct': round(((peak / entry_price) - 1) * 100, 2),   # max favorable excursion
+            'mae_pct': round(((trough / entry_price) - 1) * 100, 2),  # max adverse excursion
+            'reasoning': reasoning
+        })
 
-    wins = sum(1 for t in portfolio['closed_trades'] if t.get('net_pnl_eur', t['pnl_eur']) > 0)
-    portfolio['win_rate'] = wins / len(portfolio['closed_trades']) * 100
-    total_value = portfolio['current_cash_eur']
+        wins = sum(1 for t in portfolio['closed_trades'] if t.get('net_pnl_eur', t['pnl_eur']) > 0)
+        portfolio['win_rate'] = wins / len(portfolio['closed_trades']) * 100
+    else:
+        # Partial (TP1): shrink the position, keep the runner
+        position['value_eur'] = round(full_value - sell_value, 2)
+        position['fee_paid'] = round(buy_fee_full - buy_fee, 2)
+
+    # Mark-to-market: cash + open positions at current price. The old cash-only
+    # line is why stats showed nonsense like -24% while actually +0.7%.
+    total_value = portfolio_value(portfolio)
     portfolio['total_pnl_percent'] = round(((total_value / portfolio['starting_capital_eur']) - 1) * 100, 2)
 
     emoji = "💰" if net_pnl > 0 else "❌"
-    print(f"\n{emoji} SELL {symbol} @ EUR {price:.2f}")
+    tag = "" if is_full_close else f" ({fraction:.0%} partial — runner stays open)"
+    print(f"\n{emoji} SELL{tag} {symbol} @ EUR {price:.2f}")
     print(f"   Gross P&L: EUR {pnl_eur:+.2f} ({pnl_pct:+.2f}%) | Fee: EUR {total_fee:.2f} | Net: EUR {net_pnl:+.2f}")
     print(f"   Reasoning: {reasoning}")
 
-    send_trade_email('SELL', symbol, price, reasoning, portfolio, pnl_eur=pnl_eur, net_pnl=net_pnl, fee=total_fee)
-    log_decision('SELL', symbol, reasoning, price)
+    send_trade_email('SELL', symbol, price, reasoning + tag, portfolio, pnl_eur=pnl_eur, net_pnl=net_pnl, fee=total_fee)
+    log_decision('SELL' if is_full_close else 'PARTIAL_SELL', symbol, reasoning + tag, price)
     save_portfolio(portfolio)
     return True
 
@@ -823,8 +1061,7 @@ def execute_sell(symbol, price, reasoning, portfolio):
 
 def print_status(portfolio, market_data):
     """Print current status. market_data is dict: symbol -> {label: candles}"""
-    total_exposure = sum(p['value_eur'] for p in portfolio['positions'])
-    total_value = portfolio['current_cash_eur'] + total_exposure
+    total_value = portfolio_value(portfolio)  # mark-to-market, not cash-only
 
     print(f"\n{'='*70}")
     print(f"🤖 AI TRADER (LLM Mode) — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
@@ -860,8 +1097,6 @@ def print_status(portfolio, market_data):
 
 def run_cycle(portfolio, trades_today):
     """Run a single trading cycle. Returns (trades_today, market_data)."""
-    # Reset daily trade counter at midnight UTC
-    today = datetime.now(timezone.utc).date()
 
     # Fetch multi-timeframe market data
     market_data = {}
@@ -877,7 +1112,7 @@ def run_cycle(portfolio, trades_today):
     # Update current prices on open positions
     for pos in portfolio['positions']:
         tf = market_data.get(pos['symbol'], {})
-        candles = tf.get('1m') or tf.get('5m')
+        candles = tf.get('5m') or tf.get('15m')
         if candles:
             pos['current_price'] = float(candles[-1]['close'])
 
@@ -894,6 +1129,14 @@ def run_cycle(portfolio, trades_today):
             send_failure_email(portfolio, ["Revolut X market data"])
         return trades_today, market_data
 
+    # Deterministic risk overlay runs BEFORE the LLM — it owns disaster exits,
+    # profit-banking and dead-thesis cleanup, and cannot be overridden. Full
+    # exits count toward the daily trade cap; TP1 partials don't (the cloud
+    # counter only counts 'SELL' decision-log lines, not 'PARTIAL_SELL').
+    update_circuit_breaker(portfolio)
+    overlay_exits = apply_risk_overlay(portfolio, market_data)
+    trades_today += sum(1 for _, reason in overlay_exits if not reason.startswith("TP1:"))
+
     # Ask Claude for a decision
     print(f"\n🧠 Asking LLM for analysis... (trades today: {trades_today})")
     decision = get_llm_decision(market_data, portfolio, trades_today=trades_today)
@@ -909,16 +1152,20 @@ def run_cycle(portfolio, trades_today):
         price = None
         if symbol:
             tf = market_data.get(symbol, {})
-            candles = tf.get('1m') or tf.get('5m')
+            candles = tf.get('5m') or tf.get('15m')
             if candles:
                 price = float(candles[-1]['close'])
 
         if action == 'BUY' and symbol and price:
-            execute_buy(symbol, price, reasoning, portfolio)
-            trades_today += 1
+            block = buy_guard(symbol, portfolio, trades_today, market_data)
+            if block:
+                print(f"🛡️ BUY BLOCKED: {block}")
+                log_decision('BLOCKED_BUY', symbol, f"Blocked: {block}. {reasoning}", price)
+            elif execute_buy(symbol, price, reasoning, portfolio):
+                trades_today += 1
         elif action == 'SELL' and symbol and price:
-            execute_sell(symbol, price, reasoning, portfolio)
-            trades_today += 1
+            if execute_sell(symbol, price, reasoning, portfolio):
+                trades_today += 1
         elif action == 'HOLD':
             print(f"   Holding — {reasoning}")
             log_decision(action, symbol, reasoning, price)
@@ -946,8 +1193,8 @@ def main():
     print(f"💰 Capital: EUR {STARTING_CAPITAL:,.0f}")
     print(f"📧 Alerts: {GMAIL_ADDRESS}")
     print(f"⏱️ Check interval: {CHECK_INTERVAL // 60} min (fast-poll: {OPPORTUNITY_INTERVAL}s on dip)")
-    print(f"📊 Timeframes: 15m (summary), 5m+1m (raw candles)")
-    print(f"🎯 Decision maker: Claude (no hardcoded rules)")
+    print(f"📊 Timeframes: 1d (macro), 15m (summary), 5m (raw candles)")
+    print(f"🎯 Decision maker: LLM entries + deterministic risk overlay (stops/TP1/timeouts)")
     print(f"💰 Fee: {TRADING_FEE_PCT * 100:.1f}% taker per trade ({TRADING_FEE_PCT * 200:.1f}% round-trip)")
     print(f"🆔 Source: {BOT_SOURCE}")
     print(f"📈 Min trades: none — patient entries only")
