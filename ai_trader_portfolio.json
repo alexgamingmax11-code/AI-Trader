@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.16549093380036,
-  "positions": [],
+  "current_cash_eur": 354.2654909338004,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-04T12:01:16.722840+00:00",
+      "entry_price": 55437.67,
+      "current_price": 55437.67,
+      "peak_price": 55437.67,
+      "trough_price": 55437.67,
+      "value_eur": 141.76,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 53497.35
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -121,11 +134,11 @@
       "reasoning": "Existing position's thesis is broken on 5m structure as lower highs and lower lows are forming against the 1d uptrend; also, the 15m medium momentum has turned negative"
     }
   ],
-  "total_trades": 9,
+  "total_trades": 10,
   "win_rate": 33.33333333333333,
   "total_pnl_eur": -3.82,
   "total_pnl_percent": -0.77,
-  "total_fees_paid_eur": 2.150000000000001,
+  "total_fees_paid_eur": 2.290000000000001,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785843072.4224684,
   "cb_date": "2026-08-04",
