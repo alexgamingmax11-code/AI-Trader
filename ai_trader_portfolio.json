@@ -1,31 +1,19 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 254.8581151149441,
+  "current_cash_eur": 354.0292849115622,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-08-04T01:15:52.893065+00:00",
       "entry_price": 55125.02,
-      "current_price": 55443.39,
+      "current_price": 55399.95,
       "peak_price": 55600.0,
       "trough_price": 55103.94,
       "value_eur": 141.85,
       "fee_paid": 0.14,
       "tp1_done": false,
       "invalidation": 53195.64
-    },
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-04T04:45:52.715345+00:00",
-      "entry_price": 64.165,
-      "current_price": 64.026,
-      "peak_price": 64.165,
-      "trough_price": 64.026,
-      "value_eur": 99.51,
-      "fee_paid": 0.1,
-      "tp1_done": false,
-      "invalidation": 60.96
     }
   ],
   "closed_trades": [
@@ -116,13 +104,27 @@
       "mfe_pct": 2.25,
       "mae_pct": 0.0,
       "reasoning": "Existing position thesis is broken on structure (price below daily low, 5m showing bearish structure against 15m oversold), despite recent BB bounce on SOL-EUR, this isn't enough to outweigh the daily trend flip"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-04T04:45:52.715345+00:00",
+      "exit_time": "2026-08-04T05:31:02.451872+00:00",
+      "entry_price": 64.165,
+      "exit_price": 64.011,
+      "pnl_eur": -0.24,
+      "pnl_pct": -0.24,
+      "fee_paid": 0.2,
+      "net_pnl_eur": -0.44,
+      "mfe_pct": 0.0,
+      "mae_pct": -0.24,
+      "reasoning": "SOL-EUR's thesis is broken on structure due to the 1d/15m trend shift and the 5m candles showing a reversal with lower highs and lower lows, making the initial entry now invalid."
     }
   ],
   "total_trades": 9,
-  "win_rate": 28.57142857142857,
-  "total_pnl_eur": -3.53,
-  "total_pnl_percent": -0.71,
-  "total_fees_paid_eur": 1.9100000000000006,
+  "win_rate": 25.0,
+  "total_pnl_eur": -3.9699999999999998,
+  "total_pnl_percent": -0.68,
+  "total_fees_paid_eur": 2.0100000000000007,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785817861.8319309,
   "cb_date": "2026-08-04",
