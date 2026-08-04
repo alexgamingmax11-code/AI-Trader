@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 433.30040891586845,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-03T11:01:15.564303+00:00",
-      "entry_price": 62.961,
-      "current_price": 63.808,
-      "value_eur": 62.5,
-      "fee_paid": 0.06,
-      "peak_price": 64.38,
-      "trough_price": 62.961,
-      "tp1_done": true,
-      "invalidation": 59.81
-    }
-  ],
+  "current_cash_eur": 496.45811511494406,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -90,13 +77,27 @@
       "mfe_pct": 0.21,
       "mae_pct": -0.66,
       "reasoning": "The thesis is broken on structure as the 1-day and 15-minute trend direction suggests a weakening trend, with a lower high and lower low against the existing long position on the 5-minute chart."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-03T11:01:15.564303+00:00",
+      "exit_time": "2026-08-04T00:31:07.505165+00:00",
+      "entry_price": 62.961,
+      "exit_price": 63.684,
+      "pnl_eur": 0.72,
+      "pnl_pct": 1.15,
+      "fee_paid": 0.12,
+      "net_pnl_eur": 0.6,
+      "mfe_pct": 2.25,
+      "mae_pct": 0.0,
+      "reasoning": "Existing position thesis is broken on structure (price below daily low, 5m showing bearish structure against 15m oversold), despite recent BB bounce on SOL-EUR, this isn't enough to outweigh the daily trend flip"
     }
   ],
   "total_trades": 7,
-  "win_rate": 16.666666666666664,
-  "total_pnl_eur": -4.13,
-  "total_pnl_percent": -0.68,
-  "total_fees_paid_eur": 1.6100000000000003,
+  "win_rate": 28.57142857142857,
+  "total_pnl_eur": -3.53,
+  "total_pnl_percent": -0.71,
+  "total_fees_paid_eur": 1.6700000000000004,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785800748.5167882,
   "cb_date": "2026-08-04",
