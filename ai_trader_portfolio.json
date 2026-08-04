@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 354.1947696372524,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-04T13:45:48.803576+00:00",
-      "entry_price": 55465.57,
-      "current_price": 55755.0,
-      "peak_price": 55755.0,
-      "trough_price": 55150.0,
-      "value_eur": 141.73,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 53524.28
-    }
-  ],
+  "current_cash_eur": 496.63979150577376,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -146,13 +133,27 @@
       "mfe_pct": 0.13,
       "mae_pct": -0.13,
       "reasoning": "The thesis of the existing long position in BTC-EUR is broken on structure. The daily trend is now uncertain, with a daily RSI of 33.0, and the 5m candles show a bearish reversal."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-04T13:45:48.803576+00:00",
+      "exit_time": "2026-08-04T18:31:12.558919+00:00",
+      "entry_price": 55465.57,
+      "exit_price": 55800.18,
+      "pnl_eur": 0.86,
+      "pnl_pct": 0.6,
+      "fee_paid": 0.28,
+      "net_pnl_eur": 0.58,
+      "mfe_pct": 0.6,
+      "mae_pct": -0.57,
+      "reasoning": "Existing position thesis is broken as 1d RSI has dropped further with the price hitting the daily low, indicating a possible reversal of the macro trend, with no other concrete entry setup in sight across timeframes."
     }
   ],
   "total_trades": 11,
-  "win_rate": 30.0,
-  "total_pnl_eur": -3.92,
-  "total_pnl_percent": -0.79,
-  "total_fees_paid_eur": 2.570000000000001,
+  "win_rate": 36.36363636363637,
+  "total_pnl_eur": -3.34,
+  "total_pnl_percent": -0.67,
+  "total_fees_paid_eur": 2.7100000000000013,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785864050.3193917,
   "cb_date": "2026-08-04",
