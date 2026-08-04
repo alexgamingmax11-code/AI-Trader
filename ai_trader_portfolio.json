@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.45811511494406,
-  "positions": [],
+  "current_cash_eur": 354.4681151149441,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-04T01:15:52.893065+00:00",
+      "entry_price": 55125.02,
+      "current_price": 55125.02,
+      "peak_price": 55125.02,
+      "trough_price": 55125.02,
+      "value_eur": 141.85,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 53195.64
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -93,11 +106,11 @@
       "reasoning": "Existing position thesis is broken on structure (price below daily low, 5m showing bearish structure against 15m oversold), despite recent BB bounce on SOL-EUR, this isn't enough to outweigh the daily trend flip"
     }
   ],
-  "total_trades": 7,
+  "total_trades": 8,
   "win_rate": 28.57142857142857,
   "total_pnl_eur": -3.53,
   "total_pnl_percent": -0.71,
-  "total_fees_paid_eur": 1.6700000000000004,
+  "total_fees_paid_eur": 1.8100000000000005,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785805279.4459014,
   "cb_date": "2026-08-04",
