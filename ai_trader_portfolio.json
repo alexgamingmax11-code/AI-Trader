@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 354.0292849115622,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-04T01:15:52.893065+00:00",
-      "entry_price": 55125.02,
-      "current_price": 55319.06,
-      "peak_price": 55600.0,
-      "trough_price": 55070.42,
-      "value_eur": 141.85,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 53195.64
-    }
-  ],
+  "current_cash_eur": 496.16549093380036,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -118,13 +105,27 @@
       "mfe_pct": 0.0,
       "mae_pct": -0.24,
       "reasoning": "SOL-EUR's thesis is broken on structure due to the 1d/15m trend shift and the 5m candles showing a reversal with lower highs and lower lows, making the initial entry now invalid."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-04T01:15:52.893065+00:00",
+      "exit_time": "2026-08-04T11:15:52.498856+00:00",
+      "entry_price": 55125.02,
+      "exit_price": 55290.65,
+      "pnl_eur": 0.43,
+      "pnl_pct": 0.3,
+      "fee_paid": 0.28,
+      "net_pnl_eur": 0.15,
+      "mfe_pct": 0.86,
+      "mae_pct": -0.1,
+      "reasoning": "Existing position's thesis is broken on 5m structure as lower highs and lower lows are forming against the 1d uptrend; also, the 15m medium momentum has turned negative"
     }
   ],
   "total_trades": 9,
-  "win_rate": 25.0,
-  "total_pnl_eur": -3.9699999999999998,
-  "total_pnl_percent": -0.68,
-  "total_fees_paid_eur": 2.0100000000000007,
+  "win_rate": 33.33333333333333,
+  "total_pnl_eur": -3.82,
+  "total_pnl_percent": -0.77,
+  "total_fees_paid_eur": 2.150000000000001,
   "last_digest_date": "2026-08-04",
   "last_hold_email_ts": 1785839465.22312,
   "cb_date": "2026-08-04",
