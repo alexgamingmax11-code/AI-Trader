@@ -7,7 +7,7 @@
       "symbol": "BTC-EUR",
       "entry_time": "2026-08-04T13:45:48.803576+00:00",
       "entry_price": 55465.57,
-      "current_price": 55583.54,
+      "current_price": 55539.86,
       "peak_price": 55590.9,
       "trough_price": 55150.0,
       "value_eur": 141.73,
@@ -154,7 +154,7 @@
   "total_pnl_percent": -0.79,
   "total_fees_paid_eur": 2.570000000000001,
   "last_digest_date": "2026-08-04",
-  "last_hold_email_ts": 1785855675.51969,
+  "last_hold_email_ts": 1785860149.705238,
   "cb_date": "2026-08-04",
   "cb_day_start_value": 496.6670168159971,
   "last_failure_email_ts": 1785815222.0257623
