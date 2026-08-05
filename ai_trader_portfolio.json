@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.70248794754303,
-  "positions": [],
+  "current_cash_eur": 386.212487947543,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-05T04:16:42.627863+00:00",
+      "entry_price": 1616.76,
+      "current_price": 1616.76,
+      "peak_price": 1616.76,
+      "trough_price": 1616.76,
+      "value_eur": 110.38,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1544.01
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -177,11 +190,11 @@
       "reasoning": "The SOL thesis is broken with bearish structure on the 15m timeframe and SOL below its daily BB_lower; this is after 1% loss (-0.7% on the trade), invalidating the trade thesis"
     }
   ],
-  "total_trades": 13,
+  "total_trades": 14,
   "win_rate": 38.46153846153847,
   "total_pnl_eur": -3.2800000000000002,
   "total_pnl_percent": -0.66,
-  "total_fees_paid_eur": 3.1100000000000017,
+  "total_fees_paid_eur": 3.2200000000000015,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785900668.4809344,
   "cb_date": "2026-08-05",
