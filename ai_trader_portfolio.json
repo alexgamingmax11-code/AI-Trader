@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.78709317061805,
-  "positions": [],
+  "current_cash_eur": 354.70709317061807,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-05T12:45:58.847754+00:00",
+      "entry_price": 55720.24,
+      "current_price": 55720.24,
+      "peak_price": 55720.24,
+      "trough_price": 55720.24,
+      "value_eur": 141.94,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 53770.03
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -219,11 +232,11 @@
       "reasoning": "ETH-EUR thesis broken due to bearish 5m candles showing lower highs and increasing volume, existing position invalidated on 15m timeframe despite recent uptrend"
     }
   ],
-  "total_trades": 16,
+  "total_trades": 17,
   "win_rate": 43.75,
   "total_pnl_eur": -3.1900000000000004,
   "total_pnl_percent": -0.64,
-  "total_fees_paid_eur": 3.770000000000001,
+  "total_fees_paid_eur": 3.910000000000001,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785930344.1031642,
   "cb_date": "2026-08-05",
