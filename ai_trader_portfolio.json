@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 354.70709317061807,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-05T12:45:58.847754+00:00",
-      "entry_price": 55720.24,
-      "current_price": 55792.57,
-      "peak_price": 55792.57,
-      "trough_price": 55473.2,
-      "value_eur": 141.94,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 53770.03
-    }
-  ],
+  "current_cash_eur": 496.31007966888154,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -230,13 +217,27 @@
       "mfe_pct": 0.51,
       "mae_pct": 0.0,
       "reasoning": "ETH-EUR thesis broken due to bearish 5m candles showing lower highs and increasing volume, existing position invalidated on 15m timeframe despite recent uptrend"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-05T12:45:58.847754+00:00",
+      "exit_time": "2026-08-05T14:31:10.238404+00:00",
+      "entry_price": 55720.24,
+      "exit_price": 55642.9,
+      "pnl_eur": -0.2,
+      "pnl_pct": -0.14,
+      "fee_paid": 0.28,
+      "net_pnl_eur": -0.48,
+      "mfe_pct": 0.13,
+      "mae_pct": -0.44,
+      "reasoning": "Thesis is broken on structure as the 5m and 15m timeframes show a reversal and momentum flip, but the 1d macro trend is still weak and against the position; this setup invalidates the original entry, and the overlay should be allowed to handle the loss if the stop is reached."
     }
   ],
   "total_trades": 17,
-  "win_rate": 43.75,
-  "total_pnl_eur": -3.1900000000000004,
-  "total_pnl_percent": -0.64,
-  "total_fees_paid_eur": 3.910000000000001,
+  "win_rate": 41.17647058823529,
+  "total_pnl_eur": -3.6700000000000004,
+  "total_pnl_percent": -0.74,
+  "total_fees_paid_eur": 4.050000000000001,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785938484.208073,
   "cb_date": "2026-08-05",
