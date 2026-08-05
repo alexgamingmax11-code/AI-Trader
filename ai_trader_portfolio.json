@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.4468613753788,
-  "positions": [],
+  "current_cash_eur": 386.01686137537877,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-05T12:15:56.885868+00:00",
+      "entry_price": 1618.67,
+      "current_price": 1618.67,
+      "peak_price": 1618.67,
+      "trough_price": 1618.67,
+      "value_eur": 110.32,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1545.83
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -205,11 +218,11 @@
       "reasoning": "The thesis of the existing ETH-EUR position has been broken due to a change in 1d macro trend context; ETH is currently in a short-term downtrend on a 7d and 21d basis with a strong RSI reading, indicating a potential end to the uptrend."
     }
   ],
-  "total_trades": 15,
+  "total_trades": 16,
   "win_rate": 40.0,
   "total_pnl_eur": -3.5300000000000002,
   "total_pnl_percent": -0.71,
-  "total_fees_paid_eur": 3.550000000000001,
+  "total_fees_paid_eur": 3.660000000000001,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785930344.1031642,
   "cb_date": "2026-08-05",
