@@ -14,6 +14,7 @@ import base64
 import smtplib
 import requests
 from datetime import datetime, timezone, timedelta
+from email.header import Header
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from cryptography.hazmat.primitives import serialization
@@ -102,6 +103,9 @@ LLM_MODEL_CHAIN = _build_model_chain()
 # Email (Gmail SMTP)
 GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "alexgamingmax11@gmail.com")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
+# Phone push via ntfy.sh — free, no signup; the topic name IS the secret, so
+# keep it unguessable. Empty = push silently skipped (fail-open, like email).
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
 
 # Trading
 SYMBOLS = ["BTC-EUR", "ETH-EUR", "SOL-EUR"]
@@ -745,6 +749,26 @@ def send_email(subject, body):
         return False
 
 
+def send_push(title, body, priority="default"):
+    """Phone push via ntfy.sh. Fail-open: unset topic or network error just
+    prints a warning — a dead push channel must never block a trade."""
+    if not NTFY_TOPIC:
+        return False
+    try:
+        resp = requests.post(
+            f"https://ntfy.sh/{NTFY_TOPIC}",
+            data=body.encode("utf-8"),
+            headers={"Title": Header(title, "utf-8").encode(), "Priority": priority},
+            timeout=10,
+        )
+        ok = resp.status_code == 200
+        print(f"📲 Push {'sent' if ok else f'HTTP {resp.status_code}'}: {title}")
+        return ok
+    except Exception as e:
+        print(f"⚠️ Push failed: {e}")
+        return False
+
+
 def send_startup_email(portfolio):
     """Send startup notification"""
     tf_desc = ", ".join(f"{c['label']}({c['limit']}×)" for c in CANDLE_CONFIGS)
@@ -976,6 +1000,11 @@ def execute_buy(symbol, price, reasoning, portfolio):
     print(f"   Reasoning: {reasoning}")
 
     send_trade_email('BUY', symbol, price, reasoning, portfolio)
+    send_push(
+        f"🟢 [{BOT_SOURCE}] AI BUY {symbol}",
+        f"@ €{price:.2f} · invalidation €{position['invalidation']:.2f}",
+        priority="high",
+    )
     log_decision('BUY', symbol, reasoning, price)
     save_portfolio(portfolio)
     return True
@@ -1052,6 +1081,11 @@ def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
     print(f"   Reasoning: {reasoning}")
 
     send_trade_email('SELL', symbol, price, reasoning + tag, portfolio, pnl_eur=pnl_eur, net_pnl=net_pnl, fee=total_fee)
+    send_push(
+        f"{emoji} [{BOT_SOURCE}] AI SELL {symbol}{' (partial)' if not is_full_close else ''}",
+        f"@ €{price:.2f} · net P&L €{net_pnl:+.2f} ({pnl_pct:+.2f}%){' — runner stays open' if not is_full_close else ''}",
+        priority="high",
+    )
     log_decision('SELL' if is_full_close else 'PARTIAL_SELL', symbol, reasoning + tag, price)
     save_portfolio(portfolio)
     return True
