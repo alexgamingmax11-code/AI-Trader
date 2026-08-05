@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.1900675893903,
-  "positions": [],
+  "current_cash_eur": 396.85006758939033,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-05T01:01:26.068816+00:00",
+      "entry_price": 63.66,
+      "current_price": 63.66,
+      "peak_price": 63.66,
+      "trough_price": 63.66,
+      "value_eur": 99.24,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 60.48
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -163,11 +176,11 @@
       "reasoning": "The SOL-EUR position's thesis is broken on structure; despite a recent bounce, the 15m RSI is not strongly oversold, and the 1d macro trend is negative, indicating a weak uptrend. Given the SOL-EUR position is already down over 3% from entry and has a hard stop of -5.0% (SOL's risk level in the overlay), it is safer to exit now."
     }
   ],
-  "total_trades": 12,
+  "total_trades": 13,
   "win_rate": 33.33333333333333,
   "total_pnl_eur": -3.79,
   "total_pnl_percent": -0.76,
-  "total_fees_paid_eur": 2.9100000000000015,
+  "total_fees_paid_eur": 3.0100000000000016,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785890751.3467393,
   "cb_date": "2026-08-05",
