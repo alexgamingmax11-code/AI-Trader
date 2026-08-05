@@ -7,7 +7,7 @@
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-05T04:16:42.627863+00:00",
       "entry_price": 1616.76,
-      "current_price": 1617.45,
+      "current_price": 1617.12,
       "peak_price": 1617.45,
       "trough_price": 1616.76,
       "value_eur": 110.38,
@@ -196,7 +196,7 @@
   "total_pnl_percent": -0.66,
   "total_fees_paid_eur": 3.2200000000000015,
   "last_digest_date": "2026-08-05",
-  "last_hold_email_ts": 1785900668.4809344,
+  "last_hold_email_ts": 1785905150.9614253,
   "cb_date": "2026-08-05",
   "cb_day_start_value": 496.1900675893903,
   "last_failure_email_ts": 1785815222.0257623
