@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.73987469634926,
-  "positions": [],
+  "current_cash_eur": 386.23987469634926,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-05T11:15:53.546513+00:00",
+      "entry_price": 1617.75,
+      "current_price": 1617.75,
+      "peak_price": 1617.75,
+      "trough_price": 1617.75,
+      "value_eur": 110.39,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1544.95
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -191,11 +204,11 @@
       "reasoning": "The thesis on ETH-EUR is broken on structure, as the 5m candle showed a lower low against the position, while the 15m timeframe still indicated an oversold condition, but with less convincing momentum."
     }
   ],
-  "total_trades": 14,
+  "total_trades": 15,
   "win_rate": 42.857142857142854,
   "total_pnl_eur": -3.24,
   "total_pnl_percent": -0.65,
-  "total_fees_paid_eur": 3.3300000000000014,
+  "total_fees_paid_eur": 3.4400000000000013,
   "last_digest_date": "2026-08-05",
   "last_hold_email_ts": 1785925863.6598346,
   "cb_date": "2026-08-05",
