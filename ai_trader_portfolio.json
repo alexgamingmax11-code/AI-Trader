@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 353.7499684832569,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-06T04:15:53.225811+00:00",
-      "entry_price": 55866.79,
-      "current_price": 56174.73,
-      "peak_price": 56186.77,
-      "trough_price": 55866.79,
-      "value_eur": 141.56,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 53911.45
-    }
-  ],
+  "current_cash_eur": 495.88632300443135,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -272,13 +259,27 @@
       "mfe_pct": 0.1,
       "mae_pct": -0.43,
       "reasoning": "The existing position's thesis is broken on structure as ETH 1d macro and 15m summaries do not support a continuation of the upward trend, and recent 5m candles show a lack of momentum shift and higher lows, indicating the bullish structure against 15m oversold is no longer valid"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-06T04:15:53.225811+00:00",
+      "exit_time": "2026-08-06T08:45:45.865725+00:00",
+      "entry_price": 55866.79,
+      "exit_price": 56149.5,
+      "pnl_eur": 0.72,
+      "pnl_pct": 0.51,
+      "fee_paid": 0.28,
+      "net_pnl_eur": 0.44,
+      "mfe_pct": 0.57,
+      "mae_pct": 0.0,
+      "reasoning": "The thesis is broken on the 1d and 15m trends as price failed to hold at the daily resistance area and 15m BB%b is above 0, with an existing position down over 3.3% and a valid daily low not visible."
     }
   ],
   "total_trades": 20,
-  "win_rate": 36.84210526315789,
-  "total_pnl_eur": -4.53,
-  "total_pnl_percent": -0.91,
-  "total_fees_paid_eur": 4.630000000000002,
+  "win_rate": 40.0,
+  "total_pnl_eur": -4.09,
+  "total_pnl_percent": -0.82,
+  "total_fees_paid_eur": 4.770000000000001,
   "last_digest_date": "2026-08-06",
   "last_hold_email_ts": 1786004208.8611078,
   "cb_date": "2026-08-06",
