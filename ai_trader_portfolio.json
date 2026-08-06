@@ -1,21 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 385.678592162674,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-08-06T01:31:06.583040+00:00",
-      "entry_price": 1647.0,
-      "current_price": 1642.54,
-      "peak_price": 1648.61,
-      "trough_price": 1639.86,
-      "value_eur": 110.22,
-      "fee_paid": 0.11,
-      "tp1_done": false,
-      "invalidation": 1572.88
-    }
-  ],
+  "current_cash_eur": 495.4499684832569,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -258,13 +245,27 @@
       "mfe_pct": 0.0,
       "mae_pct": -0.07,
       "reasoning": "ETH-EUR's thesis is broken on structure due to a lower high + lower low on the 5m and 15m timeframes against the 1d uptrend, with the RSI also declining; this setup is invalidated and requires an early exit to avoid further losses."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-06T01:31:06.583040+00:00",
+      "exit_time": "2026-08-06T04:01:13.009486+00:00",
+      "entry_price": 1647.0,
+      "exit_price": 1641.94,
+      "pnl_eur": -0.34,
+      "pnl_pct": -0.31,
+      "fee_paid": 0.22,
+      "net_pnl_eur": -0.56,
+      "mfe_pct": 0.1,
+      "mae_pct": -0.43,
+      "reasoning": "The existing position's thesis is broken on structure as ETH 1d macro and 15m summaries do not support a continuation of the upward trend, and recent 5m candles show a lack of momentum shift and higher lows, indicating the bullish structure against 15m oversold is no longer valid"
     }
   ],
   "total_trades": 19,
-  "win_rate": 38.88888888888889,
-  "total_pnl_eur": -3.97,
-  "total_pnl_percent": -0.8,
-  "total_fees_paid_eur": 4.380000000000002,
+  "win_rate": 36.84210526315789,
+  "total_pnl_eur": -4.53,
+  "total_pnl_percent": -0.91,
+  "total_fees_paid_eur": 4.490000000000002,
   "last_digest_date": "2026-08-06",
   "last_hold_email_ts": 1785987961.0833805,
   "cb_date": "2026-08-06",
