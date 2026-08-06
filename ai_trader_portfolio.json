@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 495.88632300443135,
-  "positions": [],
+  "current_cash_eur": 396.6063230044314,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-06T10:31:03.625649+00:00",
+      "entry_price": 63.54,
+      "current_price": 63.54,
+      "peak_price": 63.54,
+      "trough_price": 63.54,
+      "value_eur": 99.18,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 60.36
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -275,11 +288,11 @@
       "reasoning": "The thesis is broken on the 1d and 15m trends as price failed to hold at the daily resistance area and 15m BB%b is above 0, with an existing position down over 3.3% and a valid daily low not visible."
     }
   ],
-  "total_trades": 20,
+  "total_trades": 21,
   "win_rate": 40.0,
   "total_pnl_eur": -4.09,
   "total_pnl_percent": -0.82,
-  "total_fees_paid_eur": 4.770000000000001,
+  "total_fees_paid_eur": 4.870000000000001,
   "last_digest_date": "2026-08-06",
   "last_hold_email_ts": 1786008095.7297904,
   "cb_date": "2026-08-06",
