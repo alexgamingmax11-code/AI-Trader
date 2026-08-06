@@ -1,8 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 496.31007966888154,
-  "positions": [],
+  "current_cash_eur": 385.9100796688815,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-06T01:01:18.485698+00:00",
+      "entry_price": 1651.22,
+      "current_price": 1651.22,
+      "peak_price": 1651.22,
+      "trough_price": 1651.22,
+      "value_eur": 110.29,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1576.92
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -233,11 +246,11 @@
       "reasoning": "Thesis is broken on structure as the 5m and 15m timeframes show a reversal and momentum flip, but the 1d macro trend is still weak and against the position; this setup invalidates the original entry, and the overlay should be allowed to handle the loss if the stop is reached."
     }
   ],
-  "total_trades": 17,
+  "total_trades": 18,
   "win_rate": 41.17647058823529,
   "total_pnl_eur": -3.6700000000000004,
   "total_pnl_percent": -0.74,
-  "total_fees_paid_eur": 4.050000000000001,
+  "total_fees_paid_eur": 4.160000000000001,
   "last_digest_date": "2026-08-06",
   "last_hold_email_ts": 1785975351.9253666,
   "cb_date": "2026-08-06",
