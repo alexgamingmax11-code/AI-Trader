@@ -211,6 +211,38 @@ p19['current_cash_eur'] = 480.0
 t.update_circuit_breaker(p19)
 check("cb: rolls on new UTC day", p19['cb_day_start_value'] == 480.0)
 
+# ── 5. LLM sell gate + cooldown-on-any-exit + thesis memory ──────────────
+pos_win = mkpos("BTC-EUR", 100.0, 10, current_price=101.0)  # +1.0% >= +0.75%
+check("sell gate: profit exit blocked", t.llm_sell_guard(pos_win) is not None)
+
+pos_inv = mkpos("ETH-EUR", 100.0, 0.1, current_price=97.9)  # -2.1% <= -2%
+check("sell gate: invalidation allowed immediately", t.llm_sell_guard(pos_inv) is None)
+
+pos_young = mkpos("SOL-EUR", 100.0, 1, current_price=99.5)  # -0.5%, 1h
+check("sell gate: young loss-band blocked", t.llm_sell_guard(pos_young) is not None)
+pos_aged = mkpos("SOL-EUR", 100.0, 5, current_price=99.5)   # -0.5%, 5h
+check("sell gate: aged loss-band allowed", t.llm_sell_guard(pos_aged) is None)
+
+pos_run = mkpos("BTC-EUR", 100.0, 30, current_price=102.5, tp1_done=True)
+check("sell gate: profitable runner blocked", t.llm_sell_guard(pos_run) is not None)
+
+p20 = fresh_portfolio()
+p20['positions'].append(mkpos("BTC-EUR", 100.0, 10))
+check("execute_sell full close sets cooldown",
+      t.execute_sell("BTC-EUR", 101.0, "test llm-path sell", p20)
+      and 'BTC-EUR' in p20.get('cooldowns', {}))
+
+p21 = fresh_portfolio()
+p21['positions'].append(mkpos("BTC-EUR", 100.0, 1))
+check("execute_sell partial sets no cooldown",
+      t.execute_sell("BTC-EUR", 101.6, "test tp1", p21, fraction=0.5)
+      and 'BTC-EUR' not in p21.get('cooldowns', {}))
+
+p22 = fresh_portfolio()
+t.execute_buy("BTC-EUR", 100.0, "breakout above 15m BB mid", p22)
+check("entry thesis stored on position",
+      p22['positions'][0].get('entry_reasoning') == "breakout above 15m BB mid")
+
 print()
 if FAIL:
     print(f"❌ {len(FAIL)} FAILURES: {FAIL}")

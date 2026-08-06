@@ -2,9 +2,12 @@
 """
 AI Day Trader - LLM-Powered Crypto Trading Bot
 Uses an LLM to analyze market data and make trading decisions.
-The LLM owns entries and early discretionary exits; a deterministic risk
+The LLM owns entries and early invalidation exits; a deterministic risk
 overlay (hard stops, partial take-profits, trailing stops, time stops) runs
-before the LLM each cycle and cannot be overridden by it.
+before the LLM each cycle and cannot be overridden by it. A deterministic sell
+gate constrains LLM exits (profit exits are overlay-only; loss-band exits need
+minimum age) and every full close triggers a re-entry cooldown — 2026-08-06
+forensics: unguarded sells caused 5 churn exits + 4 flip-flops in 7 days.
 """
 import os
 import sys
@@ -133,15 +136,23 @@ TRAIL_PCT = 0.012               # trail remainder -1.2% from post-TP1 peak
 STALL_HOURS = 20                # dead-thesis exit: age >= 20h AND pnl in band…
 STALL_BAND = (-0.015, 0.0075)   # …[-1.5%, +0.75%) — frees capital for real signals
 TIME_STOP_HOURS = 48            # unconditional exit if still underwater at 48h
-COOLDOWN_HOURS = 4              # per-symbol re-entry block after an overlay exit
+COOLDOWN_HOURS = 4              # per-symbol re-entry block after ANY full exit
 RISK_PER_TRADE_PCT = 0.01       # 1% of current equity risked per trade
 MAX_POSITION_PCT = 0.30         # of current equity
 MAX_POSITIONS = 2               # BTC/ETH/SOL are 0.85-0.95 correlated: 3 = one bet
 MAX_NOTIONAL_PCT = 0.50         # total deployed, of current equity
 ONE_AT_RISK_MIN_PNL = 0.0075    # 2nd position allowed only if existing >= +0.75%
 DAILY_CIRCUIT_BREAKER_PCT = 0.05  # no new BUYs if equity -5% from UTC day start
-MAX_TRADES_PER_DAY = 10         # enforced in code (was advisory-only)
+MAX_TRADES_PER_DAY = 6          # 3 round trips/day backstop (was 10 — churn hit it 22x in 7d)
 MIN_TRADE_EUR = 50              # floor for risk-sized orders
+
+# ── LLM sell gate (deterministic, applied to LLM SELL decisions) ─────────────
+# Forensics 2026-08-06: unguarded LLM sells produced 5 churn exits (<1h holds,
+# -1.14 EUR net with 1.06 EUR fees) and 4 same-symbol re-buys <60min later; the
+# prompt's "don't sell to cut small losses" rule was ignored 20 times. The gate
+# confines LLM sells to their one legitimate job: early invalidation.
+LLM_PROFIT_GATE_PCT = ONE_AT_RISK_MIN_PNL  # >= +0.75%: overlay owns the exit
+MIN_LLM_HOLD_HOURS = 4          # loss-band sells allowed only at this age+
 STARTING_CAPITAL = float(os.environ.get("STARTING_CAPITAL", "500"))  # Default €500
 
 # ── Revolut X API ──────────────────────────────────────────────────────────────
@@ -283,6 +294,45 @@ def get_market_summary(candles, label):
     }
 
 
+# ── Regime labels (computed in code, injected into the prompt) ────────────────
+# Forensics 2026-08-06: a raw-numbers-only prompt lets the LLM hallucinate its
+# own thresholds — RSI 79-86 was called "oversold" 8 times, driving bad exits.
+# Labels make the regime deterministic instead of model-interpreted.
+
+def _rsi_tag(rsi):
+    if rsi is None:
+        return "n/a"
+    if rsi < 30:
+        return f"{rsi} (OVERSOLD)"
+    if rsi > 70:
+        return f"{rsi} (OVERBOUGHT)"
+    if rsi < 45:
+        return f"{rsi} (weak-neutral)"
+    if rsi > 55:
+        return f"{rsi} (strong-neutral)"
+    return f"{rsi} (neutral)"
+
+
+def _bb_tag(pct_b):
+    if pct_b is None:
+        return "n/a"
+    if pct_b < 0.2:
+        return f"{pct_b:.2f} (LOWER band zone)"
+    if pct_b > 0.8:
+        return f"{pct_b:.2f} (UPPER band zone)"
+    return f"{pct_b:.2f} (mid-band)"
+
+
+def _trend_tag(pct):
+    if pct is None:
+        return "n/a"
+    if pct > 0.5:
+        return f"{pct:+.2f}% (UP)"
+    if pct < -0.5:
+        return f"{pct:+.2f}% (DOWN)"
+    return f"{pct:+.2f}% (flat)"
+
+
 # ── Opportunity Detector ──────────────────────────────────────────────────────
 
 def detect_dip_opportunity(market_data):
@@ -375,14 +425,10 @@ def apply_risk_overlay(portfolio, market_data):
         if reason:
             print(f"\n🛡️ OVERLAY: {reason}")
             if execute_sell(symbol, price, f"[OVERLAY] {reason}", portfolio, fraction=fraction):
-                if fraction >= 0.999:
-                    portfolio.setdefault('cooldowns', {})[symbol] = (
-                        datetime.now(timezone.utc) + timedelta(hours=COOLDOWN_HOURS)
-                    ).isoformat()
-                    # Persist NOW — execute_sell's internal save already ran, and a
-                    # crash before the cycle's final save would lose the cooldown,
-                    # letting the next run instantly re-buy the stopped-out symbol.
-                    save_portfolio(portfolio)
+                # Full exits: the re-entry cooldown is set inside execute_sell and
+                # persisted atomically with its save — covering LLM exits too (was
+                # overlay-only; the gap let 4 flip-flop re-buys happen <60min
+                # after discretionary sells).
                 if fraction < 1:
                     pos['tp1_done'] = True
                     save_portfolio(portfolio)
@@ -405,7 +451,7 @@ def buy_guard(symbol, portfolio, trades_today, market_data=None):
     if cd:
         try:
             if datetime.now(timezone.utc) < datetime.fromisoformat(cd):
-                return f"{symbol} in {COOLDOWN_HOURS}h cooldown after overlay exit"
+                return f"{symbol} in {COOLDOWN_HOURS}h cooldown after exit"
         except Exception:
             pass
     if market_data is not None:
@@ -438,6 +484,31 @@ def buy_guard(symbol, portfolio, trades_today, market_data=None):
         for p in positions
     ):
         return f"one-at-risk rule: existing position must reach +{ONE_AT_RISK_MIN_PNL*100:.2f}% before adding correlated risk"
+    return None
+
+
+def llm_sell_guard(position):
+    """Deterministic gate on LLM SELL decisions — returns a block reason or None.
+
+    The LLM's only legitimate sell job is early invalidation: exiting when the
+    entry thesis is broken BEFORE the stop tags. Everything else is overlay
+    territory. Forensics 2026-08-06 (21 closes in 7 days): 5 churn exits (<1h
+    holds) burned -1.14 EUR net incl. 1.06 EUR fees, and a +0.51% winner was
+    cut 6.5min after entry — before TP1 (+1.5%) could fire.
+
+    - pnl <= -SOFT_INVALIDATION_PCT → invalidation: allowed at any age
+    - band (-2%, +0.75%)            → allowed only at MIN_LLM_HOLD_HOURS+ age
+    - pnl >= +LLM_PROFIT_GATE_PCT   → blocked: TP1/trail/stall own profit exits
+    """
+    price = position.get('current_price', position['entry_price'])
+    pnl = (price / position['entry_price']) - 1
+    age_h = _position_age_hours(position)
+    if pnl >= LLM_PROFIT_GATE_PCT:
+        return (f"at {pnl*100:+.1f}% — profit exits belong to the overlay "
+                f"(TP1 +{TP1_PCT*100:.1f}% / trail / stall)")
+    if pnl > -SOFT_INVALIDATION_PCT and age_h < MIN_LLM_HOLD_HOURS:
+        return (f"only {age_h:.1f}h old at {pnl*100:+.1f}% — loss-band sells need "
+                f"{MIN_LLM_HOLD_HOURS}h+ age, or P&L <= -{SOFT_INVALIDATION_PCT*100:.0f}% (invalidation)")
     return None
 
 
@@ -475,11 +546,19 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
                 flags.append("⚠️ INVALIDATED — thesis broken, exit on structural weakness")
             if p.get('tp1_done'):
                 flags.append("TP1 banked, trailing")
+            sell_block = llm_sell_guard(p)
+            if sell_block:
+                flags.append(f"🔒 SELL would be blocked: {sell_block}")
             inv_text = f", hard stop EUR {inv:.2f}" if inv else ""
             flag_text = f" [{'; '.join(flags)}]" if flags else ""
+            # Thesis memory: quote the original entry reasoning back so the LLM
+            # judges whether THAT thesis broke — without it each cycle invents a
+            # fresh thesis and declares it broken (root cause of 4 flip-flops).
+            thesis = p.get('entry_reasoning')
+            thesis_text = f"\n      Entry thesis (yours, {age_h:.0f}h ago): \"{thesis}\"" if thesis else ""
             portfolio_text += (
                 f"\n    - {p['symbol']}: EUR {p['value_eur']:.2f} @ EUR {p['entry_price']:.2f} "
-                f"({pnl:+.1f}%, {age_h:.0f}h old{inv_text}){flag_text}"
+                f"({pnl:+.1f}%, {age_h:.0f}h old{inv_text}){flag_text}{thesis_text}"
             )
 
     # Build multi-timeframe data: summaries for higher TF, raw candles for lower TFs
@@ -495,10 +574,10 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
                 off_low = ((s1d['current_price'] - s1d['full_range_low']) / s1d['full_range_low'] * 100) if s1d['full_range_low'] > 0 else 0
                 market_text_parts.append(
                     f"  1d macro: price={s1d['current_price']:.2f}, "
-                    f"7d={s1d.get('recent_pct') or 0:+.2f}%, "
-                    f"21d={s1d.get('medium_pct') or 0:+.2f}%, "
+                    f"7d={_trend_tag(s1d.get('recent_pct'))}, "
+                    f"21d={_trend_tag(s1d.get('medium_pct'))}, "
                     f"30d range={s1d['full_range_low']:.2f}-{s1d['full_range_high']:.2f} "
-                    f"({off_low:+.1f}% off low), daily RSI={s1d.get('rsi_14') or '?'}"
+                    f"({off_low:+.1f}% off low), daily RSI={_rsi_tag(s1d.get('rsi_14'))}"
                 )
 
         # 15m: summary only (trend + momentum context)
@@ -508,13 +587,13 @@ def get_llm_decision(market_data_list, portfolio, trades_today=0):
             if summary:
                 bb_text = ""
                 if summary.get('bb_pct_b') is not None:
-                    bb_text = f", BB%b={summary['bb_pct_b']:.2f}"
+                    bb_text = f", BB%b={_bb_tag(summary['bb_pct_b'])}"
                 market_text_parts.append(
                     f"  15m summary: price={summary['current_price']:.2f}, "
-                    f"recent={summary.get('recent_pct', 0):+.2f}%, "
-                    f"medium={summary.get('medium_pct', 0):+.2f}%, "
+                    f"recent={_trend_tag(summary.get('recent_pct'))}, "
+                    f"medium={_trend_tag(summary.get('medium_pct'))}, "
                     f"range={summary.get('full_range_pct', 0):.2f}%, "
-                    f"RSI={summary.get('rsi_14', '?')}, "
+                    f"RSI={_rsi_tag(summary.get('rsi_14'))}, "
                     f"vol={summary.get('volume_ratio', '?')}x"
                     f"{bb_text}"
                 )
@@ -544,10 +623,16 @@ RISK OVERLAY (deterministic code, runs before you every cycle — you cannot ove
 - Position size is computed in code: {RISK_PER_TRADE_PCT * 100:.0f}% of equity risked vs the symbol's stop distance (max {MAX_POSITION_PCT * 100:.0f}% of equity, max {MAX_POSITIONS} positions)
 - New buys are blocked if equity drops {DAILY_CIRCUIT_BREAKER_PCT * 100:.0f}% from UTC day start
 
-Your job is ENTRIES and EARLY discretionary exits only:
+Your job is ENTRIES and EARLY invalidation exits only:
 - Do NOT sell to "take profit" or "cut a small loss" — the overlay handles that
-- DO sell early only when the thesis is clearly broken on structure (e.g. lower
-  high + lower low against the position, macro trend flip) BEFORE the stop tags
+- DO sell early only when the position's ENTRY THESIS (quoted with the position
+  above) is clearly broken on structure (e.g. lower high + lower low against the
+  position, macro trend flip) BEFORE the stop tags — and name the specific part
+  of the quoted thesis that broke
+- A deterministic sell gate runs after you and REJECTS: sells at >= +{LLM_PROFIT_GATE_PCT * 100:.2f}%
+  P&L (profit exits belong to the overlay) and sells younger than {MIN_LLM_HOLD_HOURS}h in
+  the loss band. Positions are annotated with their gate state — never choose SELL
+  for a position flagged as blocked; choose HOLD instead
 
 MARKET DATA (multi-timeframe):
 {market_text}
@@ -566,8 +651,9 @@ Respond with ONLY a JSON object (no markdown, no code fences):
 
 Rules:
 - BUY: you see a concrete entry setup with aligned timeframes (position size is automatic)
-- SELL: an existing position's thesis is broken on structure — profit-taking and stop-losses are NOT your job
+- SELL: an existing position's entry thesis is broken on structure — profit-taking and stop-losses are NOT your job
 - HOLD: no compelling entry or exit — wait
+- Regime labels (OVERSOLD/OVERBOUGHT/UP/DOWN/flat) are computed in code from the raw numbers — use them verbatim, never re-derive your own thresholds
 - NOTE: Each trade costs {TRADING_FEE_PCT * 100:.1f}% taker fee each way (buy + sell = {TRADING_FEE_PCT * 200:.1f}% round-trip). Factor this into your risk/reward."""
 
     # Try each provider in the chain — fall back on failure. Skip providers
@@ -988,6 +1074,9 @@ def execute_buy(symbol, price, reasoning, portfolio):
         'fee_paid': fee,
         'tp1_done': False,
         'invalidation': round(price * (1 - stop), 2),
+        # Thesis memory — quoted back in the prompt so future SELL decisions must
+        # judge THIS thesis, not a freshly invented one (flip-flop root cause).
+        'entry_reasoning': reasoning,
     }
 
     portfolio['positions'].append(position)
@@ -1064,6 +1153,13 @@ def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
 
         wins = sum(1 for t in portfolio['closed_trades'] if t.get('net_pnl_eur', t['pnl_eur']) > 0)
         portfolio['win_rate'] = wins / len(portfolio['closed_trades']) * 100
+        # Re-entry cooldown on EVERY full close — set before this function's save
+        # so it persists atomically with the sell. Was overlay-exits-only; the gap
+        # let 4 LLM flip-flops re-buy the same symbol <60min after a discretionary
+        # sell (forensics 2026-08-06). TP1 partials don't trigger it.
+        portfolio.setdefault('cooldowns', {})[symbol] = (
+            datetime.now(timezone.utc) + timedelta(hours=COOLDOWN_HOURS)
+        ).isoformat()
     else:
         # Partial (TP1): shrink the position, keep the runner
         position['value_eur'] = round(full_value - sell_value, 2)
@@ -1198,8 +1294,18 @@ def run_cycle(portfolio, trades_today):
             elif execute_buy(symbol, price, reasoning, portfolio):
                 trades_today += 1
         elif action == 'SELL' and symbol and price:
-            if execute_sell(symbol, price, reasoning, portfolio):
-                trades_today += 1
+            position = next((p for p in portfolio['positions'] if p['symbol'] == symbol), None)
+            if not position:
+                print(f"⚠️ SELL {symbol} dropped — no open position")
+                log_decision('DROPPED_SELL', symbol, f"SELL dropped: no open position. {reasoning}", price)
+            else:
+                position['current_price'] = price  # guard judges the live mark
+                block = llm_sell_guard(position)
+                if block:
+                    print(f"🛡️ SELL BLOCKED: {block}")
+                    log_decision('BLOCKED_SELL', symbol, f"Blocked: {block}. {reasoning}", price)
+                elif execute_sell(symbol, price, reasoning, portfolio):
+                    trades_today += 1
         elif action == 'HOLD':
             print(f"   Holding — {reasoning}")
             log_decision(action, symbol, reasoning, price)
