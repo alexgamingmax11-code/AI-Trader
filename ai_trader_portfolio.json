@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 494.8824561489073,
-  "positions": [],
+  "current_cash_eur": 384.8024561489073,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-07T02:15:51.447356+00:00",
+      "entry_price": 1649.77,
+      "current_price": 1649.77,
+      "peak_price": 1649.77,
+      "trough_price": 1649.77,
+      "value_eur": 109.97,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1575.53,
+      "entry_reasoning": "Reversal setup: 5m showing bullish structure (higher lows) against 15m oversold RSI, with increasing volume on reversal candles."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -289,11 +303,11 @@
       "reasoning": "The thesis for the existing SOL-EUR position, which was based on buying a pullback to middle Bollinger Band, is broken as the recent candles show a clear lower high; the 15-minute trend summary also indicates price is below medium."
     }
   ],
-  "total_trades": 21,
+  "total_trades": 22,
   "win_rate": 38.095238095238095,
   "total_pnl_eur": -5.09,
   "total_pnl_percent": -1.02,
-  "total_fees_paid_eur": 4.970000000000001,
+  "total_fees_paid_eur": 5.080000000000001,
   "last_digest_date": "2026-08-07",
   "last_hold_email_ts": 1786068142.817394,
   "cb_date": "2026-08-07",
