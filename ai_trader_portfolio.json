@@ -336,10 +336,10 @@
   "total_pnl_eur": -4.68,
   "total_pnl_percent": -0.94,
   "total_fees_paid_eur": 5.610000000000001,
-  "last_digest_date": "2026-08-07",
+  "last_digest_date": "2026-08-08",
   "last_hold_email_ts": 1786145461.9476933,
-  "cb_date": "2026-08-07",
-  "cb_day_start_value": 494.9840170554229,
+  "cb_date": "2026-08-08",
+  "cb_day_start_value": 495.2888199010243,
   "last_failure_email_ts": 1786131023.8047729,
   "cooldowns": {
     "SOL-EUR": "2026-08-07T20:15:59.738309+00:00",
