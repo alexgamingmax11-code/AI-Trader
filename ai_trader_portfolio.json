@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 495.2888199010243,
-  "positions": [],
+  "current_cash_eur": 385.11881990102427,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-08T02:47:50.749904+00:00",
+      "entry_price": 1654.57,
+      "current_price": 1654.57,
+      "peak_price": 1654.57,
+      "trough_price": 1654.57,
+      "value_eur": 110.06,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1580.11,
+      "entry_reasoning": "Daily trend UP (7d +1.62%, 21d +1.14%) with price 26.8% off 30d low; 15m shows BB lower band touch (%b=0.10) and RSI 37.7 weak-neutral \u2014 classic pullback entry in uptrend; 5m consolidating at 1654-1655 with subtle higher lows forming, volume spike at 02:20 suggests absorption."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -331,11 +345,11 @@
       "reasoning": "The entry thesis for the existing position on ETH-EUR is broken as the 5m candles now show a lower high and an overall decline, against the original thesis of a reversal with higher lows and momentum shift against a 15m oversold condition."
     }
   ],
-  "total_trades": 24,
+  "total_trades": 25,
   "win_rate": 41.66666666666667,
   "total_pnl_eur": -4.68,
   "total_pnl_percent": -0.94,
-  "total_fees_paid_eur": 5.610000000000001,
+  "total_fees_paid_eur": 5.7200000000000015,
   "last_digest_date": "2026-08-08",
   "last_hold_email_ts": 1786154478.6754682,
   "cb_date": "2026-08-08",
