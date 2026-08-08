@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 446.2620924986711,
+  "current_cash_eur": 335.7120924986711,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-08T09:01:18.724218+00:00",
       "entry_price": 64.71,
-      "current_price": 66.312,
+      "current_price": 66.29,
       "peak_price": 66.312,
       "trough_price": 64.688,
       "value_eur": 49.52,
@@ -15,6 +15,19 @@
       "tp1_done": true,
       "invalidation": 61.47,
       "entry_reasoning": "A BB bounce on the 5m candles at SOL-EUR's 64.65 level, with %b near 0 and recovery on the next candle, setting up a buy on the first pullback-to-band. The 1d macro is UP and the 15m medium is up, supporting this entry."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-08T15:19:46.992333+00:00",
+      "entry_price": 1663.86,
+      "current_price": 1663.86,
+      "peak_price": 1663.86,
+      "trough_price": 1663.86,
+      "value_eur": 110.44,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1588.99,
+      "entry_reasoning": "A BB bounce pattern forms on ETH-EUR's 5m candles at 1664.55 level with recovery on the next candle, setting up a buy on the first pullback-to-band. 1d macro trend is UP, and the 15m medium trend is also UP, supporting this entry."
     }
   ],
   "closed_trades": [
@@ -359,11 +372,11 @@
       "reasoning": "ETH-EUR's 15m BB%b is in a LOWER band zone, but the 5M candles show bearish structure against the position, lower highs and a momentum shift \u2014 the entry thesis is broken"
     }
   ],
-  "total_trades": 26,
+  "total_trades": 27,
   "win_rate": 40.0,
   "total_pnl_eur": -4.13,
   "total_pnl_percent": -0.69,
-  "total_fees_paid_eur": 5.980000000000001,
+  "total_fees_paid_eur": 6.090000000000002,
   "last_digest_date": "2026-08-08",
   "last_hold_email_ts": 1786200346.8129156,
   "cb_date": "2026-08-08",
