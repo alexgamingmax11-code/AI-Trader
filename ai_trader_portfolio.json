@@ -1,28 +1,15 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 335.7120924986711,
+  "current_cash_eur": 385.76292513659416,
   "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-08T09:01:18.724218+00:00",
-      "entry_price": 64.71,
-      "current_price": 65.696,
-      "peak_price": 66.312,
-      "trough_price": 64.688,
-      "value_eur": 49.52,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 61.47,
-      "entry_reasoning": "A BB bounce on the 5m candles at SOL-EUR's 64.65 level, with %b near 0 and recovery on the next candle, setting up a buy on the first pullback-to-band. The 1d macro is UP and the 15m medium is up, supporting this entry."
-    },
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-08-08T15:19:46.992333+00:00",
       "entry_price": 1663.86,
-      "current_price": 1659.58,
+      "current_price": 1655.19,
       "peak_price": 1664.85,
-      "trough_price": 1656.0,
+      "trough_price": 1655.19,
       "value_eur": 110.44,
       "fee_paid": 0.11,
       "tp1_done": false,
@@ -370,20 +357,34 @@
       "mfe_pct": 0.27,
       "mae_pct": 0.0,
       "reasoning": "ETH-EUR's 15m BB%b is in a LOWER band zone, but the 5M candles show bearish structure against the position, lower highs and a momentum shift \u2014 the entry thesis is broken"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-08T09:01:18.724218+00:00",
+      "exit_time": "2026-08-09T01:31:03.358927+00:00",
+      "entry_price": 64.71,
+      "exit_price": 65.469,
+      "pnl_eur": 0.58,
+      "pnl_pct": 1.17,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 0.48,
+      "mfe_pct": 2.48,
+      "mae_pct": -0.03,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 66.31"
     }
   ],
   "total_trades": 27,
-  "win_rate": 40.0,
-  "total_pnl_eur": -4.13,
-  "total_pnl_percent": -0.69,
-  "total_fees_paid_eur": 6.090000000000002,
+  "win_rate": 42.30769230769231,
+  "total_pnl_eur": -3.65,
+  "total_pnl_percent": -0.87,
+  "total_fees_paid_eur": 6.1400000000000015,
   "last_digest_date": "2026-08-09",
   "last_hold_email_ts": 1786238146.7285535,
   "cb_date": "2026-08-09",
   "cb_day_start_value": 495.9087291255993,
   "last_failure_email_ts": 1786237279.2208443,
   "cooldowns": {
-    "SOL-EUR": "2026-08-07T20:15:59.738309+00:00",
+    "SOL-EUR": "2026-08-09T05:31:03.358944+00:00",
     "ETH-EUR": "2026-08-08T11:45:55.876757+00:00"
   }
 }
