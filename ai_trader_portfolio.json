@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 494.25762541287423,
-  "positions": [],
+  "current_cash_eur": 352.8976254128743,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-11T11:31:07.156497+00:00",
+      "entry_price": 55704.15,
+      "current_price": 55704.15,
+      "peak_price": 55704.15,
+      "trough_price": 55704.15,
+      "value_eur": 141.22,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 53754.5,
+      "entry_reasoning": "the price bounce at the lower BB boundary in the 15m summary on the current candle, followed by a slight recovery, sets up a BB bounce entry as the 5m candles show continuation of the higher lows trend, with no apparent weakness in the 1d/15m trend direction."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -457,11 +471,11 @@
       "reasoning": "Existing position's thesis broken due to lower high and lower low against the weak 1d trend on 5m candles; ETH-EUR's bullish reversal structure is failing"
     }
   ],
-  "total_trades": 33,
+  "total_trades": 34,
   "win_rate": 42.42424242424242,
   "total_pnl_eur": -5.709999999999999,
   "total_pnl_percent": -1.15,
-  "total_fees_paid_eur": 7.57,
+  "total_fees_paid_eur": 7.71,
   "last_digest_date": "2026-08-11",
   "last_hold_email_ts": 1786446125.4934263,
   "cb_date": "2026-08-11",
