@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 493.7582586120584,
-  "positions": [],
+  "current_cash_eur": 352.5482586120584,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-12T15:01:20.399419+00:00",
+      "entry_price": 54849.09,
+      "current_price": 54849.09,
+      "peak_price": 54849.09,
+      "trough_price": 54849.09,
+      "value_eur": 141.07,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 52929.37,
+      "entry_reasoning": "15m trend is down but RSI is OVERSOLD, and the 5m candles show a potential reversal with higher lows, making it a good entry point for a bounce, while the 1d macro trend is also down but price is near the lower end of the 30d range, suggesting a possible rebound."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -499,11 +513,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 66.68"
     }
   ],
-  "total_trades": 36,
+  "total_trades": 37,
   "win_rate": 44.44444444444444,
   "total_pnl_eur": -6.209999999999999,
   "total_pnl_percent": -1.25,
-  "total_fees_paid_eur": 8.27,
+  "total_fees_paid_eur": 8.41,
   "last_digest_date": "2026-08-12",
   "last_hold_email_ts": 1786543283.142267,
   "cb_date": "2026-08-12",
