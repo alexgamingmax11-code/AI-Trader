@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 493.8372536400525,
-  "positions": [],
+  "current_cash_eur": 383.9872536400525,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-13T03:13:35.417809+00:00",
+      "entry_price": 1632.84,
+      "current_price": 1632.84,
+      "peak_price": 1632.84,
+      "trough_price": 1632.84,
+      "value_eur": 109.74,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1559.36,
+      "entry_reasoning": "Reversal setup seen on 5m candles against 15m oversold condition, supported by increasing volume on recent reversal candles."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -513,11 +527,11 @@
       "reasoning": "The existing position's thesis of a potential reversal with higher lows has been broken due to the 15m neutral trend direction and the daily RSI indicating a weak-neutral market, while the 5m candles show weak momentum shift with lower highs."
     }
   ],
-  "total_trades": 37,
+  "total_trades": 38,
   "win_rate": 45.94594594594595,
   "total_pnl_eur": -6.129999999999999,
   "total_pnl_percent": -1.23,
-  "total_fees_paid_eur": 8.55,
+  "total_fees_paid_eur": 8.66,
   "last_digest_date": "2026-08-13",
   "last_hold_email_ts": 1786586479.3806329,
   "cb_date": "2026-08-13",
