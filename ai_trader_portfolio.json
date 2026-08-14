@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 488.8285145229238,
-  "positions": [],
+  "current_cash_eur": 390.9585145229238,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-14T14:31:10.571260+00:00",
+      "entry_price": 64.89,
+      "current_price": 64.89,
+      "peak_price": 64.89,
+      "trough_price": 64.89,
+      "value_eur": 97.77,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 61.65,
+      "entry_reasoning": "Solana shows a clear BB bounce with increasing volume, with the 5m candle recovering from BB_lower to above BB_middle against the 15m OVERSOLD RSI, indicating a potential reversal setup"
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -583,11 +597,11 @@
       "reasoning": "The entry thesis 'The 1d macro trend is down, but the 15m summary shows a recent flat trend and the RSI is oversold, while the 5m candles show a potential reversal with a higher low at 08:45 and increasing volume on the reversal candles, setting up a buy opportunity on a pullback to the 5m BB_middle' is broken on structure due to consecutive lower highs on the 5m candles since 13:40."
     }
   ],
-  "total_trades": 42,
+  "total_trades": 43,
   "win_rate": 40.476190476190474,
   "total_pnl_eur": -11.149999999999999,
   "total_pnl_percent": -2.23,
-  "total_fees_paid_eur": 9.73,
+  "total_fees_paid_eur": 9.83,
   "last_digest_date": "2026-08-14",
   "last_hold_email_ts": 1786710666.4346657,
   "cb_date": "2026-08-14",
