@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 488.68096094807385,
-  "positions": [],
+  "current_cash_eur": 390.84096094807387,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-15T05:47:57.270578+00:00",
+      "entry_price": 65.158,
+      "current_price": 65.158,
+      "peak_price": 65.158,
+      "trough_price": 65.158,
+      "value_eur": 97.74,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 61.9,
+      "entry_reasoning": "BB bounce: price hit BB_lower in 5m timeframe, with next candle showing a recovery. This is a promising pullback entry opportunity with aligned 1d and 15m uptrend."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -611,11 +625,11 @@
       "reasoning": "the 5m candles show a lower high against the entry thesis and a pullback, indicating a breakdown in the short-term bullish structure"
     }
   ],
-  "total_trades": 44,
+  "total_trades": 45,
   "win_rate": 40.909090909090914,
   "total_pnl_eur": -11.299999999999999,
   "total_pnl_percent": -2.26,
-  "total_fees_paid_eur": 10.21,
+  "total_fees_paid_eur": 10.31,
   "last_digest_date": "2026-08-15",
   "last_hold_email_ts": 1786770981.0330906,
   "cb_date": "2026-08-15",
