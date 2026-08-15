@@ -7,7 +7,7 @@
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-15T05:47:57.270578+00:00",
       "entry_price": 65.158,
-      "current_price": 64.969,
+      "current_price": 65.03,
       "peak_price": 65.179,
       "trough_price": 64.804,
       "value_eur": 97.74,
@@ -634,7 +634,7 @@
   "last_hold_email_ts": 1786787228.4001675,
   "cb_date": "2026-08-15",
   "cb_day_start_value": 488.66015529962283,
-  "last_failure_email_ts": 1786780959.757239,
+  "last_failure_email_ts": 1786788827.073652,
   "cooldowns": {
     "SOL-EUR": "2026-08-15T02:15:46.106854+00:00",
     "ETH-EUR": "2026-08-13T15:31:09.078602+00:00",
