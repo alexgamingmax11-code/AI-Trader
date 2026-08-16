@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 488.0909482722214,
-  "positions": [],
+  "current_cash_eur": 379.5209482722214,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-16T00:01:30.650679+00:00",
+      "entry_price": 1625.65,
+      "current_price": 1625.65,
+      "peak_price": 1625.65,
+      "trough_price": 1625.65,
+      "value_eur": 108.46,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1552.5,
+      "entry_reasoning": "Reversal setup on ETH-EUR using the 5m bullish structure and 15m oversold reading, with volume confirmation on the recent candles."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -639,15 +653,15 @@
       "reasoning": "Existing position's thesis 'BTC-EUR appears oversold on 15m timeframe, while 5m candles show potential for consolidation or reversal' on 5m timeframe broken with no recovery in BB bounce; price fell below BB_lower without reversal, invalidating the thesis."
     }
   ],
-  "total_trades": 46,
+  "total_trades": 47,
   "win_rate": 39.130434782608695,
   "total_pnl_eur": -11.89,
   "total_pnl_percent": -2.38,
-  "total_fees_paid_eur": 10.690000000000001,
-  "last_digest_date": "2026-08-15",
+  "total_fees_paid_eur": 10.8,
+  "last_digest_date": "2026-08-16",
   "last_hold_email_ts": 1786835641.6782122,
-  "cb_date": "2026-08-15",
-  "cb_day_start_value": 488.66015529962283,
+  "cb_date": "2026-08-16",
+  "cb_day_start_value": 488.0909482722214,
   "last_failure_email_ts": 1786822509.6076584,
   "cooldowns": {
     "SOL-EUR": "2026-08-15T15:16:32.198501+00:00",
