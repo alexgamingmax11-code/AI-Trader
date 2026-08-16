@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 348.0505525043128,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-16T12:27:15.776888+00:00",
-      "entry_price": 54445.38,
-      "current_price": 54671.16,
-      "peak_price": 54739.74,
-      "trough_price": 54400.0,
-      "value_eur": 139.28,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 52539.79,
-      "entry_reasoning": "BTC is oversold on the 15m (RSI=36.1) and showing a higher low on the 5m candles, with a potential BB bounce setup near the lower band. The daily macro trend is still down, but this could be a chance to re-enter the long trade if the price recovers near the lower Bollinger Band."
-    }
-  ],
+  "current_cash_eur": 487.72088467942115,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -679,13 +665,27 @@
       "mfe_pct": 0.16,
       "mae_pct": -0.15,
       "reasoning": "The SOL-EUR entry thesis is broken on structure; the recent 5m candles have printed a lower low, contradicting the higher lows and momentum shift that led to the initial entry."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-16T12:27:15.776888+00:00",
+      "exit_time": "2026-08-16T16:59:32.856518+00:00",
+      "entry_price": 54445.38,
+      "exit_price": 54652.69,
+      "pnl_eur": 0.53,
+      "pnl_pct": 0.38,
+      "fee_paid": 0.28,
+      "net_pnl_eur": 0.25,
+      "mfe_pct": 0.54,
+      "mae_pct": -0.08,
+      "reasoning": "Existing position's thesis, a BB bounce setup, is broken with the 5m candles showing a lower high and the price trading below 15m BB_middle, invalidating the entry thesis, and a sell signal is triggered before the hard stop."
     }
   ],
   "total_trades": 49,
-  "win_rate": 37.5,
-  "total_pnl_eur": -12.51,
-  "total_pnl_percent": -2.51,
-  "total_fees_paid_eur": 11.25,
+  "win_rate": 38.775510204081634,
+  "total_pnl_eur": -12.26,
+  "total_pnl_percent": -2.46,
+  "total_fees_paid_eur": 11.39,
   "last_digest_date": "2026-08-16",
   "last_hold_email_ts": 1786896825.0210276,
   "cb_date": "2026-08-16",
@@ -694,6 +694,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-08-16T14:13:18.031221+00:00",
     "ETH-EUR": "2026-08-16T09:50:47.103758+00:00",
-    "BTC-EUR": "2026-08-16T01:01:14.030736+00:00"
+    "BTC-EUR": "2026-08-16T20:59:32.856540+00:00"
   }
 }
