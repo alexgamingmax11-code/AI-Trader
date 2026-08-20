@@ -1,18 +1,18 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 395.95754668842596,
+  "current_cash_eur": 446.24148421528236,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-08-20T03:31:29.037870+00:00",
       "entry_price": 72.143,
-      "current_price": 73.085,
-      "peak_price": 73.085,
+      "current_price": 73.351,
+      "peak_price": 73.351,
       "trough_price": 72.143,
-      "value_eur": 99.01,
-      "fee_paid": 0.1,
-      "tp1_done": false,
+      "value_eur": 49.51,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 68.54,
       "entry_reasoning": "Daily UP trend aligned with 15m OVERSOLD (RSI 29.4) at BB lower band (%b 0.05); 5m shows high-volume capitulation (599, 169, 156 vol) followed by low-volume consolidation \u2014 classic BB bounce setup with volume confirmation."
     }
@@ -711,9 +711,9 @@
   ],
   "total_trades": 51,
   "win_rate": 40.0,
-  "total_pnl_eur": -4.909999999999999,
-  "total_pnl_percent": -0.99,
-  "total_fees_paid_eur": 11.700000000000001,
+  "total_pnl_eur": -4.18,
+  "total_pnl_percent": -0.68,
+  "total_fees_paid_eur": 11.750000000000002,
   "last_digest_date": "2026-08-20",
   "last_hold_email_ts": 1787204759.9830623,
   "cb_date": "2026-08-20",
