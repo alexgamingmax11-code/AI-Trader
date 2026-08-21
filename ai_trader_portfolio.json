@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 448.0597756723923,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-21T08:03:53.257798+00:00",
-      "entry_price": 77.497,
-      "current_price": 78.84,
-      "peak_price": 79.3,
-      "trough_price": 77.497,
-      "value_eur": 49.7,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 73.62,
-      "entry_reasoning": "SOL shows aligned timeframes: 1d UP (+18.66% 7d), 15m UP (+1.99%) with BB%b 0.82 (room to upper band), RSI 69 strong-neutral; 5m breaks 30-min consolidation (77.16-77.56) on 08:00 candle with 15x volume spike (1167 vs ~50 avg), confirming bullish breakout structure. BTC/ETH show 5m lower highs/lows against overbought 15m - avoiding."
-    }
-  ],
+  "current_cash_eur": 497.9913130222252,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -721,20 +707,34 @@
       "mfe_pct": 4.01,
       "mae_pct": 0.0,
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 75.04"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-21T08:03:53.257798+00:00",
+      "exit_time": "2026-08-21T09:15:51.202877+00:00",
+      "entry_price": 77.497,
+      "exit_price": 77.936,
+      "pnl_eur": 0.28,
+      "pnl_pct": 0.57,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 0.18,
+      "mfe_pct": 2.33,
+      "mae_pct": 0.0,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 79.30"
     }
   ],
   "total_trades": 52,
-  "win_rate": 41.17647058823529,
-  "total_pnl_eur": -2.17,
-  "total_pnl_percent": -0.28,
-  "total_fees_paid_eur": 11.950000000000003,
+  "win_rate": 42.30769230769231,
+  "total_pnl_eur": -1.99,
+  "total_pnl_percent": -0.4,
+  "total_fees_paid_eur": 12.000000000000004,
   "last_digest_date": "2026-08-21",
   "last_hold_email_ts": 1787301997.8759775,
   "cb_date": "2026-08-21",
   "cb_day_start_value": 497.0527614008721,
   "last_failure_email_ts": 1787302917.1695905,
   "cooldowns": {
-    "SOL-EUR": "2026-08-20T17:31:08.538962+00:00",
+    "SOL-EUR": "2026-08-21T13:15:51.202896+00:00",
     "ETH-EUR": "2026-08-16T09:50:47.103758+00:00",
     "BTC-EUR": "2026-08-16T20:59:32.856540+00:00"
   }
