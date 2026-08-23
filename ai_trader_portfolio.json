@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 499.34806946124957,
-  "positions": [],
+  "current_cash_eur": 388.2680694612496,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-23T04:31:18.619407+00:00",
+      "entry_price": 2064.25,
+      "current_price": 2064.25,
+      "peak_price": 2064.25,
+      "trough_price": 2064.25,
+      "value_eur": 110.97,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1971.36,
+      "entry_reasoning": "1d macro UP trend aligned; 15m OVERSOLD (RSI 24.6) at BB lower band (%b 0.19) signaling pullback in uptrend; 5m shows high-volume capitulation at 04:05 (6.64 vol) to 2057 followed by strong recovery to 2066 and consolidation above \u2014 classic BB bounce with volume confirmation."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -737,11 +751,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 2094.32"
     }
   ],
-  "total_trades": 53,
+  "total_trades": 54,
   "win_rate": 43.39622641509434,
   "total_pnl_eur": -0.63,
   "total_pnl_percent": -0.13,
-  "total_fees_paid_eur": 12.230000000000004,
+  "total_fees_paid_eur": 12.340000000000003,
   "last_digest_date": "2026-08-23",
   "last_hold_email_ts": 1787456779.4515636,
   "cb_date": "2026-08-23",
