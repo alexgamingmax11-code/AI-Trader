@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 499.43614387534274,
-  "positions": [],
+  "current_cash_eur": 388.3361438753427,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-08-28T17:31:37.479045+00:00",
+      "entry_price": 2107.32,
+      "current_price": 2107.32,
+      "peak_price": 2107.32,
+      "trough_price": 2107.32,
+      "value_eur": 110.99,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 2012.49,
+      "entry_reasoning": "Daily UP trend aligned; 15m oversold at BB lower band (%b 0.19); 5m shows bullish rejection candle at 17:25 (low 2104.36, close 2109.70) with high volume (28.22) forming higher low \u2014 classic BB bounce setup with volume confirmation."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -779,11 +793,11 @@
       "reasoning": "SOL entry thesis broken: 5m structure shows lower highs/lows (90.88\u219291.01\u219290.90\u219290.68\u219290.90\u219290.92\u219290.70\u219290.71) not the bullish higher lows cited; 15m trend flipped to DOWN (medium -0.87%) vs OVERSOLD bounce thesis; 1d remains UP but OVERBOUGHT (RSI 86.2). No new BUY setups: BTC/ETH/SOL all daily OVERBOUGHT with no 15m/5m pullback alignment."
     }
   ],
-  "total_trades": 56,
+  "total_trades": 57,
   "win_rate": 42.857142857142854,
   "total_pnl_eur": -0.5299999999999999,
   "total_pnl_percent": -0.11,
-  "total_fees_paid_eur": 12.880000000000003,
+  "total_fees_paid_eur": 12.990000000000002,
   "last_digest_date": "2026-08-28",
   "last_hold_email_ts": 1787937940.26637,
   "cb_date": "2026-08-28",
