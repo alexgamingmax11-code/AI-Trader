@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 428.6276633009767,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-08-30T01:31:24.294572+00:00",
-      "entry_price": 67360.49,
-      "current_price": 67899.86,
-      "peak_price": 68454.83,
-      "trough_price": 67322.07,
-      "value_eur": 71.28,
-      "fee_paid": 0.07,
-      "tp1_done": true,
-      "invalidation": 65002.87,
-      "entry_reasoning": "1d UP trend aligned with 15m BB lower band touch (%b=0.03) and 5m consolidation after volume-backed pullback \u2014 classic BB bounce setup with trend alignment."
-    }
-  ],
+  "current_cash_eur": 500.3665028744418,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -805,13 +791,27 @@
       "mfe_pct": 0.2,
       "mae_pct": -0.67,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at -0.2% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-08-30T01:31:24.294572+00:00",
+      "exit_time": "2026-08-30T22:01:20.678494+00:00",
+      "entry_price": 67360.49,
+      "exit_price": 67860.25,
+      "pnl_eur": 0.53,
+      "pnl_pct": 0.74,
+      "fee_paid": 0.14,
+      "net_pnl_eur": 0.39,
+      "mfe_pct": 1.62,
+      "mae_pct": -0.06,
+      "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.7% \u2014 thesis dead, freeing capital"
     }
   ],
   "total_trades": 58,
-  "win_rate": 42.10526315789473,
-  "total_pnl_eur": 0.010000000000000231,
-  "total_pnl_percent": 0.21,
-  "total_fees_paid_eur": 13.310000000000002,
+  "win_rate": 43.103448275862064,
+  "total_pnl_eur": 0.40000000000000024,
+  "total_pnl_percent": 0.07,
+  "total_fees_paid_eur": 13.380000000000003,
   "last_digest_date": "2026-08-30",
   "last_hold_email_ts": 1788100305.873277,
   "cb_date": "2026-08-30",
@@ -820,6 +820,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-08-28T16:19:10.840203+00:00",
     "ETH-EUR": "2026-08-29T17:45:55.944672+00:00",
-    "BTC-EUR": "2026-08-16T20:59:32.856540+00:00"
+    "BTC-EUR": "2026-08-31T02:01:20.678513+00:00"
   }
 }
