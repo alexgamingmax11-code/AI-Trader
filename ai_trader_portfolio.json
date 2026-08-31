@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 451.0102070298115,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-08-31T00:34:18.239307+00:00",
-      "entry_price": 88.151,
-      "current_price": 88.725,
-      "peak_price": 89.611,
-      "trough_price": 87.275,
-      "value_eur": 50.03,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 83.74,
-      "entry_reasoning": "1d strong uptrend (21d +33.67%, 7d +5.53%), 15m oversold (RSI 29.3), 5m forming higher lows (87.35\u219287.65\u219287.81\u219288.11) with volume spikes on up-candles, signaling bullish reversal against 15m oversold in alignment with daily trend."
-    }
-  ],
+  "current_cash_eur": 501.11166248692484,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -819,20 +805,34 @@
       "mfe_pct": 1.62,
       "mae_pct": -0.06,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.7% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-08-31T00:34:18.239307+00:00",
+      "exit_time": "2026-08-31T13:45:53.432689+00:00",
+      "entry_price": 88.151,
+      "exit_price": 88.365,
+      "pnl_eur": 0.12,
+      "pnl_pct": 0.24,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 0.02,
+      "mfe_pct": 1.66,
+      "mae_pct": -0.99,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 89.61"
     }
   ],
   "total_trades": 59,
-  "win_rate": 43.103448275862064,
-  "total_pnl_eur": 1.1300000000000003,
-  "total_pnl_percent": 0.37,
-  "total_fees_paid_eur": 13.530000000000003,
+  "win_rate": 44.06779661016949,
+  "total_pnl_eur": 1.1500000000000004,
+  "total_pnl_percent": 0.22,
+  "total_fees_paid_eur": 13.580000000000004,
   "last_digest_date": "2026-08-31",
   "last_hold_email_ts": 1788177795.3219218,
   "cb_date": "2026-08-31",
   "cb_day_start_value": 500.3665028744418,
   "last_failure_email_ts": 1788181346.0431087,
   "cooldowns": {
-    "SOL-EUR": "2026-08-28T16:19:10.840203+00:00",
+    "SOL-EUR": "2026-08-31T17:45:53.432707+00:00",
     "ETH-EUR": "2026-08-29T17:45:55.944672+00:00",
     "BTC-EUR": "2026-08-31T02:01:20.678513+00:00"
   }
