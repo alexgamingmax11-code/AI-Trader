@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 499.0769906663122,
-  "positions": [],
+  "current_cash_eur": 399.15699066631225,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-06T12:33:05.192620+00:00",
+      "entry_price": 91.817,
+      "current_price": 91.817,
+      "peak_price": 91.817,
+      "trough_price": 91.817,
+      "value_eur": 99.82,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 87.23,
+      "entry_reasoning": "1d and 15m trends UP aligned; 5m shows higher lows (91.58\u219291.62\u219291.66\u219291.77) with volume spikes on upward candles (259, 118, 104), indicating bullish accumulation at mid-band pullback for trend continuation."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -891,11 +905,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 91.76"
     }
   ],
-  "total_trades": 64,
+  "total_trades": 65,
   "win_rate": 45.3125,
   "total_pnl_eur": -0.8799999999999998,
   "total_pnl_percent": -0.18,
-  "total_fees_paid_eur": 14.660000000000005,
+  "total_fees_paid_eur": 14.760000000000005,
   "last_digest_date": "2026-09-06",
   "last_hold_email_ts": 1788695235.7233622,
   "cb_date": "2026-09-06",
