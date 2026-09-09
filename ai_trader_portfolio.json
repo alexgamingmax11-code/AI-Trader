@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 495.98974288558065,
-  "positions": [],
+  "current_cash_eur": 396.68974288558064,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-09T14:34:28.870021+00:00",
+      "entry_price": 89.341,
+      "current_price": 89.341,
+      "peak_price": 89.341,
+      "trough_price": 89.341,
+      "value_eur": 99.2,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 84.87,
+      "entry_reasoning": "SOL 1d uptrend (+19.6% 21d) aligns with 5m bullish reversal off 88.75 low \u2014 massive volume spike (667 at 14:25) confirms buyers, price at 15m BB mid-band (0.48) offers continuation room."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -933,11 +947,11 @@
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.6% \u2014 thesis dead, freeing capital"
     }
   ],
-  "total_trades": 67,
+  "total_trades": 68,
   "win_rate": 44.776119402985074,
   "total_pnl_eur": -3.9699999999999993,
   "total_pnl_percent": -0.8,
-  "total_fees_paid_eur": 15.280000000000003,
+  "total_fees_paid_eur": 15.380000000000003,
   "last_digest_date": "2026-09-09",
   "last_hold_email_ts": 1788959867.5055497,
   "cb_date": "2026-09-09",
