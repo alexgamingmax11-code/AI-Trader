@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 492.28437489894077,
-  "positions": [],
+  "current_cash_eur": 393.72437489894077,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-11T01:02:36.564732+00:00",
+      "entry_price": 85.384,
+      "current_price": 85.384,
+      "peak_price": 85.384,
+      "trough_price": 85.384,
+      "value_eur": 98.46,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 81.11,
+      "entry_reasoning": "5m shows high-volume capitulation candle at 00:30 (365 vol) forming a sharp low at 84.92 followed by steady higher lows recovery to 85.38; 21d daily trend is UP (+6.58%) providing macro support while 15m RSI 40.3 weak-neutral approaches oversold for a pullback entry within the longer uptrend."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -961,11 +975,11 @@
       "reasoning": "The SOL entry thesis cited a 5m reversal with higher lows to 87.01, but subsequent 5m candles have printed lower highs (87.21\u219286.17) and lower lows (86.54\u219286.03), breaking the bullish structure; 15m trend remains DOWN and 1d 7d is DOWN, invalidating the aligned setup."
     }
   ],
-  "total_trades": 69,
+  "total_trades": 70,
   "win_rate": 43.47826086956522,
   "total_pnl_eur": -7.68,
   "total_pnl_percent": -1.54,
-  "total_fees_paid_eur": 15.680000000000001,
+  "total_fees_paid_eur": 15.780000000000001,
   "last_digest_date": "2026-09-11",
   "last_hold_email_ts": 1789084909.7082393,
   "cb_date": "2026-09-11",
