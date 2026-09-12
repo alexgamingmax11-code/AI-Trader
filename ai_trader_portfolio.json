@@ -1,20 +1,33 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 385.1508519906676,
+  "current_cash_eur": 285.7208519906676,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-09-12T01:02:01.534393+00:00",
       "entry_price": 2165.04,
-      "current_price": 2188.78,
-      "peak_price": 2190.95,
+      "current_price": 2192.97,
+      "peak_price": 2192.97,
       "trough_price": 2164.1,
       "value_eur": 110.08,
       "fee_paid": 0.11,
       "tp1_done": false,
       "invalidation": 2067.61,
       "entry_reasoning": "ETH 1d uptrend (21d +3%) aligns with 15m oversold at BB lower (RSI 30.8, %b 0.26); 5m shows volume spike on decline (00:45-00:50) then stabilization at 2165, forming potential BB bounce reversal setup."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-12T14:02:29.273004+00:00",
+      "entry_price": 87.869,
+      "current_price": 87.869,
+      "peak_price": 87.869,
+      "trough_price": 87.869,
+      "value_eur": 99.33,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 83.48,
+      "entry_reasoning": "SOL 1d 21d UP (+7.38%) aligns with 15m oversold at BB lower (%b 0.13, RSI 41.2); 5m shows volume spike reversal at 13:55 (214 vol, 87.85\u219287.96) followed by low-volume pullback to 87.87 \u2014 classic BB bounce entry on first pullback-to-band."
     }
   ],
   "closed_trades": [
@@ -989,11 +1002,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 90.50"
     }
   ],
-  "total_trades": 71,
+  "total_trades": 72,
   "win_rate": 44.285714285714285,
   "total_pnl_eur": -4.629999999999999,
   "total_pnl_percent": -0.93,
-  "total_fees_paid_eur": 15.990000000000002,
+  "total_fees_paid_eur": 16.090000000000003,
   "last_digest_date": "2026-09-12",
   "last_hold_email_ts": 1789216315.9458506,
   "cb_date": "2026-09-12",
