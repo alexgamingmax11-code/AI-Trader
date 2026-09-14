@@ -1,18 +1,18 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 383.7136374927493,
+  "current_cash_eur": 439.8431634625392,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-09-14T11:32:23.646373+00:00",
       "entry_price": 2176.76,
-      "current_price": 2200.06,
-      "peak_price": 2201.91,
+      "current_price": 2230.53,
+      "peak_price": 2230.53,
       "trough_price": 2165.0,
-      "value_eur": 109.67,
-      "fee_paid": 0.11,
-      "tp1_done": false,
+      "value_eur": 54.84,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 2078.81,
       "entry_reasoning": "1d macro UP, 15m BB%b 0.20 at lower band with RSI 36.7 weak-neutral, 5m shows higher lows (2171.69\u21922177.00) and volume spike on bounce (31.97) confirming BB bounce reversal setup."
     }
@@ -1019,14 +1019,14 @@
   ],
   "total_trades": 73,
   "win_rate": 44.44444444444444,
-  "total_pnl_eur": -6.479999999999999,
-  "total_pnl_percent": -1.3,
-  "total_fees_paid_eur": 16.410000000000004,
+  "total_pnl_eur": -5.249999999999998,
+  "total_pnl_percent": -0.79,
+  "total_fees_paid_eur": 16.470000000000002,
   "last_digest_date": "2026-09-14",
   "last_hold_email_ts": 1789388244.597765,
   "cb_date": "2026-09-14",
   "cb_day_start_value": 493.49363749274926,
-  "last_failure_email_ts": 1789412481.6993876,
+  "last_failure_email_ts": 1789416955.0039017,
   "cooldowns": {
     "SOL-EUR": "2026-09-13T16:16:27.986180+00:00",
     "ETH-EUR": "2026-09-13T01:15:52.132365+00:00",
