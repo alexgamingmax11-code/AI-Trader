@@ -7,7 +7,7 @@
       "symbol": "BTC-EUR",
       "entry_time": "2026-09-15T01:31:39.048803+00:00",
       "entry_price": 67470.0,
-      "current_price": 66934.56,
+      "current_price": 66960.21,
       "peak_price": 67612.37,
       "trough_price": 66934.56,
       "value_eur": 141.64,
@@ -1040,7 +1040,7 @@
   "last_hold_email_ts": 1789439502.3496702,
   "cb_date": "2026-09-15",
   "cb_day_start_value": 495.7422545888003,
-  "last_failure_email_ts": 1789453049.8856392,
+  "last_failure_email_ts": 1789457540.4943092,
   "cooldowns": {
     "SOL-EUR": "2026-09-13T16:16:27.986180+00:00",
     "ETH-EUR": "2026-09-15T01:01:18.829601+00:00",
