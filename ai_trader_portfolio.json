@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 490.4090638267293,
-  "positions": [],
+  "current_cash_eur": 381.31906382672935,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-09-20T03:31:32.258935+00:00",
+      "entry_price": 2250.7,
+      "current_price": 2250.7,
+      "peak_price": 2250.7,
+      "trough_price": 2250.7,
+      "value_eur": 108.98,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 2149.42,
+      "entry_reasoning": "1d uptrend aligned with 15m OVERSOLD (RSI 23.4) at BB lower band (%b 0.13); 5m shows bullish reversal off 2232 low with volume spikes at 03:15/03:20 confirming bounce \u2014 classic BB bounce setup with volume confirmation."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1073,11 +1087,11 @@
       "reasoning": "SOL-EUR position thesis broken: entry cited '5m shows higher highs/lows with volume confirmation on up-candles' but 5m now prints lower highs/lows (96.14\u219294.42) with heavy volume on down-candles (275k, 245k, 249k vol) \u2014 1d UP trend intact but 5m/15m structure invalidated, position flagged INVALIDATED."
     }
   ],
-  "total_trades": 77,
+  "total_trades": 78,
   "win_rate": 44.15584415584416,
   "total_pnl_eur": -9.57,
   "total_pnl_percent": -1.92,
-  "total_fees_paid_eur": 17.430000000000007,
+  "total_fees_paid_eur": 17.540000000000006,
   "last_digest_date": "2026-09-20",
   "last_hold_email_ts": 1789816602.8248944,
   "cb_date": "2026-09-20",
