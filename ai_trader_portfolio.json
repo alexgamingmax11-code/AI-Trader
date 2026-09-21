@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 444.2744133145701,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-09-21T05:31:26.233984+00:00",
-      "entry_price": 97.58,
-      "current_price": 102.524,
-      "peak_price": 103.3,
-      "trough_price": 97.2,
-      "value_eur": 49.23,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 92.7,
-      "entry_reasoning": "1d UP trend (+15.9% 7d), 15m medium UP with BB mid-band (0.61) offering room, 5m bullish breakout from consolidation with massive volume spike (303 at 05:25) confirming momentum alignment across timeframes."
-    }
-  ],
+  "current_cash_eur": 495.6808120643139,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1099,20 +1085,34 @@
       "mfe_pct": 4.2,
       "mae_pct": -0.59,
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 2345.29"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-21T05:31:26.233984+00:00",
+      "exit_time": "2026-09-21T18:01:17.444304+00:00",
+      "entry_price": 97.58,
+      "exit_price": 101.993,
+      "pnl_eur": 2.23,
+      "pnl_pct": 4.52,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 2.13,
+      "mfe_pct": 5.86,
+      "mae_pct": -0.39,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 103.30"
     }
   ],
   "total_trades": 79,
-  "win_rate": 44.871794871794876,
-  "total_pnl_eur": -6.420000000000001,
-  "total_pnl_percent": -1.02,
-  "total_fees_paid_eur": 17.810000000000006,
+  "win_rate": 45.56962025316456,
+  "total_pnl_eur": -4.290000000000001,
+  "total_pnl_percent": -0.86,
+  "total_fees_paid_eur": 17.860000000000007,
   "last_digest_date": "2026-09-21",
   "last_hold_email_ts": 1789993005.1823754,
   "cb_date": "2026-09-21",
   "cb_day_start_value": 492.3547971985692,
   "last_failure_email_ts": 1790011865.862786,
   "cooldowns": {
-    "SOL-EUR": "2026-09-20T06:46:51.561546+00:00",
+    "SOL-EUR": "2026-09-21T22:01:17.444332+00:00",
     "ETH-EUR": "2026-09-21T06:01:14.685072+00:00",
     "BTC-EUR": "2026-09-15T13:32:03.190506+00:00"
   }
