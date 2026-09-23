@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 492.3626959774943,
-  "positions": [],
+  "current_cash_eur": 393.7926959774943,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-23T20:16:29.757589+00:00",
+      "entry_price": 100.396,
+      "current_price": 100.396,
+      "peak_price": 100.396,
+      "trough_price": 100.396,
+      "value_eur": 98.47,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 95.38,
+      "entry_reasoning": "1d UP trend with neutral RSI (66.7), 15m flat at BB mid-band (0.44), 5m shows pullback to 100.32 with volume-confirmed recovery (268 vol at 20:05) forming higher low \u2014 aligned pullback entry in uptrend."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1129,11 +1143,11 @@
       "reasoning": "ETH position thesis broken: 15m OVERSOLD condition (RSI 27.7, BB%b 0.08) that triggered entry has fully reversed \u2014 current 15m RSI 47.9 (neutral), BB%b 0.40 (mid-band), and price dropped 2.7% from entry instead of bouncing. Daily trend remains UP but structural basis for entry is gone; exit on structural weakness per invalidation flag."
     }
   ],
-  "total_trades": 81,
+  "total_trades": 82,
   "win_rate": 44.44444444444444,
   "total_pnl_eur": -7.610000000000001,
   "total_pnl_percent": -1.53,
-  "total_fees_paid_eur": 18.300000000000004,
+  "total_fees_paid_eur": 18.400000000000006,
   "last_digest_date": "2026-09-23",
   "last_hold_email_ts": 1790193762.08241,
   "cb_date": "2026-09-23",
