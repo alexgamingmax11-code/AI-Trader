@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 493.1546790744304,
-  "positions": [],
+  "current_cash_eur": 383.45467907443043,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-09-25T03:15:58.981610+00:00",
+      "entry_price": 2354.66,
+      "current_price": 2354.66,
+      "peak_price": 2354.66,
+      "trough_price": 2354.66,
+      "value_eur": 109.59,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 2248.7,
+      "entry_reasoning": "1d UP trend aligned; 15m BB%b at 0.10 (LOWER band zone) oversold; 5m shows higher low at 2350.95 with volume spike (3.30) on dip and recovery to 2354.66 \u2014 classic BB bounce entry with trend alignment."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1143,11 +1157,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 102.10"
     }
   ],
-  "total_trades": 82,
+  "total_trades": 83,
   "win_rate": 45.1219512195122,
   "total_pnl_eur": -6.810000000000001,
   "total_pnl_percent": -1.37,
-  "total_fees_paid_eur": 18.500000000000007,
+  "total_fees_paid_eur": 18.610000000000007,
   "last_digest_date": "2026-09-25",
   "last_hold_email_ts": 1790302614.490903,
   "cb_date": "2026-09-25",
