@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 439.24384974025907,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-09-25T03:15:58.981610+00:00",
-      "entry_price": 2354.66,
-      "current_price": 2384.89,
-      "peak_price": 2399.96,
-      "trough_price": 2344.71,
-      "value_eur": 54.8,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 2248.7,
-      "entry_reasoning": "1d UP trend aligned; 15m BB%b at 0.10 (LOWER band zone) oversold; 5m shows higher low at 2350.95 with volume spike (3.30) on dip and recovery to 2354.66 \u2014 classic BB bounce entry with trend alignment."
-    }
-  ],
+  "current_cash_eur": 494.33643567623284,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1155,21 +1141,35 @@
       "mfe_pct": 1.7,
       "mae_pct": -1.09,
       "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 102.10"
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-09-25T03:15:58.981610+00:00",
+      "exit_time": "2026-09-25T12:15:57.378048+00:00",
+      "entry_price": 2354.66,
+      "exit_price": 2369.81,
+      "pnl_eur": 0.35,
+      "pnl_pct": 0.64,
+      "fee_paid": 0.11,
+      "net_pnl_eur": 0.24,
+      "mfe_pct": 1.92,
+      "mae_pct": -0.42,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 2399.96"
     }
   ],
   "total_trades": 83,
-  "win_rate": 45.1219512195122,
-  "total_pnl_eur": -5.880000000000002,
-  "total_pnl_percent": -0.98,
-  "total_fees_paid_eur": 18.670000000000005,
+  "win_rate": 45.78313253012048,
+  "total_pnl_eur": -5.6400000000000015,
+  "total_pnl_percent": -1.13,
+  "total_fees_paid_eur": 18.730000000000004,
   "last_digest_date": "2026-09-25",
   "last_hold_email_ts": 1790331378.954062,
   "cb_date": "2026-09-25",
   "cb_day_start_value": 493.1546790744304,
-  "last_failure_email_ts": 1790334125.9836378,
+  "last_failure_email_ts": 1790338560.6092372,
   "cooldowns": {
     "SOL-EUR": "2026-09-24T19:01:14.598123+00:00",
-    "ETH-EUR": "2026-09-23T22:02:30.148437+00:00",
+    "ETH-EUR": "2026-09-25T16:15:57.378068+00:00",
     "BTC-EUR": "2026-09-15T13:32:03.190506+00:00"
   }
 }
