@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 439.4290721431562,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-09-29T02:47:36.827794+00:00",
-      "entry_price": 2339.48,
-      "current_price": 2390.0,
-      "peak_price": 2412.0,
-      "trough_price": 2335.34,
-      "value_eur": 54.83,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 2234.2,
-      "entry_reasoning": "ETH 15m shows OVERSOLD RSI (29.4) at BB lower band (%b 0.20), 5m candles confirm reversal with higher lows and volume spikes (30.84, 4.36, 3.26) bouncing from 2332 to 2339 \u2014 aligned mean-reversion entry."
-    }
-  ],
+  "current_cash_eur": 495.1149835422705,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1197,13 +1183,27 @@
       "mfe_pct": 0.64,
       "mae_pct": -1.86,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at -0.6% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-09-29T02:47:36.827794+00:00",
+      "exit_time": "2026-09-29T15:15:51.077321+00:00",
+      "entry_price": 2339.48,
+      "exit_price": 2378.56,
+      "pnl_eur": 0.92,
+      "pnl_pct": 1.67,
+      "fee_paid": 0.11,
+      "net_pnl_eur": 0.81,
+      "mfe_pct": 3.1,
+      "mae_pct": -0.18,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 2412.00"
     }
   ],
   "total_trades": 86,
-  "win_rate": 44.70588235294118,
-  "total_pnl_eur": -5.6800000000000015,
-  "total_pnl_percent": -0.94,
-  "total_fees_paid_eur": 19.300000000000008,
+  "win_rate": 45.348837209302324,
+  "total_pnl_eur": -4.870000000000001,
+  "total_pnl_percent": -0.98,
+  "total_fees_paid_eur": 19.360000000000007,
   "last_digest_date": "2026-09-29",
   "last_hold_email_ts": 1790687065.9588792,
   "cb_date": "2026-09-29",
@@ -1211,7 +1211,7 @@
   "last_failure_email_ts": 1790692265.5229754,
   "cooldowns": {
     "SOL-EUR": "2026-09-29T04:30:59.556883+00:00",
-    "ETH-EUR": "2026-09-25T16:15:57.378068+00:00",
+    "ETH-EUR": "2026-09-29T19:15:51.077344+00:00",
     "BTC-EUR": "2026-09-15T13:32:03.190506+00:00"
   }
 }
