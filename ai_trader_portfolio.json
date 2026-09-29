@@ -1,18 +1,18 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 383.64419422156675,
+  "current_cash_eur": 439.4290721431562,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-09-29T02:47:36.827794+00:00",
       "entry_price": 2339.48,
-      "current_price": 2373.9,
-      "peak_price": 2373.9,
+      "current_price": 2383.0,
+      "peak_price": 2383.0,
       "trough_price": 2335.34,
-      "value_eur": 109.65,
-      "fee_paid": 0.11,
-      "tp1_done": false,
+      "value_eur": 54.83,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 2234.2,
       "entry_reasoning": "ETH 15m shows OVERSOLD RSI (29.4) at BB lower band (%b 0.20), 5m candles confirm reversal with higher lows and volume spikes (30.84, 4.36, 3.26) bouncing from 2332 to 2339 \u2014 aligned mean-reversion entry."
     }
@@ -1201,9 +1201,9 @@
   ],
   "total_trades": 86,
   "win_rate": 44.70588235294118,
-  "total_pnl_eur": -6.580000000000002,
-  "total_pnl_percent": -1.32,
-  "total_fees_paid_eur": 19.24000000000001,
+  "total_pnl_eur": -5.6800000000000015,
+  "total_pnl_percent": -0.94,
+  "total_fees_paid_eur": 19.300000000000008,
   "last_digest_date": "2026-09-29",
   "last_hold_email_ts": 1790663512.2106247,
   "cb_date": "2026-09-29",
