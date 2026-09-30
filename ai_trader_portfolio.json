@@ -1,18 +1,18 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 395.3889135374832,
+  "current_cash_eur": 445.5539172942381,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-09-30T08:47:45.715148+00:00",
       "entry_price": 103.813,
-      "current_price": 105.331,
-      "peak_price": 105.331,
+      "current_price": 105.451,
+      "peak_price": 105.451,
       "trough_price": 103.813,
-      "value_eur": 98.87,
-      "fee_paid": 0.1,
-      "tp1_done": false,
+      "value_eur": 49.44,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 98.62,
       "entry_reasoning": "SOL 1d trend UP (7d +1.33%, 21d +21.40%), 15m at BB lower band (BB%b 0.15), 5m shows bullish reversal off 103.76 low with high volume (143/105) followed by low-volume pullback to 103.81 \u2014 classic BB bounce entry with trend alignment."
     }
@@ -1229,9 +1229,9 @@
   ],
   "total_trades": 88,
   "win_rate": 44.827586206896555,
-  "total_pnl_eur": -5.630000000000001,
-  "total_pnl_percent": -1.13,
-  "total_fees_paid_eur": 19.680000000000007,
+  "total_pnl_eur": -4.950000000000001,
+  "total_pnl_percent": -0.85,
+  "total_fees_paid_eur": 19.730000000000008,
   "last_digest_date": "2026-09-30",
   "last_hold_email_ts": 1790764293.1304097,
   "cb_date": "2026-09-30",
