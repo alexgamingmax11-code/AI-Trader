@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 445.5539172942381,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-09-30T08:47:45.715148+00:00",
-      "entry_price": 103.813,
-      "current_price": 107.6,
-      "peak_price": 107.753,
-      "trough_price": 103.813,
-      "value_eur": 49.44,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 98.62,
-      "entry_reasoning": "SOL 1d trend UP (7d +1.33%, 21d +21.40%), 15m at BB lower band (BB%b 0.15), 5m shows bullish reversal off 103.76 low with high volume (143/105) followed by low-volume pullback to 103.81 \u2014 classic BB bounce entry with trend alignment."
-    }
-  ],
+  "current_cash_eur": 496.17547634753583,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1225,20 +1211,34 @@
       "mfe_pct": 0.05,
       "mae_pct": -0.49,
       "reasoning": "ETH-EUR entry thesis broken: 5m candles broke below session lows (2360.41) with high-volume down-candles (45.92, 102.59) invalidating the BB bounce setup; 15m trend turned DOWN (recent -0.55%) and price remains at BB lower band without reversal confirmation."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-09-30T08:47:45.715148+00:00",
+      "exit_time": "2026-09-30T13:45:49.766856+00:00",
+      "entry_price": 103.813,
+      "exit_price": 106.399,
+      "pnl_eur": 1.23,
+      "pnl_pct": 2.49,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 1.13,
+      "mfe_pct": 3.8,
+      "mae_pct": 0.0,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 107.75"
     }
   ],
   "total_trades": 88,
-  "win_rate": 44.827586206896555,
-  "total_pnl_eur": -4.950000000000001,
-  "total_pnl_percent": -0.85,
-  "total_fees_paid_eur": 19.730000000000008,
+  "win_rate": 45.45454545454545,
+  "total_pnl_eur": -3.820000000000001,
+  "total_pnl_percent": -0.76,
+  "total_fees_paid_eur": 19.78000000000001,
   "last_digest_date": "2026-09-30",
   "last_hold_email_ts": 1790768810.390482,
   "cb_date": "2026-09-30",
   "cb_day_start_value": 495.1149835422705,
-  "last_failure_email_ts": 1790772408.0388412,
+  "last_failure_email_ts": 1790776026.5510635,
   "cooldowns": {
-    "SOL-EUR": "2026-09-29T04:30:59.556883+00:00",
+    "SOL-EUR": "2026-09-30T17:45:49.766878+00:00",
     "ETH-EUR": "2026-09-30T10:16:54.092932+00:00",
     "BTC-EUR": "2026-09-15T13:32:03.190506+00:00"
   }
