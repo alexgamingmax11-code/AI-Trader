@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 356.68349755689087,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-10-05T06:16:43.270402+00:00",
-      "entry_price": 76732.51,
-      "current_price": 76714.16,
-      "peak_price": 77178.76,
-      "trough_price": 76532.33,
-      "value_eur": 142.73,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 74046.87,
-      "entry_reasoning": "BTC shows daily uptrend (21d +17%), 15m oversold (RSI 23.6), and 5m bullish reversal with higher lows since 05:40 and volume spike at 06:10, aligning for a pullback entry in the macro trend."
-    }
-  ],
+  "current_cash_eur": 499.07255115359976,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1281,13 +1267,27 @@
       "mfe_pct": 1.08,
       "mae_pct": 0.0,
       "reasoning": "[OVERLAY] STALL EXIT: 21h old at +0.7% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-10-05T06:16:43.270402+00:00",
+      "exit_time": "2026-10-05T12:47:10.585987+00:00",
+      "entry_price": 76732.51,
+      "exit_price": 76624.48,
+      "pnl_eur": -0.2,
+      "pnl_pct": -0.14,
+      "fee_paid": 0.28,
+      "net_pnl_eur": -0.48,
+      "mfe_pct": 0.58,
+      "mae_pct": -0.26,
+      "reasoning": "BTC-EUR 5m structure has broken the entry thesis: lower highs and lower lows since 12:10 invalidate the 'bullish reversal with higher lows since 05:40'; 15m RSI normalized to 54.2, removing oversold condition. Thesis broken, exit early."
     }
   ],
   "total_trades": 92,
-  "win_rate": 46.15384615384615,
-  "total_pnl_eur": -0.4500000000000008,
-  "total_pnl_percent": -0.09,
-  "total_fees_paid_eur": 20.62000000000001,
+  "win_rate": 45.65217391304348,
+  "total_pnl_eur": -0.9300000000000008,
+  "total_pnl_percent": -0.19,
+  "total_fees_paid_eur": 20.760000000000012,
   "last_digest_date": "2026-10-05",
   "last_hold_email_ts": 1791194527.288011,
   "cb_date": "2026-10-05",
@@ -1296,6 +1296,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-10-05T07:45:46.710413+00:00",
     "ETH-EUR": "2026-10-03T16:45:45.864998+00:00",
-    "BTC-EUR": "2026-10-02T18:30:59.123532+00:00"
+    "BTC-EUR": "2026-10-05T16:47:10.586021+00:00"
   }
 }
