@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 499.07255115359976,
-  "positions": [],
+  "current_cash_eur": 388.0525511535998,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-10-05T15:31:36.629806+00:00",
+      "entry_price": 2411.47,
+      "current_price": 2411.47,
+      "peak_price": 2411.47,
+      "trough_price": 2411.47,
+      "value_eur": 110.91,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 2302.95,
+      "entry_reasoning": "Daily UP trend aligned with 15m oversold at BB lower band (%b=0.13), 5m shows bullish reversal structure with higher lows (2407.94\u21922410.92) and volume-confirmed breakout candle at 15:20 (18.54 vol, close at high 2411.51) \u2014 classic BB bounce pullback entry within macro uptrend."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1283,11 +1297,11 @@
       "reasoning": "BTC-EUR 5m structure has broken the entry thesis: lower highs and lower lows since 12:10 invalidate the 'bullish reversal with higher lows since 05:40'; 15m RSI normalized to 54.2, removing oversold condition. Thesis broken, exit early."
     }
   ],
-  "total_trades": 92,
+  "total_trades": 93,
   "win_rate": 45.65217391304348,
   "total_pnl_eur": -0.9300000000000008,
   "total_pnl_percent": -0.19,
-  "total_fees_paid_eur": 20.760000000000012,
+  "total_fees_paid_eur": 20.87000000000001,
   "last_digest_date": "2026-10-05",
   "last_hold_email_ts": 1791213399.517531,
   "cb_date": "2026-10-05",
