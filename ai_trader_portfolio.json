@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 498.70031533893075,
-  "positions": [],
+  "current_cash_eur": 356.07031533893075,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-10-06T16:31:55.710768+00:00",
+      "entry_price": 76173.86,
+      "current_price": 76173.86,
+      "peak_price": 76173.86,
+      "trough_price": 76173.86,
+      "value_eur": 142.49,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 73507.77,
+      "entry_reasoning": "BTC 1d macro UP trend aligned with 15m BB lower band (BB%b 0.11) and 5m bounce from 76080 low to 76173 \u2014 pullback entry in uptrend with oversold reversal structure."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1297,11 +1311,11 @@
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at -0.1% \u2014 thesis dead, freeing capital"
     }
   ],
-  "total_trades": 93,
+  "total_trades": 94,
   "win_rate": 45.16129032258064,
   "total_pnl_eur": -1.3000000000000007,
   "total_pnl_percent": -0.26,
-  "total_fees_paid_eur": 20.98000000000001,
+  "total_fees_paid_eur": 21.12000000000001,
   "last_digest_date": "2026-10-06",
   "last_hold_email_ts": 1791301635.0750098,
   "cb_date": "2026-10-06",
