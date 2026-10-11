@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 448.67447463825835,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-10-11T08:45:29.321737+00:00",
-      "entry_price": 97.607,
-      "current_price": 99.435,
-      "peak_price": 100.5,
-      "trough_price": 97.529,
-      "value_eur": 49.76,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 92.73,
-      "entry_reasoning": "SOL 1d OVERSOLD at 86% off 30d low (daily-range extreme), 5m shows volume climax at 97.46 with bullish reversal and follow-through; 15m volume 1.47x confirms interest. Aligned for bounce trade at daily extreme."
-    }
-  ],
+  "current_cash_eur": 498.8116866210055,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1351,20 +1337,34 @@
       "mfe_pct": 1.55,
       "mae_pct": -0.22,
       "reasoning": "[OVERLAY] STALL EXIT: 31h old at +0.6% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-10-11T08:45:29.321737+00:00",
+      "exit_time": "2026-10-11T21:15:45.461912+00:00",
+      "entry_price": 97.607,
+      "exit_price": 98.445,
+      "pnl_eur": 0.43,
+      "pnl_pct": 0.86,
+      "fee_paid": 0.1,
+      "net_pnl_eur": 0.33,
+      "mfe_pct": 2.96,
+      "mae_pct": -0.08,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 100.50"
     }
   ],
   "total_trades": 97,
-  "win_rate": 45.83333333333333,
-  "total_pnl_eur": -1.5100000000000016,
-  "total_pnl_percent": -0.12,
-  "total_fees_paid_eur": 21.840000000000014,
+  "win_rate": 46.391752577319586,
+  "total_pnl_eur": -1.1800000000000015,
+  "total_pnl_percent": -0.24,
+  "total_fees_paid_eur": 21.890000000000015,
   "last_digest_date": "2026-10-11",
   "last_hold_email_ts": 1791718339.666921,
   "cb_date": "2026-10-11",
   "cb_day_start_value": 497.87183810147144,
-  "last_failure_email_ts": 1791748873.4260015,
+  "last_failure_email_ts": 1791753349.0316741,
   "cooldowns": {
-    "SOL-EUR": "2026-10-11T07:15:46.240516+00:00",
+    "SOL-EUR": "2026-10-12T01:15:45.461935+00:00",
     "ETH-EUR": "2026-10-10T00:05:32.741144+00:00",
     "BTC-EUR": "2026-10-07T19:46:47.410469+00:00"
   }
