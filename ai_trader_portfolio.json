@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 355.5166748304582,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-10-14T08:01:57.150208+00:00",
-      "entry_price": 74608.58,
-      "current_price": 72958.48,
-      "peak_price": 74861.17,
-      "trough_price": 72771.29,
-      "value_eur": 142.26,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 71997.28,
-      "entry_reasoning": "1d UP trend aligned with 5m bullish structure (higher highs/lows from 74400 to 74608) and volume confirmation on breakout candle (0.72 vol); 15m neutral at BB middle (0.69) offers pullback entry in macro uptrend."
-    }
-  ],
+  "current_cash_eur": 494.4793808436272,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1379,13 +1365,27 @@
       "mfe_pct": 0.23,
       "mae_pct": -0.64,
       "reasoning": "BTC entry thesis broken: 5m structure shows clear lower highs and lower lows since entry, invalidating the 'higher low at 74568->74572 with consolidation near support' and BB bounce setup; 15m remains at lower band (BB%b 0.17) but no bounce materialized."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-10-14T08:01:57.150208+00:00",
+      "exit_time": "2026-10-15T00:31:37.498187+00:00",
+      "entry_price": 74608.58,
+      "exit_price": 72952.73,
+      "pnl_eur": -3.16,
+      "pnl_pct": -2.22,
+      "fee_paid": 0.28,
+      "net_pnl_eur": -3.44,
+      "mfe_pct": 0.34,
+      "mae_pct": -2.46,
+      "reasoning": "BTC position thesis broken: entry cited '1d UP trend' but 21d macro is DOWN (-1.48%), price has fallen from 74608 to 72952 (lower highs/lows), and 15m/5m show flat consolidation with no recovery structure. Position flagged INVALIDATED 16h ago \u2014 exit on structural weakness before hard stop."
     }
   ],
   "total_trades": 99,
-  "win_rate": 45.91836734693878,
-  "total_pnl_eur": -2.0800000000000014,
-  "total_pnl_percent": -0.42,
-  "total_fees_paid_eur": 22.310000000000016,
+  "win_rate": 45.45454545454545,
+  "total_pnl_eur": -5.520000000000001,
+  "total_pnl_percent": -1.1,
+  "total_fees_paid_eur": 22.450000000000017,
   "last_digest_date": "2026-10-15",
   "last_hold_email_ts": 1791968533.636636,
   "cb_date": "2026-10-15",
@@ -1394,6 +1394,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-10-12T01:15:45.461935+00:00",
     "ETH-EUR": "2026-10-10T00:05:32.741144+00:00",
-    "BTC-EUR": "2026-10-14T05:16:21.388086+00:00"
+    "BTC-EUR": "2026-10-15T04:31:37.498224+00:00"
   }
 }
