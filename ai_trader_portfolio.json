@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 441.13099696259604,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-10-20T01:33:31.748099+00:00",
-      "entry_price": 2131.65,
-      "current_price": 2200.0,
-      "peak_price": 2200.0,
-      "trough_price": 2129.17,
-      "value_eur": 54.94,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 2035.73,
-      "entry_reasoning": "Daily OVERSOLD (RSI 24.6) at 15m BB lower band (%b 0.19) with 5m bullish reversal: higher lows from 2114.66 on massive volume (209.67) at 01:10, confirming BB bounce entry."
-    }
-  ],
+  "current_cash_eur": 496.0826471866009,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1393,21 +1379,35 @@
       "mfe_pct": 0.34,
       "mae_pct": -2.46,
       "reasoning": "BTC position thesis broken: entry cited '1d UP trend' but 21d macro is DOWN (-1.48%), price has fallen from 74608 to 72952 (lower highs/lows), and 15m/5m show flat consolidation with no recovery structure. Position flagged INVALIDATED 16h ago \u2014 exit on structural weakness before hard stop."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-10-20T01:33:31.748099+00:00",
+      "exit_time": "2026-10-20T15:15:53.458851+00:00",
+      "entry_price": 2131.65,
+      "exit_price": 2134.43,
+      "pnl_eur": 0.07,
+      "pnl_pct": 0.13,
+      "fee_paid": 0.11,
+      "net_pnl_eur": -0.04,
+      "mfe_pct": 3.21,
+      "mae_pct": -0.12,
+      "reasoning": "[OVERLAY] TRAILING STOP: -1.2% from post-TP1 peak 2200.00"
     }
   ],
   "total_trades": 100,
-  "win_rate": 45.45454545454545,
-  "total_pnl_eur": -3.8800000000000017,
-  "total_pnl_percent": -0.43,
-  "total_fees_paid_eur": 22.620000000000015,
+  "win_rate": 45.0,
+  "total_pnl_eur": -3.9200000000000017,
+  "total_pnl_percent": -0.78,
+  "total_fees_paid_eur": 22.680000000000014,
   "last_digest_date": "2026-10-20",
-  "last_hold_email_ts": 1792502174.5304492,
+  "last_hold_email_ts": 1792509414.4295766,
   "cb_date": "2026-10-20",
   "cb_day_start_value": 494.4793808436272,
   "last_failure_email_ts": 1792505790.2890623,
   "cooldowns": {
     "SOL-EUR": "2026-10-12T01:15:45.461935+00:00",
-    "ETH-EUR": "2026-10-10T00:05:32.741144+00:00",
+    "ETH-EUR": "2026-10-20T19:15:53.458878+00:00",
     "BTC-EUR": "2026-10-15T04:31:37.498224+00:00"
   }
 }
