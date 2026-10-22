@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 495.8501156949934,
-  "positions": [],
+  "current_cash_eur": 354.04011569499346,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-10-22T00:16:11.439103+00:00",
+      "entry_price": 74957.28,
+      "current_price": 74957.28,
+      "peak_price": 74957.28,
+      "trough_price": 74957.28,
+      "value_eur": 141.67,
+      "fee_paid": 0.14,
+      "tp1_done": false,
+      "invalidation": 72333.78,
+      "entry_reasoning": "BTC shows aligned multi-timeframe setup: 1d macro UP on 7d (+2.02%) satisfying trend-following rule, 15m BB%b at 0.18 (LOWER band zone) with RSI 32.1 oversold, and 5m candles forming higher lows (74765\u219274816\u219274948) with bounce from lower band \u2014 classic BB bounce entry with daily trend alignment."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1409,11 +1423,11 @@
       "reasoning": "SOL entry thesis broken: 15m BB%b moved from 0.17 (lower band) to 0.35 (mid-band), removing the BB bounce setup; 5m candles show persistent lower highs/lower lows with heavy volume on downside (160.38 vol at 10:10), contradicting the 'consolidation above 94.50' and 'volume-confirmed bounce' thesis. Daily RSI remains oversold but intraday structure has failed."
     }
   ],
-  "total_trades": 101,
+  "total_trades": 102,
   "win_rate": 44.554455445544555,
   "total_pnl_eur": -4.150000000000002,
   "total_pnl_percent": -0.83,
-  "total_fees_paid_eur": 22.880000000000017,
+  "total_fees_paid_eur": 23.020000000000017,
   "last_digest_date": "2026-10-22",
   "last_hold_email_ts": 1792583174.377932,
   "cb_date": "2026-10-22",
