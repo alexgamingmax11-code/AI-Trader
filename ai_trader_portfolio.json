@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 492.9540774155895,
-  "positions": [],
+  "current_cash_eur": 394.2640774155895,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-10-24T09:16:02.962461+00:00",
+      "entry_price": 90.726,
+      "current_price": 90.726,
+      "peak_price": 90.726,
+      "trough_price": 90.726,
+      "value_eur": 98.59,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 86.19,
+      "entry_reasoning": "1d macro DOWN but at 30d-range extreme (+73.7% off low) with daily RSI 29.4 OVERSOLD; 15m shows price at BB lower band (BB%b 0.11); 5m prints clear higher low (90.60\u219290.69) with massive volume spike (1044.91) on the dip at 09:05 signaling capitulation, followed by recovery volume \u2014 aligned BB bounce + volume-confirmed reversal at daily-range extreme."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1423,11 +1437,11 @@
       "reasoning": "Entry thesis broken: 5m structure shifted from higher lows to lower highs/lower lows (73686\u219273573), 15m BB%b moved from 0.18 (lower band) to 0.26 (mid-band), invalidating the BB bounce setup despite 1d trend still UP."
     }
   ],
-  "total_trades": 102,
+  "total_trades": 103,
   "win_rate": 44.11764705882353,
   "total_pnl_eur": -7.0500000000000025,
   "total_pnl_percent": -1.41,
-  "total_fees_paid_eur": 23.160000000000018,
+  "total_fees_paid_eur": 23.26000000000002,
   "last_digest_date": "2026-10-24",
   "last_hold_email_ts": 1792830702.7966638,
   "cb_date": "2026-10-24",
