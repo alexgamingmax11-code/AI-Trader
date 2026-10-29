@@ -1,22 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 352.26783091513755,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-10-29T00:02:38.430806+00:00",
-      "entry_price": 72883.44,
-      "current_price": 71945.12,
-      "peak_price": 72883.44,
-      "trough_price": 71450.46,
-      "value_eur": 140.97,
-      "fee_paid": 0.14,
-      "tp1_done": false,
-      "invalidation": 70332.52,
-      "entry_reasoning": "1d trend UP (+0.65% 7d), 5m shows bullish reversal from 72769 low with higher lows/higher highs and increasing volume (0.32\u21920.55), pullback entry aligned with daily trend."
-    }
-  ],
+  "current_cash_eur": 491.1881721449148,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1449,13 +1435,27 @@
       "mfe_pct": 0.9,
       "mae_pct": -2.89,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.6% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-10-29T00:02:38.430806+00:00",
+      "exit_time": "2026-10-29T06:16:26.205802+00:00",
+      "entry_price": 72883.44,
+      "exit_price": 71896.12,
+      "pnl_eur": -1.91,
+      "pnl_pct": -1.35,
+      "fee_paid": 0.28,
+      "net_pnl_eur": -2.19,
+      "mfe_pct": 0.0,
+      "mae_pct": -1.97,
+      "reasoning": "BTC-EUR entry thesis broken: 1d trend flipped from UP to DOWN (21d -2.49%), and 5m structure shows lower highs/lower lows vs. thesis's higher lows/higher highs."
     }
   ],
   "total_trades": 104,
-  "win_rate": 44.66019417475729,
-  "total_pnl_eur": -6.630000000000003,
-  "total_pnl_percent": -1.32,
-  "total_fees_paid_eur": 23.50000000000002,
+  "win_rate": 44.230769230769226,
+  "total_pnl_eur": -8.820000000000002,
+  "total_pnl_percent": -1.76,
+  "total_fees_paid_eur": 23.640000000000022,
   "last_digest_date": "2026-10-29",
   "last_hold_email_ts": 1793241140.4345846,
   "cb_date": "2026-10-29",
@@ -1464,6 +1464,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-10-25T09:31:09.734846+00:00",
     "ETH-EUR": "2026-10-20T19:15:53.458878+00:00",
-    "BTC-EUR": "2026-10-22T08:46:22.025809+00:00"
+    "BTC-EUR": "2026-10-29T10:16:26.205854+00:00"
   }
 }
