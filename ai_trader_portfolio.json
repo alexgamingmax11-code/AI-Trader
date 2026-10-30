@@ -1460,7 +1460,7 @@
   "last_hold_email_ts": 1793367128.258989,
   "cb_date": "2026-10-30",
   "cb_day_start_value": 491.1881721449148,
-  "last_failure_email_ts": 1793399468.7109199,
+  "last_failure_email_ts": 1793403071.5042155,
   "cooldowns": {
     "SOL-EUR": "2026-10-25T09:31:09.734846+00:00",
     "ETH-EUR": "2026-10-20T19:15:53.458878+00:00",
