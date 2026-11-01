@@ -1,8 +1,22 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 491.1881721449148,
-  "positions": [],
+  "current_cash_eur": 392.8481721449148,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-01T05:02:22.227044+00:00",
+      "entry_price": 85.45,
+      "current_price": 85.45,
+      "peak_price": 85.45,
+      "trough_price": 85.45,
+      "value_eur": 98.24,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 81.18,
+      "entry_reasoning": "Daily RSI OVERSOLD (29.7) at 63.6% off 30d low qualifies as daily-range extreme; 15m BB%b 0.12 at lower band with 5m showing bullish reversal candle (04:55: 85.11\u219285.70) forming higher low against 15m oversold structure."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1451,11 +1465,11 @@
       "reasoning": "BTC-EUR entry thesis broken: 1d trend flipped from UP to DOWN (21d -2.49%), and 5m structure shows lower highs/lower lows vs. thesis's higher lows/higher highs."
     }
   ],
-  "total_trades": 104,
+  "total_trades": 105,
   "win_rate": 44.230769230769226,
   "total_pnl_eur": -8.820000000000002,
   "total_pnl_percent": -1.76,
-  "total_fees_paid_eur": 23.640000000000022,
+  "total_fees_paid_eur": 23.740000000000023,
   "last_digest_date": "2026-11-01",
   "last_hold_email_ts": 1793508417.3861983,
   "cb_date": "2026-11-01",
