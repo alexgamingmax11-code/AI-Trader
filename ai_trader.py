@@ -57,7 +57,7 @@ DECISION_LOG = os.environ.get("DECISION_LOG", os.path.join(os.path.expanduser("~
 # LLM API — multi-provider free chain. Each entry has its own base URL + key
 # env var, so the bot fails over across independent free quotas instead of dying
 # when one provider's free tier is exhausted (OpenRouter caps at 50 req/day;
-# Groq gives 1K–14.4K req/day and needs no credit card).
+# Groq's free tier comfortably covers this bot's 96 runs/day).
 BOT_SOURCE = os.environ.get("BOT_SOURCE", "local")  # "local" (PC) or "cloud" (GitHub Actions)
 
 # Legacy single-provider config (still used by the manual "model" override)
@@ -93,10 +93,14 @@ def _build_model_chain():
     if LLM_MODEL:
         chain.append({"model": LLM_MODEL, "base_url": ANTHROPIC_BASE_URL, "key_env": "LEGACY", "format": LLM_API_FORMAT})
     chain.extend([
-        {"model": "llama-3.3-70b-versatile", "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},          # Groq free: 1K req/day
-        {"model": "llama-3.1-8b-instant",    "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},          # Groq free: 14.4K req/day
-        {"model": "nvidia/nemotron-3-ultra-550b-a55b:free", "base_url": "https://openrouter.ai/api/v1", "key_env": "OPENROUTER_API_KEY", "format": "openai"},  # OpenRouter free: 50 req/day
-        {"model": "inclusionai/ling-3.0-flash:free",        "base_url": "https://openrouter.ai/api/v1", "key_env": "OPENROUTER_API_KEY", "format": "openai"},  # OpenRouter free
+        # Groq free tier — verified working 2026-11-02. The old Llama IDs were
+        # retired (404 model_not_found), which silently left the bot exit-only.
+        {"model": "openai/gpt-oss-120b", "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},
+        {"model": "qwen/qwen3.8-27b",    "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},
+        {"model": "openai/gpt-oss-20b",  "base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY", "format": "openai"},
+        # OpenRouter free is last resort only: its free pool is frequently
+        # rate-limited or returns empty content, so never rely on it as primary.
+        {"model": "google/gemma-4-31b-it:free", "base_url": "https://openrouter.ai/api/v1", "key_env": "OPENROUTER_API_KEY", "format": "openai"},
     ])
     return chain
 
@@ -702,7 +706,10 @@ def _call_llm(entry, prompt, api_key):
                 return None
 
             result = response.json()
-            text = result['choices'][0]['message']['content'].strip()
+            # Some reasoning/vision models return content=None. Fail with a clear
+            # message instead of AttributeError, so the chain can fall through.
+            message = result.get('choices', [{}])[0].get('message', {})
+            text = (message.get('content') or '').strip()
         else:
             response = requests.post(
                 f"{base_url}/messages",
