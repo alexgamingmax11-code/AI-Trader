@@ -130,9 +130,9 @@ TRADING_FEE_PCT = 0.001   # 0.1% taker fee (Revolut X standard for crypto)
 # data (24h adverse-excursion p90: BTC 2.96%, ETH 3.32%, SOL 3.33%) — stops sit
 # ~1.2-1.5x beyond noise so only genuine trend breaks tag them.
 HARD_STOP_PCT = {"BTC-EUR": 0.035, "ETH-EUR": 0.045, "SOL-EUR": 0.050}
-SOFT_INVALIDATION_PCT = 0.02    # prompt flag: thesis broken, exit on structure
-TP1_PCT = 0.015                 # sell 50% at +1.5% (banks the observed +1.4-1.8% winners)
-TRAIL_PCT = 0.012               # trail remainder -1.2% from post-TP1 peak
+SOFT_INVALIDATION_PCT = 0.02    # the ONLY remaining LLM sell trigger: thesis broken at -2%
+TP1_PCT = 0.03                  # sell 50% at +3.0% — 1.5% cut winners before their move
+TRAIL_PCT = 0.02                # trail remainder -2.0% from post-TP1 peak
 STALL_HOURS = 20                # dead-thesis exit: age >= 20h AND pnl in band…
 STALL_BAND = (-0.015, 0.0075)   # …[-1.5%, +0.75%) — frees capital for real signals
 TIME_STOP_HOURS = 48            # unconditional exit if still underwater at 48h
@@ -147,12 +147,13 @@ MAX_TRADES_PER_DAY = 6          # 3 round trips/day backstop (was 10 — churn h
 MIN_TRADE_EUR = 50              # floor for risk-sized orders
 
 # ── LLM sell gate (deterministic, applied to LLM SELL decisions) ─────────────
-# Forensics 2026-08-06: unguarded LLM sells produced 5 churn exits (<1h holds,
-# -1.14 EUR net with 1.06 EUR fees) and 4 same-symbol re-buys <60min later; the
-# prompt's "don't sell to cut small losses" rule was ignored 20 times. The gate
-# confines LLM sells to their one legitimate job: early invalidation.
-LLM_PROFIT_GATE_PCT = ONE_AT_RISK_MIN_PNL  # >= +0.75%: overlay owns the exit
-MIN_LLM_HOLD_HOURS = 4          # loss-band sells allowed only at this age+
+# Live forensics 2026-07-31 → 2026-11-02 (105 closed trades): the 67 LLM
+# discretionary exits averaged -0.74%/trade (-49.4% summed, 8.4h avg hold,
+# 25.4% win) while the overlay's trailing exits averaged +1.96%/trade (+45.2%,
+# 100% win). The old gate still let loss-band sells through after only 4h, and
+# those 58 shallow exits summed to -25.2%. The LLM's one defensible sell job is
+# early invalidation below -SOFT_INVALIDATION_PCT; everything else is the
+# overlay's. Do not widen this gate again without a new out-of-sample replay.
 STARTING_CAPITAL = float(os.environ.get("STARTING_CAPITAL", "500"))  # Default €500
 
 # ── Revolut X API ──────────────────────────────────────────────────────────────
@@ -416,7 +417,7 @@ def apply_risk_overlay(portfolio, market_data):
             reason = f"TP1: +{pnl*100:.1f}% — banking 50%, trailing the rest"
             fraction = 0.5
         elif pos['tp1_done'] and price <= pos['peak_price'] * (1 - TRAIL_PCT):
-            reason = f"TRAILING STOP: -1.2% from post-TP1 peak {pos['peak_price']:.2f}"
+            reason = f"TRAILING STOP: -{TRAIL_PCT*100:.1f}% from post-TP1 peak {pos['peak_price']:.2f}"
         elif age_h >= TIME_STOP_HOURS and pnl < 0:
             reason = f"TIME STOP: underwater {age_h:.0f}h at {pnl*100:+.1f}%"
         elif age_h >= STALL_HOURS and STALL_BAND[0] <= pnl < STALL_BAND[1]:
@@ -492,24 +493,21 @@ def llm_sell_guard(position):
 
     The LLM's only legitimate sell job is early invalidation: exiting when the
     entry thesis is broken BEFORE the stop tags. Everything else is overlay
-    territory. Forensics 2026-08-06 (21 closes in 7 days): 5 churn exits (<1h
-    holds) burned -1.14 EUR net incl. 1.06 EUR fees, and a +0.51% winner was
-    cut 6.5min after entry — before TP1 (+1.5%) could fire.
+    territory. Live forensics 2026-11-02 (105 closed trades) showed the LLM's
+    discretionary exits lost -0.74%/trade while overlay trailing exits made
+    +1.96%/trade. The old gate's 4h loss-band exception was the biggest leak
+    (-25.2% across 58 shallow exits), so it is gone.
 
     - pnl <= -SOFT_INVALIDATION_PCT → invalidation: allowed at any age
-    - band (-2%, +0.75%)            → allowed only at MIN_LLM_HOLD_HOURS+ age
-    - pnl >= +LLM_PROFIT_GATE_PCT   → blocked: TP1/trail/stall own profit exits
+    - anything else                 → blocked: TP1/trail/stall/time own the exit
     """
     price = position.get('current_price', position['entry_price'])
     pnl = (price / position['entry_price']) - 1
-    age_h = _position_age_hours(position)
-    if pnl >= LLM_PROFIT_GATE_PCT:
-        return (f"at {pnl*100:+.1f}% — profit exits belong to the overlay "
-                f"(TP1 +{TP1_PCT*100:.1f}% / trail / stall)")
-    if pnl > -SOFT_INVALIDATION_PCT and age_h < MIN_LLM_HOLD_HOURS:
-        return (f"only {age_h:.1f}h old at {pnl*100:+.1f}% — loss-band sells need "
-                f"{MIN_LLM_HOLD_HOURS}h+ age, or P&L <= -{SOFT_INVALIDATION_PCT*100:.0f}% (invalidation)")
-    return None
+    if pnl <= -SOFT_INVALIDATION_PCT:
+        return None
+    return (f"at {pnl*100:+.1f}% — only invalidation sells are allowed "
+            f"(P&L <= -{SOFT_INVALIDATION_PCT*100:.0f}%); TP1 +{TP1_PCT*100:.1f}% / "
+            f"trail / stall / time exits belong to the deterministic overlay")
 
 
 # ── LLM Trading Decision ──────────────────────────────────────────────────────
@@ -629,10 +627,11 @@ Your job is ENTRIES and EARLY invalidation exits only:
   above) is clearly broken on structure (e.g. lower high + lower low against the
   position, macro trend flip) BEFORE the stop tags — and name the specific part
   of the quoted thesis that broke
-- A deterministic sell gate runs after you and REJECTS: sells at >= +{LLM_PROFIT_GATE_PCT * 100:.2f}%
-  P&L (profit exits belong to the overlay) and sells younger than {MIN_LLM_HOLD_HOURS}h in
-  the loss band. Positions are annotated with their gate state — never choose SELL
-  for a position flagged as blocked; choose HOLD instead
+- A deterministic sell gate runs after you and REJECTS every sell at P&L above
+  -{SOFT_INVALIDATION_PCT * 100:.0f}%. Only true invalidation exits are executable; TP1,
+  trailing, stall and time exits belong to the overlay. Positions are annotated
+  with their gate state — never choose SELL for a position flagged as blocked;
+  choose HOLD instead
 
 MARKET DATA (multi-timeframe):
 {market_text}
@@ -1071,6 +1070,7 @@ def execute_buy(symbol, price, reasoning, portfolio):
         'peak_price': price,
         'trough_price': price,
         'value_eur': position_value,
+        'initial_value_eur': position_value,  # cost basis for whole-trade P&L after TP1
         'fee_paid': fee,
         'tp1_done': False,
         'invalidation': round(price * (1 - stop), 2),
@@ -1112,6 +1112,13 @@ def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
 
     entry_price = position['entry_price']
     full_value = position['value_eur']
+    # Original cost basis for the whole trade (partial TP1 legs shrink value_eur,
+    # so using the remaining value would understate the trade's return).
+    position.setdefault(
+        'initial_value_eur',
+        round(full_value + position.get('tp1_sold_value_eur', 0.0), 2),
+    )
+    initial_value = position['initial_value_eur']
     sell_value = full_value * fraction
     buy_fee_full = position.get('fee_paid', 0)
     buy_fee = round(buy_fee_full * fraction, 2)  # proportional share of entry fee
@@ -1132,20 +1139,37 @@ def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
     portfolio['total_fees_paid_eur'] = portfolio.get('total_fees_paid_eur', 0) + sell_fee
 
     is_full_close = fraction >= 0.999
+
+    # Report the whole trade on a full close: a TP1 partial already booked its
+    # own net P&L, but closed_trades used to record only the runner leg, so 26
+    # partial profits were invisible to the trade ledger and win rate
+    # (live forensics 2026-11-02).
+    trade_pnl, trade_net, trade_fee, trade_pct = pnl_eur, net_pnl, total_fee, pnl_pct
+
     if is_full_close:
         portfolio['positions'].remove(position)
         peak = position.get('peak_price', entry_price)
         trough = position.get('trough_price', entry_price)
+        partial_pnl = position.get('tp1_pnl_eur', 0.0)
+        partial_net = position.get('tp1_net_pnl_eur', 0.0)
+        partial_fee = position.get('tp1_fee_eur', 0.0)
+        trade_pnl = round(pnl_eur + partial_pnl, 2)
+        trade_net = round(net_pnl + partial_net, 2)
+        trade_fee = round(total_fee + partial_fee, 2)
+        trade_pct = round(trade_pnl / initial_value * 100, 2) if initial_value else pnl_pct
         portfolio['closed_trades'].append({
             'symbol': symbol,
             'entry_time': position['entry_time'],
             'exit_time': datetime.now(timezone.utc).isoformat(),
             'entry_price': entry_price,
             'exit_price': price,
-            'pnl_eur': pnl_eur,
-            'pnl_pct': pnl_pct,
-            'fee_paid': total_fee,
-            'net_pnl_eur': net_pnl,
+            'pnl_eur': trade_pnl,
+            'pnl_pct': trade_pct,
+            'fee_paid': trade_fee,
+            'net_pnl_eur': trade_net,
+            'tp1_done': bool(position.get('tp1_done')),
+            'tp1_price': position.get('tp1_price'),
+            'tp1_net_pnl_eur': round(partial_net, 2),
             'mfe_pct': round(((peak / entry_price) - 1) * 100, 2),   # max favorable excursion
             'mae_pct': round(((trough / entry_price) - 1) * 100, 2),  # max adverse excursion
             'reasoning': reasoning
@@ -1161,25 +1185,33 @@ def execute_sell(symbol, price, reasoning, portfolio, fraction=1.0):
             datetime.now(timezone.utc) + timedelta(hours=COOLDOWN_HOURS)
         ).isoformat()
     else:
-        # Partial (TP1): shrink the position, keep the runner
+        # Partial (TP1): shrink the position, keep the runner. Persist the partial
+        # leg so the eventual full-close record includes its P&L and fee.
         position['value_eur'] = round(full_value - sell_value, 2)
         position['fee_paid'] = round(buy_fee_full - buy_fee, 2)
+        position['tp1_done'] = True
+        position['tp1_price'] = price
+        position['tp1_time'] = datetime.now(timezone.utc).isoformat()
+        position['tp1_pnl_eur'] = round(position.get('tp1_pnl_eur', 0.0) + pnl_eur, 2)
+        position['tp1_fee_eur'] = round(position.get('tp1_fee_eur', 0.0) + total_fee, 2)
+        position['tp1_net_pnl_eur'] = round(position.get('tp1_net_pnl_eur', 0.0) + net_pnl, 2)
+        position['tp1_sold_value_eur'] = round(position.get('tp1_sold_value_eur', 0.0) + sell_value, 2)
 
     # Mark-to-market: cash + open positions at current price. The old cash-only
     # line is why stats showed nonsense like -24% while actually +0.7%.
     total_value = portfolio_value(portfolio)
     portfolio['total_pnl_percent'] = round(((total_value / portfolio['starting_capital_eur']) - 1) * 100, 2)
 
-    emoji = "💰" if net_pnl > 0 else "❌"
+    emoji = "💰" if trade_net > 0 else "❌"
     tag = "" if is_full_close else f" ({fraction:.0%} partial — runner stays open)"
     print(f"\n{emoji} SELL{tag} {symbol} @ EUR {price:.2f}")
-    print(f"   Gross P&L: EUR {pnl_eur:+.2f} ({pnl_pct:+.2f}%) | Fee: EUR {total_fee:.2f} | Net: EUR {net_pnl:+.2f}")
+    print(f"   Gross P&L: EUR {trade_pnl:+.2f} ({trade_pct:+.2f}%) | Fee: EUR {trade_fee:.2f} | Net: EUR {trade_net:+.2f}")
     print(f"   Reasoning: {reasoning}")
 
-    send_trade_email('SELL', symbol, price, reasoning + tag, portfolio, pnl_eur=pnl_eur, net_pnl=net_pnl, fee=total_fee)
+    send_trade_email('SELL', symbol, price, reasoning + tag, portfolio, pnl_eur=trade_pnl, net_pnl=trade_net, fee=trade_fee)
     send_push(
         f"{emoji} [{BOT_SOURCE}] AI SELL {symbol}{' (partial)' if not is_full_close else ''}",
-        f"@ €{price:.2f} · net P&L €{net_pnl:+.2f} ({pnl_pct:+.2f}%){' — runner stays open' if not is_full_close else ''}",
+        f"@ €{price:.2f} · net P&L €{trade_net:+.2f} ({trade_pct:+.2f}%){' — runner stays open' if not is_full_close else ''}",
         priority="high",
     )
     log_decision('SELL' if is_full_close else 'PARTIAL_SELL', symbol, reasoning + tag, price)

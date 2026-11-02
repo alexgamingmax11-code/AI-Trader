@@ -149,26 +149,26 @@ check("overlay: cooldown persisted immediately on full exit",
       bool(SAVED) and 'BTC-EUR' in SAVED[-1].get('cooldowns', {}),
       f"saves={len(SAVED)}, last has cooldown={'BTC-EUR' in (SAVED[-1].get('cooldowns', {}) if SAVED else {})}")
 
-# TP1: up 1.6% → partial, tp1_done, position stays
+# TP1: up 3.1% → partial, tp1_done, position stays
 p11 = fresh_portfolio()
 p11['positions'].append(mkpos("BTC-EUR", 100.0, 1))
-exits = t.apply_risk_overlay(p11, md(101.6))
+exits = t.apply_risk_overlay(p11, md(103.1))
 check("overlay: TP1 fires as partial", len(exits) == 1 and exits[0][1].startswith("TP1:"), f"{exits}")
 check("overlay: TP1 keeps position, flags tp1_done", len(p11['positions']) == 1 and p11['positions'][0]['tp1_done'],
       f"pos={p11['positions']}")
 check("overlay: TP1 no cooldown", 'cooldowns' not in p11 or 'BTC-EUR' not in p11.get('cooldowns', {}))
 
-# trailing: after TP1, drop 1.2%+ from peak
+# trailing: after TP1, drop 2.0%+ from peak
 p12 = fresh_portfolio()
-p12['positions'].append(mkpos("BTC-EUR", 100.0, 1, peak_price=102.0, tp1_done=True))
-exits = t.apply_risk_overlay(p12, md(100.7))  # -1.27% from peak
+p12['positions'].append(mkpos("BTC-EUR", 100.0, 1, peak_price=103.0, tp1_done=True))
+exits = t.apply_risk_overlay(p12, md(100.9))  # -2.04% from peak
 check("overlay: trailing stop fires post-TP1", len(exits) == 1 and not exits[0][1].startswith("TP1:"), f"{exits}")
 check("overlay: trailing full exit", not p12['positions'])
 
 # trailing should NOT fire before TP1
 p13 = fresh_portfolio()
 p13['positions'].append(mkpos("BTC-EUR", 100.0, 1, peak_price=101.5))
-exits = t.apply_risk_overlay(p13, md(100.2))  # -1.28% from peak but tp1 not done, +0.2% pnl
+exits = t.apply_risk_overlay(p13, md(99.0))  # -2.46% from peak but tp1 not done, -1% pnl
 check("overlay: no trailing before TP1", len(exits) == 0, f"{exits}")
 
 # time stop: 48h+, underwater
@@ -180,7 +180,7 @@ check("overlay: time stop fires (48h+, <0)", len(exits) == 1 and "TIME STOP" in 
 # time stop does NOT fire when profitable
 p15 = fresh_portfolio()
 p15['positions'].append(mkpos("BTC-EUR", 100.0, 49))
-exits = t.apply_risk_overlay(p15, md(101.0))  # +1% < TP1 1.5%, profitable → TP1? no, 1.0<1.5
+exits = t.apply_risk_overlay(p15, md(101.0))  # +1% < TP1 3%, profitable → TP1? no, 1.0<3.0
 check("overlay: no time stop when profitable", len(exits) == 0, f"{exits}")
 
 # stall: 20h+, pnl in (-1.5%, +0.75%)
@@ -221,7 +221,7 @@ check("sell gate: invalidation allowed immediately", t.llm_sell_guard(pos_inv) i
 pos_young = mkpos("SOL-EUR", 100.0, 1, current_price=99.5)  # -0.5%, 1h
 check("sell gate: young loss-band blocked", t.llm_sell_guard(pos_young) is not None)
 pos_aged = mkpos("SOL-EUR", 100.0, 5, current_price=99.5)   # -0.5%, 5h
-check("sell gate: aged loss-band allowed", t.llm_sell_guard(pos_aged) is None)
+check("sell gate: aged loss-band blocked too", t.llm_sell_guard(pos_aged) is not None)
 
 pos_run = mkpos("BTC-EUR", 100.0, 30, current_price=102.5, tp1_done=True)
 check("sell gate: profitable runner blocked", t.llm_sell_guard(pos_run) is not None)
@@ -235,8 +235,21 @@ check("execute_sell full close sets cooldown",
 p21 = fresh_portfolio()
 p21['positions'].append(mkpos("BTC-EUR", 100.0, 1))
 check("execute_sell partial sets no cooldown",
-      t.execute_sell("BTC-EUR", 101.6, "test tp1", p21, fraction=0.5)
+      t.execute_sell("BTC-EUR", 103.0, "test tp1", p21, fraction=0.5)
       and 'BTC-EUR' not in p21.get('cooldowns', {}))
+
+# Whole-trade ledger: TP1 partial P&L must be included in the eventual close.
+p23 = fresh_portfolio()
+p23['positions'].append(mkpos("BTC-EUR", 100.0, 2))
+t.execute_sell("BTC-EUR", 103.0, "tp1", p23, fraction=0.5)   # +3% on half
+t.execute_sell("BTC-EUR", 102.0, "trail", p23)               # +2% on the rest
+rec = p23['closed_trades'][-1]
+check("ledger: TP1 partial included in trade pnl_pct",
+      abs(rec['pnl_pct'] - 2.5) < 0.01, f"got {rec['pnl_pct']}, want 2.5")
+check("ledger: TP1 partial included in trade net P&L",
+      abs(rec['net_pnl_eur'] - 2.30) < 0.01, f"got {rec['net_pnl_eur']}, want 2.30")
+check("ledger: TP1 trade counted as a win", rec['tp1_done'] and p23['win_rate'] == 100.0,
+      f"tp1={rec['tp1_done']}, win_rate={p23['win_rate']}")
 
 p22 = fresh_portfolio()
 t.execute_buy("BTC-EUR", 100.0, "breakout above 15m BB mid", p22)
