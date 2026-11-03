@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 390.6961637725009,
+  "current_cash_eur": 281.7861637725009,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-11-03T02:31:15.811122+00:00",
       "entry_price": 82.431,
-      "current_price": 83.235,
+      "current_price": 83.44,
       "peak_price": 83.62,
       "trough_price": 81.632,
       "value_eur": 97.7,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 78.31,
       "entry_reasoning": "1d macro is DOWN but OVERSOLD (RSI 16.3); 5m candles show a clear bullish reversal from a low at 02:05 (L 82.20, high volume 84.83) to higher highs and a pullback to near BB middle (BB%b 0.66) at 02:30, confirming momentum shift"
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-03T20:31:32.382804+00:00",
+      "entry_price": 2040.71,
+      "current_price": 2040.71,
+      "peak_price": 2040.71,
+      "trough_price": 2040.71,
+      "value_eur": 108.8,
+      "initial_value_eur": 108.8,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1948.88,
+      "entry_reasoning": "1d macro is DOWN and 15m price sits at the lower Bollinger band (BB%b 0.19); the 5m candles have rebounded from the 20:10 low (~2035) with a modest volume spike, signalling a BB bounce entry."
     }
   ],
   "closed_trades": [
@@ -1497,11 +1511,11 @@
       "reasoning": "The bullish reversal thesis is broken: 5m candles show consecutive lower highs/lower lows and price sliding from 83.35 to 82.59, confirming downtrend and structural weakness."
     }
   ],
-  "total_trades": 107,
+  "total_trades": 108,
   "win_rate": 43.39622641509434,
   "total_pnl_eur": -11.510000000000002,
   "total_pnl_percent": -2.3,
-  "total_fees_paid_eur": 24.14000000000003,
+  "total_fees_paid_eur": 24.25000000000003,
   "last_digest_date": "2026-11-03",
   "last_hold_email_ts": 1793736099.277426,
   "cb_date": "2026-11-03",
