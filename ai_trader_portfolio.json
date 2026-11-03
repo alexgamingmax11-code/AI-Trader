@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 488.4961637725009,
-  "positions": [],
+  "current_cash_eur": 390.6961637725009,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-03T02:31:15.811122+00:00",
+      "entry_price": 82.431,
+      "current_price": 82.431,
+      "peak_price": 82.431,
+      "trough_price": 82.431,
+      "value_eur": 97.7,
+      "initial_value_eur": 97.7,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 78.31,
+      "entry_reasoning": "1d macro is DOWN but OVERSOLD (RSI 16.3); 5m candles show a clear bullish reversal from a low at 02:05 (L 82.20, high volume 84.83) to higher highs and a pullback to near BB middle (BB%b 0.66) at 02:30, confirming momentum shift"
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1482,11 +1497,11 @@
       "reasoning": "The bullish reversal thesis is broken: 5m candles show consecutive lower highs/lower lows and price sliding from 83.35 to 82.59, confirming downtrend and structural weakness."
     }
   ],
-  "total_trades": 106,
+  "total_trades": 107,
   "win_rate": 43.39622641509434,
   "total_pnl_eur": -11.510000000000002,
   "total_pnl_percent": -2.3,
-  "total_fees_paid_eur": 24.040000000000028,
+  "total_fees_paid_eur": 24.14000000000003,
   "last_digest_date": "2026-11-03",
   "last_hold_email_ts": 1793670356.5954704,
   "cb_date": "2026-11-03",
