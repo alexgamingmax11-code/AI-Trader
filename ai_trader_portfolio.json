@@ -1,21 +1,27 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 388.45644029248393,
+  "current_cash_eur": 438.4985619347639,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-11-04T12:31:15.970119+00:00",
       "entry_price": 82.422,
-      "current_price": 84.27,
-      "peak_price": 84.27,
+      "current_price": 85.005,
+      "peak_price": 85.005,
       "trough_price": 82.197,
-      "value_eur": 97.14,
+      "value_eur": 48.57,
       "initial_value_eur": 97.14,
-      "fee_paid": 0.1,
-      "tp1_done": false,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 78.3,
-      "entry_reasoning": "On the 5m timeframe, SOL has formed a bullish capitulation/reversal structure at local support (12:15-12:20), characterized by a breakout above the previous resistance with massive volume (312-384 vs baseline ~30-70) and higher lows, while the 1d RSI at 14.7 signals a statistically significant oversold condition, providing a high-probability mean-reversion entry despite the macro downtrend."
+      "entry_reasoning": "On the 5m timeframe, SOL has formed a bullish capitulation/reversal structure at local support (12:15-12:20), characterized by a breakout above the previous resistance with massive volume (312-384 vs baseline ~30-70) and higher lows, while the 1d RSI at 14.7 signals a statistically significant oversold condition, providing a high-probability mean-reversion entry despite the macro downtrend.",
+      "tp1_price": 85.005,
+      "tp1_time": "2026-11-04T15:01:30.386152+00:00",
+      "tp1_pnl_eur": 1.52,
+      "tp1_fee_eur": 0.1,
+      "tp1_net_pnl_eur": 1.42,
+      "tp1_sold_value_eur": 48.57
     }
   ],
   "closed_trades": [
@@ -1533,9 +1539,9 @@
   ],
   "total_trades": 109,
   "win_rate": 43.51851851851852,
-  "total_pnl_eur": -14.310000000000002,
-  "total_pnl_percent": -2.86,
-  "total_fees_paid_eur": 24.56000000000003,
+  "total_pnl_eur": -12.890000000000002,
+  "total_pnl_percent": -2.28,
+  "total_fees_paid_eur": 24.61000000000003,
   "last_digest_date": "2026-11-04",
   "last_hold_email_ts": 1793802677.2247972,
   "cb_date": "2026-11-04",
