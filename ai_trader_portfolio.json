@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 485.69644029248394,
-  "positions": [],
+  "current_cash_eur": 388.45644029248393,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-04T12:31:15.970119+00:00",
+      "entry_price": 82.422,
+      "current_price": 82.422,
+      "peak_price": 82.422,
+      "trough_price": 82.422,
+      "value_eur": 97.14,
+      "initial_value_eur": 97.14,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 78.3,
+      "entry_reasoning": "On the 5m timeframe, SOL has formed a bullish capitulation/reversal structure at local support (12:15-12:20), characterized by a breakout above the previous resistance with massive volume (312-384 vs baseline ~30-70) and higher lows, while the 1d RSI at 14.7 signals a statistically significant oversold condition, providing a high-probability mean-reversion entry despite the macro downtrend."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1516,11 +1531,11 @@
       "reasoning": "The ETH-EUR position is flagged as INVALIDATED because the 5m structure has broken down, forming a lower low (1983.09) and losing the 2000 support level, which directly contradicts the thesis of a 'modest volume spike' signalling a Bullish BB bounce/rebound. With price closing at 1986.96 below the 20:10 low structure and 15m RSI at 19.6 (OVERSOLD), the structural weakness confirms the entry thesis is broken, warranting an early exit before the hard stop."
     }
   ],
-  "total_trades": 108,
+  "total_trades": 109,
   "win_rate": 43.51851851851852,
   "total_pnl_eur": -14.310000000000002,
   "total_pnl_percent": -2.86,
-  "total_fees_paid_eur": 24.46000000000003,
+  "total_fees_paid_eur": 24.56000000000003,
   "last_digest_date": "2026-11-04",
   "last_hold_email_ts": 1793793695.03071,
   "cb_date": "2026-11-04",
