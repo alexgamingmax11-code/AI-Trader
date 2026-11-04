@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 488.3273626190472,
-  "positions": [],
+  "current_cash_eur": 379.6973626190472,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-04T19:31:26.235690+00:00",
+      "entry_price": 2161.08,
+      "current_price": 2161.08,
+      "peak_price": 2161.08,
+      "trough_price": 2161.08,
+      "value_eur": 108.52,
+      "initial_value_eur": 108.52,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 2063.83,
+      "entry_reasoning": "5m candles show a clear bullish reversal \u2013 higher lows after the 19:00 low and a strong bullish 19:05 candle on high volume \u2013 while the 1d macro is up (+7.37% 7\u2011day) and the 15m frame is neutral, aligning for a continuation entry."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1533,11 +1548,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 86.41"
     }
   ],
-  "total_trades": 109,
+  "total_trades": 110,
   "win_rate": 44.03669724770643,
   "total_pnl_eur": -11.680000000000003,
   "total_pnl_percent": -2.33,
-  "total_fees_paid_eur": 24.660000000000032,
+  "total_fees_paid_eur": 24.77000000000003,
   "last_digest_date": "2026-11-04",
   "last_hold_email_ts": 1793818895.1835203,
   "cb_date": "2026-11-04",
