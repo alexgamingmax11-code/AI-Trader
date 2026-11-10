@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 372.90119555084794,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-11-10T11:01:37.830639+00:00",
-      "entry_price": 1858.02,
-      "current_price": 1821.32,
-      "peak_price": 1870.96,
-      "trough_price": 1806.35,
-      "value_eur": 106.58,
-      "initial_value_eur": 106.58,
-      "fee_paid": 0.11,
-      "tp1_done": false,
-      "invalidation": 1774.41,
-      "entry_reasoning": "15m OVERSOLD (RSI 24.6, BB%b 0.04) at the daily lower\u2011range extreme; 5m candles showed a clear bounce after a high\u2011volume down candle at 10:40, confirming a bullish reversal."
-    }
-  ],
+  "current_cash_eur": 476.7993257109108,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1631,13 +1616,30 @@
       "mfe_pct": 0.53,
       "mae_pct": -2.52,
       "reasoning": "The position is flagged as INVALIDATED and the 5m chart shows structural weakness with a series of lower highs and a recent breakdown from ~75.90 to 75.10 on increased volume, breaking the 'rebound confirming BB bounce' component of the thesis. The price is making new lows rather than holding support, confirming the structural breakdown required for an early exit before the hard stop is hit."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-10T11:01:37.830639+00:00",
+      "exit_time": "2026-11-10T16:31:17.676827+00:00",
+      "entry_price": 1858.02,
+      "exit_price": 1813.01,
+      "pnl_eur": -2.58,
+      "pnl_pct": -2.42,
+      "fee_paid": 0.21,
+      "net_pnl_eur": -2.79,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.7,
+      "mae_pct": -2.78,
+      "reasoning": "The position is flagged as INVALIDATED due to structural weakness; the 5m candles confirm the thesis is broken as price fails to sustain the initial bounce, forming lower highs (1825 -> 1819) and losing the bounce low (1815 -> 1813), indicating continued downtrend pressure rather than reversal."
     }
   ],
   "total_trades": 115,
-  "win_rate": 42.98245614035088,
-  "total_pnl_eur": -20.420000000000005,
-  "total_pnl_percent": -4.08,
-  "total_fees_paid_eur": 25.800000000000036,
+  "win_rate": 42.608695652173914,
+  "total_pnl_eur": -23.210000000000004,
+  "total_pnl_percent": -4.64,
+  "total_fees_paid_eur": 25.900000000000038,
   "last_digest_date": "2026-11-10",
   "last_hold_email_ts": 1794325563.1553884,
   "cb_date": "2026-11-10",
@@ -1645,7 +1647,7 @@
   "last_failure_email_ts": 1794303958.206351,
   "cooldowns": {
     "SOL-EUR": "2026-11-10T14:46:04.443432+00:00",
-    "ETH-EUR": "2026-11-09T11:16:03.437317+00:00",
+    "ETH-EUR": "2026-11-10T20:31:17.676859+00:00",
     "BTC-EUR": "2026-10-29T10:16:26.205854+00:00"
   }
 }
