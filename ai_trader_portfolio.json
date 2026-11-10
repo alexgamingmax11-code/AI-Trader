@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 479.59119555084794,
-  "positions": [],
+  "current_cash_eur": 372.90119555084794,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-10T11:01:37.830639+00:00",
+      "entry_price": 1858.02,
+      "current_price": 1858.02,
+      "peak_price": 1858.02,
+      "trough_price": 1858.02,
+      "value_eur": 106.58,
+      "initial_value_eur": 106.58,
+      "fee_paid": 0.11,
+      "tp1_done": false,
+      "invalidation": 1774.41,
+      "entry_reasoning": "15m OVERSOLD (RSI 24.6, BB%b 0.04) at the daily lower\u2011range extreme; 5m candles showed a clear bounce after a high\u2011volume down candle at 10:40, confirming a bullish reversal."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1618,11 +1633,11 @@
       "reasoning": "The position is flagged as INVALIDATED and the 5m chart shows structural weakness with a series of lower highs and a recent breakdown from ~75.90 to 75.10 on increased volume, breaking the 'rebound confirming BB bounce' component of the thesis. The price is making new lows rather than holding support, confirming the structural breakdown required for an early exit before the hard stop is hit."
     }
   ],
-  "total_trades": 114,
+  "total_trades": 115,
   "win_rate": 42.98245614035088,
   "total_pnl_eur": -20.420000000000005,
   "total_pnl_percent": -4.08,
-  "total_fees_paid_eur": 25.690000000000037,
+  "total_fees_paid_eur": 25.800000000000036,
   "last_digest_date": "2026-11-10",
   "last_hold_email_ts": 1794304891.1529896,
   "cb_date": "2026-11-10",
