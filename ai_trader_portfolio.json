@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 385.67525339962106,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-09T17:31:16.444167+00:00",
-      "entry_price": 77.063,
-      "current_price": 75.851,
-      "peak_price": 77.475,
-      "trough_price": 75.818,
-      "value_eur": 96.44,
-      "initial_value_eur": 96.44,
-      "fee_paid": 0.1,
-      "tp1_done": false,
-      "invalidation": 73.21,
-      "entry_reasoning": "Daily macro is DOWN but SOL is oversold and price is near the lower Bollinger band (~0.16 BB%b) \u2013 a clear daily-range low \u2013 and the 5\u2011minute candle after the dip at 17:15 rebounded, confirming a BB bounce entry."
-    }
-  ],
+  "current_cash_eur": 479.59119555084794,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1614,20 +1599,37 @@
       "mfe_pct": 0.71,
       "mae_pct": -2.34,
       "reasoning": "The entry thesis explicitly relied on '5m candles display a bullish reversal with higher highs/lows'. This is broken as the 5m timeframe shows a decisive structural breakdown with a volume spike (63.96) pushing price to a new low (1863.99), confirming the breakdown rather than a bounce."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-09T17:31:16.444167+00:00",
+      "exit_time": "2026-11-10T10:46:04.443396+00:00",
+      "entry_price": 77.063,
+      "exit_price": 75.118,
+      "pnl_eur": -2.43,
+      "pnl_pct": -2.52,
+      "fee_paid": 0.19,
+      "net_pnl_eur": -2.62,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.53,
+      "mae_pct": -2.52,
+      "reasoning": "The position is flagged as INVALIDATED and the 5m chart shows structural weakness with a series of lower highs and a recent breakdown from ~75.90 to 75.10 on increased volume, breaking the 'rebound confirming BB bounce' component of the thesis. The price is making new lows rather than holding support, confirming the structural breakdown required for an early exit before the hard stop is hit."
     }
   ],
   "total_trades": 114,
-  "win_rate": 43.36283185840708,
-  "total_pnl_eur": -17.800000000000004,
-  "total_pnl_percent": -3.56,
-  "total_fees_paid_eur": 25.600000000000037,
+  "win_rate": 42.98245614035088,
+  "total_pnl_eur": -20.420000000000005,
+  "total_pnl_percent": -4.08,
+  "total_fees_paid_eur": 25.690000000000037,
   "last_digest_date": "2026-11-10",
   "last_hold_email_ts": 1794304891.1529896,
   "cb_date": "2026-11-10",
   "cb_day_start_value": 482.22788332578534,
   "last_failure_email_ts": 1794303958.206351,
   "cooldowns": {
-    "SOL-EUR": "2026-11-09T01:31:17.860313+00:00",
+    "SOL-EUR": "2026-11-10T14:46:04.443432+00:00",
     "ETH-EUR": "2026-11-09T11:16:03.437317+00:00",
     "BTC-EUR": "2026-10-29T10:16:26.205854+00:00"
   }
