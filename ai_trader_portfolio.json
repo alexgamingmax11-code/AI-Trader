@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 294.02208270328276,
+  "current_cash_eur": 342.5149595648883,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-11-11T02:31:14.787945+00:00",
       "entry_price": 65578.83,
-      "current_price": 66947.85,
+      "current_price": 66759.14,
       "peak_price": 67323.21,
       "trough_price": 65578.83,
       "value_eur": 136.23,
@@ -16,26 +16,6 @@
       "tp1_done": false,
       "invalidation": 63283.57,
       "entry_reasoning": "1d macro is DOWN but OVERSOLD; 15m BB%b is at the lower band and price tested the lower Bollinger level, then the 5m candle at 02:30 closed at its high after a low near 65500, showing a BB bounce and bullish reversal."
-    },
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-11T07:31:13.191287+00:00",
-      "entry_price": 74.331,
-      "current_price": 76.013,
-      "peak_price": 77.177,
-      "trough_price": 74.224,
-      "value_eur": 47.79,
-      "initial_value_eur": 95.58,
-      "fee_paid": 0.05,
-      "tp1_done": true,
-      "invalidation": 70.61,
-      "entry_reasoning": "1d macro is DOWN but OVERSOLD (RSI\u202f17.7) with price near the low end of its 30\u2011day range; 5m candles show a higher\u2011high/higher\u2011low bullish structure, a modest pull\u2011back from the 07:20 peak and increasing volume, confirming a pull\u2011back entry despite neutral 15m conditions.",
-      "tp1_price": 76.715,
-      "tp1_time": "2026-11-11T17:16:01.512951+00:00",
-      "tp1_pnl_eur": 1.53,
-      "tp1_fee_eur": 0.1,
-      "tp1_net_pnl_eur": 1.43,
-      "tp1_sold_value_eur": 47.79
     }
   ],
   "closed_trades": [
@@ -1668,20 +1648,37 @@
       "mfe_pct": 0.7,
       "mae_pct": -2.78,
       "reasoning": "The position is flagged as INVALIDATED due to structural weakness; the 5m candles confirm the thesis is broken as price fails to sustain the initial bounce, forming lower highs (1825 -> 1819) and losing the bounce low (1815 -> 1813), indicating continued downtrend pressure rather than reversal."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-11T07:31:13.191287+00:00",
+      "exit_time": "2026-11-11T22:45:57.684556+00:00",
+      "entry_price": 74.331,
+      "exit_price": 75.502,
+      "pnl_eur": 2.28,
+      "pnl_pct": 2.39,
+      "fee_paid": 0.2,
+      "net_pnl_eur": 2.08,
+      "tp1_done": true,
+      "tp1_price": 76.715,
+      "tp1_net_pnl_eur": 1.43,
+      "mfe_pct": 3.83,
+      "mae_pct": -0.14,
+      "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 77.18"
     }
   ],
   "total_trades": 117,
-  "win_rate": 42.608695652173914,
-  "total_pnl_eur": -21.780000000000005,
-  "total_pnl_percent": -3.5,
-  "total_fees_paid_eur": 26.19000000000004,
+  "win_rate": 43.103448275862064,
+  "total_pnl_eur": -21.130000000000006,
+  "total_pnl_percent": -3.76,
+  "total_fees_paid_eur": 26.24000000000004,
   "last_digest_date": "2026-11-11",
-  "last_hold_email_ts": 1794432723.4664001,
+  "last_hold_email_ts": 1794437160.9388056,
   "cb_date": "2026-11-11",
   "cb_day_start_value": 476.7993257109108,
   "last_failure_email_ts": 1794435356.4805806,
   "cooldowns": {
-    "SOL-EUR": "2026-11-10T14:46:04.443432+00:00",
+    "SOL-EUR": "2026-11-12T02:45:57.684591+00:00",
     "ETH-EUR": "2026-11-10T20:31:17.676859+00:00",
     "BTC-EUR": "2026-10-29T10:16:26.205854+00:00"
   }
