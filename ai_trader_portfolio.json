@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 342.5149595648883,
+  "current_cash_eur": 246.29495956488827,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-11-11T02:31:14.787945+00:00",
       "entry_price": 65578.83,
-      "current_price": 66487.77,
+      "current_price": 66459.81,
       "peak_price": 67323.21,
       "trough_price": 65578.83,
       "value_eur": 136.23,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 63283.57,
       "entry_reasoning": "1d macro is DOWN but OVERSOLD; 15m BB%b is at the lower band and price tested the lower Bollinger level, then the 5m candle at 02:30 closed at its high after a low near 65500, showing a BB bounce and bullish reversal."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-12T04:45:59.136401+00:00",
+      "entry_price": 74.839,
+      "current_price": 74.839,
+      "peak_price": 74.839,
+      "trough_price": 74.839,
+      "value_eur": 96.12,
+      "initial_value_eur": 96.12,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 71.1,
+      "entry_reasoning": "1d macro is DOWN and OVERSOLD; 15m BB%b is in lower\u2011band zone; 5m candle at 04:40 closed higher after a low at 04:30, showing a Bollinger bounce with supporting volume \u2013 aligned entry across timeframes."
     }
   ],
   "closed_trades": [
@@ -1667,11 +1681,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 77.18"
     }
   ],
-  "total_trades": 117,
+  "total_trades": 118,
   "win_rate": 43.103448275862064,
   "total_pnl_eur": -21.130000000000006,
   "total_pnl_percent": -3.76,
-  "total_fees_paid_eur": 26.24000000000004,
+  "total_fees_paid_eur": 26.340000000000042,
   "last_digest_date": "2026-11-12",
   "last_hold_email_ts": 1794454276.118961,
   "cb_date": "2026-11-12",
