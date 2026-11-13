@@ -1,21 +1,27 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 378.44524706441166,
+  "current_cash_eur": 427.1930399997702,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-11-13T04:01:22.405657+00:00",
       "entry_price": 70.775,
-      "current_price": 72.724,
-      "peak_price": 72.842,
+      "current_price": 72.993,
+      "peak_price": 72.993,
       "trough_price": 70.685,
-      "value_eur": 94.63,
+      "value_eur": 47.31,
       "initial_value_eur": 94.63,
-      "fee_paid": 0.09,
-      "tp1_done": false,
+      "fee_paid": 0.05,
+      "tp1_done": true,
       "invalidation": 67.24,
-      "entry_reasoning": "5m BB bounce: price touched the lower band (BB%b -0.03) at a 70.56 low and immediately recovered to close 70.78; 15m shows oversold lower\u2011band zone and daily trend is down but at an oversold extreme, providing a aligned short\u2011term rebound entry."
+      "entry_reasoning": "5m BB bounce: price touched the lower band (BB%b -0.03) at a 70.56 low and immediately recovered to close 70.78; 15m shows oversold lower\u2011band zone and daily trend is down but at an oversold extreme, providing a aligned short\u2011term rebound entry.",
+      "tp1_price": 72.993,
+      "tp1_time": "2026-11-13T11:45:56.220216+00:00",
+      "tp1_pnl_eur": 1.48,
+      "tp1_fee_eur": 0.09,
+      "tp1_net_pnl_eur": 1.39,
+      "tp1_sold_value_eur": 47.31
     }
   ],
   "closed_trades": [
@@ -1720,9 +1726,9 @@
   ],
   "total_trades": 120,
   "win_rate": 42.857142857142854,
-  "total_pnl_eur": -26.850000000000005,
-  "total_pnl_percent": -5.37,
-  "total_fees_paid_eur": 26.930000000000042,
+  "total_pnl_eur": -25.460000000000004,
+  "total_pnl_percent": -4.8,
+  "total_fees_paid_eur": 26.980000000000043,
   "last_digest_date": "2026-11-13",
   "last_hold_email_ts": 1794566763.1268349,
   "cb_date": "2026-11-13",
