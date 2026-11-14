@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 466.7529707371498,
-  "positions": [],
+  "current_cash_eur": 373.3129707371498,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-14T23:01:24.968410+00:00",
+      "entry_price": 63.017,
+      "current_price": 63.017,
+      "peak_price": 63.017,
+      "trough_price": 63.017,
+      "value_eur": 93.35,
+      "initial_value_eur": 93.35,
+      "fee_paid": 0.09,
+      "tp1_done": false,
+      "invalidation": 59.87,
+      "entry_reasoning": "SOL is deeply OVERSOLD on the 1d (RSI 15.0) and 15m (RSI 22.3) with price pinned to the lower BB band, while the 5m timeframe shows a clear reversal structure with higher lows (62.52 -> 62.63) and a bullish close (63.02) accompanied by significant volume spikes (371.94 at 22:40), indicating a high-probability mean reversion entry."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1771,11 +1786,11 @@
       "reasoning": "5m candles show a lower low (1648.88 at 20:30) breaking the higher\u2011low bullish reversal thesis, and price has fallen well below entry, invalidating the entry condition"
     }
   ],
-  "total_trades": 123,
+  "total_trades": 124,
   "win_rate": 42.27642276422765,
   "total_pnl_eur": -33.260000000000005,
   "total_pnl_percent": -6.65,
-  "total_fees_paid_eur": 27.620000000000047,
+  "total_fees_paid_eur": 27.710000000000047,
   "last_digest_date": "2026-11-14",
   "last_hold_email_ts": 1794694557.3504593,
   "cb_date": "2026-11-14",
