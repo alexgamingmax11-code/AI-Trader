@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 469.6490299529374,
-  "positions": [],
+  "current_cash_eur": 365.1790299529374,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-14T19:01:25.858761+00:00",
+      "entry_price": 1663.07,
+      "current_price": 1663.07,
+      "peak_price": 1663.07,
+      "trough_price": 1663.07,
+      "value_eur": 104.37,
+      "initial_value_eur": 104.37,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 1588.23,
+      "entry_reasoning": "5m candles show bullish reversal with higher lows (1656.81 \u2192 1658.80 \u2192 1661.13 \u2192 1663.07) and price recovering, while 1d macro is DOWN but oversold (RSI 25.9) and 15m is neutral, aligning for a short\u2011term buy"
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1754,11 +1769,11 @@
       "reasoning": "The 5m chart has broken the higher\u2011low bullish reversal (now making lower lows down to 66.46) and the 15m trend has turned down, invalidating the entry thesis; loss is >2% so sell is allowed."
     }
   ],
-  "total_trades": 122,
+  "total_trades": 123,
   "win_rate": 42.62295081967213,
   "total_pnl_eur": -30.360000000000007,
   "total_pnl_percent": -6.07,
-  "total_fees_paid_eur": 27.420000000000044,
+  "total_fees_paid_eur": 27.520000000000046,
   "last_digest_date": "2026-11-14",
   "last_hold_email_ts": 1794681073.4140058,
   "cb_date": "2026-11-14",
