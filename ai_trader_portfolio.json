@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 373.3129707371498,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-14T23:01:24.968410+00:00",
-      "entry_price": 63.017,
-      "current_price": 61.896,
-      "peak_price": 63.747,
-      "trough_price": 61.896,
-      "value_eur": 93.35,
-      "initial_value_eur": 93.35,
-      "fee_paid": 0.09,
-      "tp1_done": false,
-      "invalidation": 59.87,
-      "entry_reasoning": "SOL is deeply OVERSOLD on the 1d (RSI 15.0) and 15m (RSI 22.3) with price pinned to the lower BB band, while the 5m timeframe shows a clear reversal structure with higher lows (62.52 -> 62.63) and a bullish close (63.02) accompanied by significant volume spikes (371.94 at 22:40), indicating a high-probability mean reversion entry."
-    }
-  ],
+  "current_cash_eur": 463.7184164105395,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1784,20 +1769,37 @@
       "mfe_pct": 0.27,
       "mae_pct": -2.58,
       "reasoning": "5m candles show a lower low (1648.88 at 20:30) breaking the higher\u2011low bullish reversal thesis, and price has fallen well below entry, invalidating the entry condition"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-14T23:01:24.968410+00:00",
+      "exit_time": "2026-11-15T01:45:56.897718+00:00",
+      "entry_price": 63.017,
+      "exit_price": 61.09,
+      "pnl_eur": -2.85,
+      "pnl_pct": -3.05,
+      "fee_paid": 0.18,
+      "net_pnl_eur": -3.03,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 1.16,
+      "mae_pct": -3.06,
+      "reasoning": "The 5m chart has turned bearish: after earlier higher lows (62.52\u219262.63) price now makes lower lows and lower highs (61.22\u219261.09) with strong volume, breaking the bullish reversal structure that justified the entry; additionally the 15m RSI has risen out of the OVERSOLD regime, invalidating the oversold thesis."
     }
   ],
   "total_trades": 124,
-  "win_rate": 42.27642276422765,
-  "total_pnl_eur": -33.260000000000005,
-  "total_pnl_percent": -6.65,
-  "total_fees_paid_eur": 27.710000000000047,
+  "win_rate": 41.935483870967744,
+  "total_pnl_eur": -36.290000000000006,
+  "total_pnl_percent": -7.26,
+  "total_fees_paid_eur": 27.800000000000047,
   "last_digest_date": "2026-11-15",
   "last_hold_email_ts": 1794702697.4540577,
   "cb_date": "2026-11-15",
   "cb_day_start_value": 467.6984318032113,
   "last_failure_email_ts": 1794675690.3349338,
   "cooldowns": {
-    "SOL-EUR": "2026-11-14T19:31:14.326888+00:00",
+    "SOL-EUR": "2026-11-15T05:45:56.897752+00:00",
     "ETH-EUR": "2026-11-15T00:55:28.621482+00:00",
     "BTC-EUR": "2026-11-13T07:15:54.670228+00:00"
   }
