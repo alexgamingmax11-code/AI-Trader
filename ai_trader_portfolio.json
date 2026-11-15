@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 360.5684164105395,
+  "current_cash_eur": 267.35841641053946,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-11-15T06:45:57.942516+00:00",
       "entry_price": 1627.9,
-      "current_price": 1658.85,
+      "current_price": 1659.02,
       "peak_price": 1668.01,
       "trough_price": 1612.0,
       "value_eur": 103.05,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 1554.64,
       "entry_reasoning": "1d down but oversold (RSI 24.8) and 15m oversold (RSI 28.9) with BB%b 0.23 near lower band; 5m candles show recent bullish spike and rising volume, indicating a bounce off the lower Bollinger band \u2013 entry aligns across timeframes."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-15T11:15:53.627133+00:00",
+      "entry_price": 65.522,
+      "current_price": 65.522,
+      "peak_price": 65.522,
+      "trough_price": 65.522,
+      "value_eur": 93.12,
+      "initial_value_eur": 93.12,
+      "fee_paid": 0.09,
+      "tp1_done": false,
+      "invalidation": 62.25,
+      "entry_reasoning": "Daily RSI is deeply oversold (20.3) but 15m shows strong upward momentum (RSI 75.1, medium +3.55%) with 5m candles forming higher lows and reclaiming the mid-Bollinger band; this aligns with a corrective bounce entry against the broader downtrend at a higher risk/reward ratio than ETH or BTC which are already extended."
     }
   ],
   "closed_trades": [
@@ -1803,11 +1817,11 @@
       "reasoning": "The 5m chart has turned bearish: after earlier higher lows (62.52\u219262.63) price now makes lower lows and lower highs (61.22\u219261.09) with strong volume, breaking the bullish reversal structure that justified the entry; additionally the 15m RSI has risen out of the OVERSOLD regime, invalidating the oversold thesis."
     }
   ],
-  "total_trades": 125,
+  "total_trades": 126,
   "win_rate": 41.935483870967744,
   "total_pnl_eur": -36.290000000000006,
   "total_pnl_percent": -7.26,
-  "total_fees_paid_eur": 27.90000000000005,
+  "total_fees_paid_eur": 27.990000000000048,
   "last_digest_date": "2026-11-15",
   "last_hold_email_ts": 1794736897.7392678,
   "cb_date": "2026-11-15",
