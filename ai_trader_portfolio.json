@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 463.7184164105395,
-  "positions": [],
+  "current_cash_eur": 360.5684164105395,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-15T06:45:57.942516+00:00",
+      "entry_price": 1627.9,
+      "current_price": 1627.9,
+      "peak_price": 1627.9,
+      "trough_price": 1627.9,
+      "value_eur": 103.05,
+      "initial_value_eur": 103.05,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 1554.64,
+      "entry_reasoning": "1d down but oversold (RSI 24.8) and 15m oversold (RSI 28.9) with BB%b 0.23 near lower band; 5m candles show recent bullish spike and rising volume, indicating a bounce off the lower Bollinger band \u2013 entry aligns across timeframes."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1788,11 +1803,11 @@
       "reasoning": "The 5m chart has turned bearish: after earlier higher lows (62.52\u219262.63) price now makes lower lows and lower highs (61.22\u219261.09) with strong volume, breaking the bullish reversal structure that justified the entry; additionally the 15m RSI has risen out of the OVERSOLD regime, invalidating the oversold thesis."
     }
   ],
-  "total_trades": 124,
+  "total_trades": 125,
   "win_rate": 41.935483870967744,
   "total_pnl_eur": -36.290000000000006,
   "total_pnl_percent": -7.26,
-  "total_fees_paid_eur": 27.800000000000047,
+  "total_fees_paid_eur": 27.90000000000005,
   "last_digest_date": "2026-11-15",
   "last_hold_email_ts": 1794724280.2245593,
   "cb_date": "2026-11-15",
