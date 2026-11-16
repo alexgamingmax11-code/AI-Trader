@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 267.35841641053946,
+  "current_cash_eur": 359.19744910184926,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-11-15T06:45:57.942516+00:00",
       "entry_price": 1627.9,
-      "current_price": 1649.96,
+      "current_price": 1650.26,
       "peak_price": 1668.01,
       "trough_price": 1612.0,
       "value_eur": 103.05,
@@ -16,20 +16,6 @@
       "tp1_done": false,
       "invalidation": 1554.64,
       "entry_reasoning": "1d down but oversold (RSI 24.8) and 15m oversold (RSI 28.9) with BB%b 0.23 near lower band; 5m candles show recent bullish spike and rising volume, indicating a bounce off the lower Bollinger band \u2013 entry aligns across timeframes."
-    },
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-15T11:15:53.627133+00:00",
-      "entry_price": 65.522,
-      "current_price": 64.435,
-      "peak_price": 66.203,
-      "trough_price": 64.225,
-      "value_eur": 93.12,
-      "initial_value_eur": 93.12,
-      "fee_paid": 0.09,
-      "tp1_done": false,
-      "invalidation": 62.25,
-      "entry_reasoning": "Daily RSI is deeply oversold (20.3) but 15m shows strong upward momentum (RSI 75.1, medium +3.55%) with 5m candles forming higher lows and reclaiming the mid-Bollinger band; this aligns with a corrective bounce entry against the broader downtrend at a higher risk/reward ratio than ETH or BTC which are already extended."
     }
   ],
   "closed_trades": [
@@ -1815,20 +1801,37 @@
       "mfe_pct": 1.16,
       "mae_pct": -3.06,
       "reasoning": "The 5m chart has turned bearish: after earlier higher lows (62.52\u219262.63) price now makes lower lows and lower highs (61.22\u219261.09) with strong volume, breaking the bullish reversal structure that justified the entry; additionally the 15m RSI has risen out of the OVERSOLD regime, invalidating the oversold thesis."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-15T11:15:53.627133+00:00",
+      "exit_time": "2026-11-16T08:01:30.065894+00:00",
+      "entry_price": 65.522,
+      "exit_price": 64.684,
+      "pnl_eur": -1.19,
+      "pnl_pct": -1.28,
+      "fee_paid": 0.18,
+      "net_pnl_eur": -1.37,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 1.04,
+      "mae_pct": -1.98,
+      "reasoning": "[OVERLAY] STALL EXIT: 21h old at -1.3% \u2014 thesis dead, freeing capital"
     }
   ],
   "total_trades": 126,
-  "win_rate": 41.935483870967744,
-  "total_pnl_eur": -36.290000000000006,
-  "total_pnl_percent": -7.26,
-  "total_fees_paid_eur": 27.990000000000048,
+  "win_rate": 41.6,
+  "total_pnl_eur": -37.660000000000004,
+  "total_pnl_percent": -7.27,
+  "total_fees_paid_eur": 28.080000000000048,
   "last_digest_date": "2026-11-16",
-  "last_hold_email_ts": 1794809760.8043892,
+  "last_hold_email_ts": 1794816092.658609,
   "cb_date": "2026-11-16",
   "cb_day_start_value": 466.2516927504577,
   "last_failure_email_ts": 1794814306.0444424,
   "cooldowns": {
-    "SOL-EUR": "2026-11-15T05:45:56.897752+00:00",
+    "SOL-EUR": "2026-11-16T12:01:30.065929+00:00",
     "ETH-EUR": "2026-11-15T00:55:28.621482+00:00",
     "BTC-EUR": "2026-11-13T07:15:54.670228+00:00"
   }
