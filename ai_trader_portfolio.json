@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 330.45288586086394,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-11-16T19:15:59.044720+00:00",
-      "entry_price": 58896.84,
-      "current_price": 58747.56,
-      "peak_price": 59514.08,
-      "trough_price": 58339.09,
-      "value_eur": 132.24,
-      "initial_value_eur": 132.24,
-      "fee_paid": 0.13,
-      "tp1_done": false,
-      "invalidation": 56835.45,
-      "entry_reasoning": "Daily RSI is OVERSOLD (25.9) providing a macro floor, while the 15m timeframe shows a medium-term UP trend (+0.66%) with RSI recovering to 61.6, and 5m candles indicate momentum shifting upward from the 58893 support, aligning with a 'Buy WITH the daily trend' context at a local extreme."
-    }
-  ],
+  "current_cash_eur": 462.82151986567646,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1835,13 +1820,30 @@
       "mfe_pct": 2.46,
       "mae_pct": -0.98,
       "reasoning": "[OVERLAY] STALL EXIT: 26h old at +0.7% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-16T19:15:59.044720+00:00",
+      "exit_time": "2026-11-17T15:31:14.349723+00:00",
+      "entry_price": 58896.84,
+      "exit_price": 59012.03,
+      "pnl_eur": 0.26,
+      "pnl_pct": 0.2,
+      "fee_paid": 0.26,
+      "net_pnl_eur": 0.0,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 1.05,
+      "mae_pct": -0.95,
+      "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.2% \u2014 thesis dead, freeing capital"
     }
   ],
   "total_trades": 127,
-  "win_rate": 42.06349206349206,
+  "win_rate": 41.732283464566926,
   "total_pnl_eur": -37.18000000000001,
   "total_pnl_percent": -7.44,
-  "total_fees_paid_eur": 28.31000000000005,
+  "total_fees_paid_eur": 28.440000000000047,
   "last_digest_date": "2026-11-17",
   "last_hold_email_ts": 1794926758.7548666,
   "cb_date": "2026-11-17",
@@ -1850,6 +1852,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-11-16T12:01:30.065929+00:00",
     "ETH-EUR": "2026-11-16T12:31:12.611903+00:00",
-    "BTC-EUR": "2026-11-13T07:15:54.670228+00:00"
+    "BTC-EUR": "2026-11-17T19:31:14.349751+00:00"
   }
 }
