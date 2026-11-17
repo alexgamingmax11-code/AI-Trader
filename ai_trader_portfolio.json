@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 462.82151986567646,
-  "positions": [],
+  "current_cash_eur": 359.8715198656765,
+  "positions": [
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-17T19:16:00.394049+00:00",
+      "entry_price": 1627.55,
+      "current_price": 1627.55,
+      "peak_price": 1627.55,
+      "trough_price": 1627.55,
+      "value_eur": 102.85,
+      "initial_value_eur": 102.85,
+      "fee_paid": 0.1,
+      "tp1_done": false,
+      "invalidation": 1554.31,
+      "entry_reasoning": "5m candles show a clear bullish higher\u2011low structure with rising volume, 15m trend is up and RSI neutral, and the daily chart is at an oversold extreme near the 30\u2011day low, meeting the entry criteria."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1839,11 +1854,11 @@
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.2% \u2014 thesis dead, freeing capital"
     }
   ],
-  "total_trades": 127,
+  "total_trades": 128,
   "win_rate": 41.732283464566926,
   "total_pnl_eur": -37.18000000000001,
   "total_pnl_percent": -7.44,
-  "total_fees_paid_eur": 28.440000000000047,
+  "total_fees_paid_eur": 28.54000000000005,
   "last_digest_date": "2026-11-17",
   "last_hold_email_ts": 1794940280.2390828,
   "cb_date": "2026-11-17",
