@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 359.8715198656765,
+  "current_cash_eur": 227.0415198656765,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-11-17T19:16:00.394049+00:00",
       "entry_price": 1627.55,
-      "current_price": 1645.48,
+      "current_price": 1654.95,
       "peak_price": 1663.02,
       "trough_price": 1623.44,
       "value_eur": 102.85,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 1554.31,
       "entry_reasoning": "5m candles show a clear bullish higher\u2011low structure with rising volume, 15m trend is up and RSI neutral, and the daily chart is at an oversold extreme near the 30\u2011day low, meeting the entry criteria."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-18T07:15:57.224023+00:00",
+      "entry_price": 58960.21,
+      "current_price": 58960.21,
+      "peak_price": 58960.21,
+      "trough_price": 58960.21,
+      "value_eur": 132.7,
+      "initial_value_eur": 132.7,
+      "fee_paid": 0.13,
+      "tp1_done": false,
+      "invalidation": 56896.6,
+      "entry_reasoning": "1d shows OVERSOLD daily RSI (12.7) and down macro, but price is at a daily-range extreme; 15m trend is UP (medium +0.54%) with RSI neutral; 5m candles have formed a clear bullish higher\u2011high/higher\u2011low structure after a dip with rising volume, confirming reversal entry."
     }
   ],
   "closed_trades": [
@@ -1854,11 +1868,11 @@
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.2% \u2014 thesis dead, freeing capital"
     }
   ],
-  "total_trades": 128,
+  "total_trades": 129,
   "win_rate": 41.732283464566926,
   "total_pnl_eur": -37.18000000000001,
   "total_pnl_percent": -7.44,
-  "total_fees_paid_eur": 28.54000000000005,
+  "total_fees_paid_eur": 28.670000000000048,
   "last_digest_date": "2026-11-18",
   "last_hold_email_ts": 1794983471.8567436,
   "cb_date": "2026-11-18",
