@@ -1,35 +1,21 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 227.0415198656765,
+  "current_cash_eur": 356.32245764897135,
   "positions": [
     {
       "symbol": "ETH-EUR",
       "entry_time": "2026-11-17T19:16:00.394049+00:00",
       "entry_price": 1627.55,
-      "current_price": 1633.96,
+      "current_price": 1599.0,
       "peak_price": 1663.02,
-      "trough_price": 1623.44,
+      "trough_price": 1599.0,
       "value_eur": 102.85,
       "initial_value_eur": 102.85,
       "fee_paid": 0.1,
       "tp1_done": false,
       "invalidation": 1554.31,
       "entry_reasoning": "5m candles show a clear bullish higher\u2011low structure with rising volume, 15m trend is up and RSI neutral, and the daily chart is at an oversold extreme near the 30\u2011day low, meeting the entry criteria."
-    },
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-11-18T07:15:57.224023+00:00",
-      "entry_price": 58960.21,
-      "current_price": 58350.0,
-      "peak_price": 59015.43,
-      "trough_price": 58250.67,
-      "value_eur": 132.7,
-      "initial_value_eur": 132.7,
-      "fee_paid": 0.13,
-      "tp1_done": false,
-      "invalidation": 56896.6,
-      "entry_reasoning": "1d shows OVERSOLD daily RSI (12.7) and down macro, but price is at a daily-range extreme; 15m trend is UP (medium +0.54%) with RSI neutral; 5m candles have formed a clear bullish higher\u2011high/higher\u2011low structure after a dip with rising volume, confirming reversal entry."
     }
   ],
   "closed_trades": [
@@ -1866,13 +1852,30 @@
       "mfe_pct": 1.05,
       "mae_pct": -0.95,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.2% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-18T07:15:57.224023+00:00",
+      "exit_time": "2026-11-18T14:46:04.137639+00:00",
+      "entry_price": 58960.21,
+      "exit_price": 57498.84,
+      "pnl_eur": -3.29,
+      "pnl_pct": -2.48,
+      "fee_paid": 0.26,
+      "net_pnl_eur": -3.55,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.09,
+      "mae_pct": -2.48,
+      "reasoning": "5m candles broke the bullish higher\u2011high/higher\u2011low structure (price dropped from a high of 58350 to 57498, forming lower lows), invalidating the entry thesis; the 15m trend is down and the daily is oversold."
     }
   ],
   "total_trades": 129,
-  "win_rate": 41.732283464566926,
-  "total_pnl_eur": -37.18000000000001,
-  "total_pnl_percent": -7.44,
-  "total_fees_paid_eur": 28.670000000000048,
+  "win_rate": 41.40625,
+  "total_pnl_eur": -40.730000000000004,
+  "total_pnl_percent": -8.53,
+  "total_fees_paid_eur": 28.800000000000047,
   "last_digest_date": "2026-11-18",
   "last_hold_email_ts": 1795008675.633777,
   "cb_date": "2026-11-18",
@@ -1881,6 +1884,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-11-16T12:01:30.065929+00:00",
     "ETH-EUR": "2026-11-16T12:31:12.611903+00:00",
-    "BTC-EUR": "2026-11-17T19:31:14.349751+00:00"
+    "BTC-EUR": "2026-11-18T18:46:04.137671+00:00"
   }
 }
