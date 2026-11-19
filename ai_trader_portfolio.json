@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 366.45030579964225,
-  "positions": [
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-19T06:15:54.696025+00:00",
-      "entry_price": 68.237,
-      "current_price": 67.14,
-      "peak_price": 68.484,
-      "trough_price": 66.906,
-      "value_eur": 91.92,
-      "initial_value_eur": 91.92,
-      "fee_paid": 0.09,
-      "tp1_done": false,
-      "invalidation": 64.83,
-      "entry_reasoning": "SOL-EUR presents the strongest entry setup: 15m is UP with a clear bullish trend (medium +2.11%) and the 5m candles show fresh bullish momentum with a significant volume spike (53.84) on the 06:15 candle, confirming the push to the highs. Although the 15m RSI is OVERBOUGHT, the alignment of daily weakness (weak-neutral) with strong short-term uptrend momentum and volume confirms continuation, offering better risk/reward than the neutral/overbought BTC or the lagging ETH."
-    }
-  ],
+  "current_cash_eur": 456.18965351422526,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1903,20 +1888,37 @@
       "mfe_pct": 1.65,
       "mae_pct": -0.79,
       "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.4% \u2014 thesis dead, freeing capital"
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-19T06:15:54.696025+00:00",
+      "exit_time": "2026-11-19T17:01:48.242066+00:00",
+      "entry_price": 68.237,
+      "exit_price": 66.685,
+      "pnl_eur": -2.09,
+      "pnl_pct": -2.27,
+      "fee_paid": 0.18,
+      "net_pnl_eur": -2.27,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.36,
+      "mae_pct": -2.27,
+      "reasoning": "15m trend is DOWN (medium -1.93%) contradicting the entry's bullish 15m premise, and price has dropped below recent lows, breaking the bullish structure referenced in the original thesis"
     }
   ],
   "total_trades": 131,
-  "win_rate": 41.53846153846154,
-  "total_pnl_eur": -41.540000000000006,
-  "total_pnl_percent": -8.66,
-  "total_fees_paid_eur": 29.250000000000046,
+  "win_rate": 41.221374045801525,
+  "total_pnl_eur": -43.81000000000001,
+  "total_pnl_percent": -8.76,
+  "total_fees_paid_eur": 29.340000000000046,
   "last_digest_date": "2026-11-19",
   "last_hold_email_ts": 1795104090.8354964,
   "cb_date": "2026-11-19",
   "cb_day_start_value": 458.3613692476974,
   "last_failure_email_ts": 1795101369.6649513,
   "cooldowns": {
-    "SOL-EUR": "2026-11-16T12:01:30.065929+00:00",
+    "SOL-EUR": "2026-11-19T21:01:48.242109+00:00",
     "ETH-EUR": "2026-11-18T19:31:26.258788+00:00",
     "BTC-EUR": "2026-11-19T20:16:01.627600+00:00"
   }
