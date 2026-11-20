@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 450.7143322906415,
-  "positions": [],
+  "current_cash_eur": 321.80433229064147,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-20T21:01:30.163989+00:00",
+      "entry_price": 53221.77,
+      "current_price": 53221.77,
+      "peak_price": 53221.77,
+      "trough_price": 53221.77,
+      "value_eur": 128.78,
+      "initial_value_eur": 128.78,
+      "fee_paid": 0.13,
+      "tp1_done": false,
+      "invalidation": 51359.01,
+      "entry_reasoning": "Daily RSI of 9.8 indicates extreme oversold conditions, providing a macro support context; on the 5m timeframe, BTC has rebounded from the 53,010 low with higher lows (53,040 -> 53,148 -> 53,188) suggesting short-term bottoming structure within the 15m neutral zone."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1941,11 +1956,11 @@
       "reasoning": "The 5m bullish reversal has broken: after a higher high at 19:25 (1457.37), the 19:30 candle formed a lower high (1454.51) and closed lower, invalidating the reversal part of the entry thesis."
     }
   ],
-  "total_trades": 133,
+  "total_trades": 134,
   "win_rate": 40.6015037593985,
   "total_pnl_eur": -49.29000000000001,
   "total_pnl_percent": -9.86,
-  "total_fees_paid_eur": 29.800000000000047,
+  "total_fees_paid_eur": 29.930000000000046,
   "last_digest_date": "2026-11-20",
   "last_hold_email_ts": 1795206674.6135755,
   "cb_date": "2026-11-20",
