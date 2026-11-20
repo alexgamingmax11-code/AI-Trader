@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 352.33050177508585,
-  "positions": [
-    {
-      "symbol": "ETH-EUR",
-      "entry_time": "2026-11-20T17:16:03.068132+00:00",
-      "entry_price": 1484.03,
-      "current_price": 1453.01,
-      "peak_price": 1485.64,
-      "trough_price": 1453.01,
-      "value_eur": 100.7,
-      "initial_value_eur": 100.7,
-      "fee_paid": 0.1,
-      "tp1_done": false,
-      "invalidation": 1417.25,
-      "entry_reasoning": "5m candles show a bullish reversal after a sharp drop to the 15m BB lower band (BB%b=0.14), with confirming volume and daily/15m oversold regime, aligning with a pull\u2011back entry at a daily-range extreme."
-    }
-  ],
+  "current_cash_eur": 450.7143322906415,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1937,13 +1922,30 @@
       "mfe_pct": 1.44,
       "mae_pct": -2.15,
       "reasoning": "The BTC position is flagged as INVALIDATED because the entry thesis of a 'bullish reversal' from the lower Bollinger band is broken by structural weakness: the 5m chart shows persistent lower lows and lower highs with increasing volume on the downfalls (17.68 -> 11.93) rather than recovery, and price is currently testing the hard stop at 54859 vs entry 56063."
+    },
+    {
+      "symbol": "ETH-EUR",
+      "entry_time": "2026-11-20T17:16:03.068132+00:00",
+      "exit_time": "2026-11-20T19:31:15.192889+00:00",
+      "entry_price": 1484.03,
+      "exit_price": 1451.37,
+      "pnl_eur": -2.22,
+      "pnl_pct": -2.2,
+      "fee_paid": 0.2,
+      "net_pnl_eur": -2.42,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.11,
+      "mae_pct": -2.2,
+      "reasoning": "The 5m bullish reversal has broken: after a higher high at 19:25 (1457.37), the 19:30 candle formed a lower high (1454.51) and closed lower, invalidating the reversal part of the entry thesis."
     }
   ],
   "total_trades": 133,
-  "win_rate": 40.909090909090914,
-  "total_pnl_eur": -46.87000000000001,
-  "total_pnl_percent": -9.37,
-  "total_fees_paid_eur": 29.700000000000045,
+  "win_rate": 40.6015037593985,
+  "total_pnl_eur": -49.29000000000001,
+  "total_pnl_percent": -9.86,
+  "total_fees_paid_eur": 29.800000000000047,
   "last_digest_date": "2026-11-20",
   "last_hold_email_ts": 1795201287.5700145,
   "cb_date": "2026-11-20",
@@ -1951,7 +1953,7 @@
   "last_failure_email_ts": 1795131069.9130502,
   "cooldowns": {
     "SOL-EUR": "2026-11-19T21:01:48.242109+00:00",
-    "ETH-EUR": "2026-11-18T19:31:26.258788+00:00",
+    "ETH-EUR": "2026-11-20T23:31:15.192924+00:00",
     "BTC-EUR": "2026-11-20T19:31:15.486289+00:00"
   }
 }
