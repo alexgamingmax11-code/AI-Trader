@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 444.63668665991554,
-  "positions": [],
+  "current_cash_eur": 317.4666866599155,
+  "positions": [
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-21T19:31:14.436334+00:00",
+      "entry_price": 54896.98,
+      "current_price": 54896.98,
+      "peak_price": 54896.98,
+      "trough_price": 54896.98,
+      "value_eur": 127.04,
+      "initial_value_eur": 127.04,
+      "fee_paid": 0.13,
+      "tp1_done": false,
+      "invalidation": 52975.59,
+      "entry_reasoning": "Daily RSI is oversold and price sits near the lower 15% of its 30\u2011day range; 15\u2011minute summary shows an uptrend (medium +0.69% and RSI 68.4); the latest 5\u2011minute candle turned green after a brief dip, indicating a pull\u2011back bounce\u2014aligned entry across timeframes."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -1958,11 +1973,11 @@
       "reasoning": "[OVERLAY] HARD STOP: -4.5% breached BTC-EUR -3.5% limit"
     }
   ],
-  "total_trades": 134,
+  "total_trades": 135,
   "win_rate": 40.298507462686565,
   "total_pnl_eur": -55.37000000000001,
   "total_pnl_percent": -11.07,
-  "total_fees_paid_eur": 30.050000000000047,
+  "total_fees_paid_eur": 30.180000000000046,
   "last_digest_date": "2026-11-21",
   "last_hold_email_ts": 1795287685.481775,
   "cb_date": "2026-11-21",
