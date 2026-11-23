@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 353.1642301969189,
+  "current_cash_eur": 226.4042301969189,
   "positions": [
     {
       "symbol": "SOL-EUR",
       "entry_time": "2026-11-22T14:45:59.094800+00:00",
       "entry_price": 64.171,
-      "current_price": 65.53,
+      "current_price": 65.418,
       "peak_price": 65.646,
       "trough_price": 63.589,
       "value_eur": 88.31,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 60.96,
       "entry_reasoning": "1d oversold macro, 15m BB% b near middle (0.51) and a bullish 5m candle closed at its high (64.28) with a slight pullback to 64.17, signaling a pull\u2011back\u2011to\u2011band continuation entry."
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-23T08:15:54.834864+00:00",
+      "entry_price": 55552.7,
+      "current_price": 55552.7,
+      "peak_price": 55552.7,
+      "trough_price": 55552.7,
+      "value_eur": 126.63,
+      "initial_value_eur": 126.63,
+      "fee_paid": 0.13,
+      "tp1_done": false,
+      "invalidation": 53608.36,
+      "entry_reasoning": "1d RSI is 20.3 (OVERSOLD) providing macro support, and 15m BB%b=0.05 indicates price is at the lower band; the 5m chart shows a high-volume sell-off (0.99x) followed by a flat holding pattern, creating a concrete mean-reversion entry setup at the extreme."
     }
   ],
   "closed_trades": [
@@ -1990,11 +2004,11 @@
       "reasoning": "The 15\u2011minute trend is now down (medium -1.80% and RSI 20.4 oversold), contradicting the entry thesis of a 15\u2011min uptrend, and the 5\u2011minute candles show successive lower lows (53677\u219253727\u219253795\u219253863\u219253981), breaking the expected pull\u2011back bounce."
     }
   ],
-  "total_trades": 136,
+  "total_trades": 137,
   "win_rate": 40.0,
   "total_pnl_eur": -58.44000000000001,
   "total_pnl_percent": -11.69,
-  "total_fees_paid_eur": 30.390000000000047,
+  "total_fees_paid_eur": 30.520000000000046,
   "last_digest_date": "2026-11-23",
   "last_hold_email_ts": 1795419951.130049,
   "cb_date": "2026-11-23",
