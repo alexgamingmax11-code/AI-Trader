@@ -1,29 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 385.26247005721956,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-11-23T08:15:54.834864+00:00",
-      "entry_price": 55552.7,
-      "current_price": 57498.8,
-      "peak_price": 58400.0,
-      "trough_price": 55552.7,
-      "value_eur": 63.31,
-      "initial_value_eur": 126.63,
-      "fee_paid": 0.06,
-      "tp1_done": true,
-      "invalidation": 53608.36,
-      "entry_reasoning": "1d RSI is 20.3 (OVERSOLD) providing macro support, and 15m BB%b=0.05 indicates price is at the lower band; the 5m chart shows a high-volume sell-off (0.99x) followed by a flat holding pattern, creating a concrete mean-reversion entry setup at the extreme.",
-      "tp1_price": 57800.0,
-      "tp1_time": "2026-11-23T14:01:29.417394+00:00",
-      "tp1_pnl_eur": 2.56,
-      "tp1_fee_eur": 0.14,
-      "tp1_net_pnl_eur": 2.42,
-      "tp1_sold_value_eur": 63.31
-    }
-  ],
+  "current_cash_eur": 450.1522732135018,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -2011,13 +1990,30 @@
       "mfe_pct": 10.36,
       "mae_pct": -0.91,
       "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 70.82"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-23T08:15:54.834864+00:00",
+      "exit_time": "2026-11-23T16:46:07.207879+00:00",
+      "entry_price": 55552.7,
+      "exit_price": 56991.58,
+      "pnl_eur": 4.2,
+      "pnl_pct": 3.32,
+      "fee_paid": 0.26,
+      "net_pnl_eur": 3.94,
+      "tp1_done": true,
+      "tp1_price": 57800.0,
+      "tp1_net_pnl_eur": 2.42,
+      "mfe_pct": 5.13,
+      "mae_pct": 0.0,
+      "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 58400.00"
     }
   ],
   "total_trades": 137,
-  "win_rate": 40.44117647058824,
-  "total_pnl_eur": -51.370000000000005,
-  "total_pnl_percent": -9.83,
-  "total_fees_paid_eur": 30.690000000000047,
+  "win_rate": 40.87591240875913,
+  "total_pnl_eur": -49.85,
+  "total_pnl_percent": -9.97,
+  "total_fees_paid_eur": 30.750000000000046,
   "last_digest_date": "2026-11-23",
   "last_hold_email_ts": 1795448760.6757486,
   "cb_date": "2026-11-23",
@@ -2026,6 +2022,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-11-23T19:45:58.398263+00:00",
     "ETH-EUR": "2026-11-20T23:31:15.192924+00:00",
-    "BTC-EUR": "2026-11-22T09:15:56.401403+00:00"
+    "BTC-EUR": "2026-11-23T20:46:07.208026+00:00"
   }
 }
