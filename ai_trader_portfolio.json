@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 447.1627340508004,
-  "positions": [],
+  "current_cash_eur": 357.6427340508004,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-24T14:46:07.288273+00:00",
+      "entry_price": 63.78,
+      "current_price": 63.78,
+      "peak_price": 63.78,
+      "trough_price": 63.78,
+      "value_eur": 89.43,
+      "initial_value_eur": 89.43,
+      "fee_paid": 0.09,
+      "tp1_done": false,
+      "invalidation": 60.59,
+      "entry_reasoning": "15m BB%b is 0.24 (near lower band) and price dropped to 63.40 on the 14:30 5m candle then recovered on subsequent 5m candles; the 15m trend is flat\u2011up and RSI neutral, confirming a bullish BB\u2011bounce entry."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -2026,11 +2041,11 @@
       "reasoning": "5m candles show a clear lower high + lower low pattern, breaking the bullish reversal thesis; 1d trend is still down (7d -5.35%, 21d -24.12%) and daily RSI oversold but not enough to justify holding. The entry thesis is structurally invalidated, so early exit is warranted."
     }
   ],
-  "total_trades": 138,
+  "total_trades": 139,
   "win_rate": 40.57971014492754,
   "total_pnl_eur": -52.84,
   "total_pnl_percent": -10.57,
-  "total_fees_paid_eur": 31.010000000000044,
+  "total_fees_paid_eur": 31.100000000000044,
   "last_digest_date": "2026-11-24",
   "last_hold_email_ts": 1795528888.046053,
   "cb_date": "2026-11-24",
