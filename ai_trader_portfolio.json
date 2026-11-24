@@ -1,23 +1,8 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 321.4122732135018,
-  "positions": [
-    {
-      "symbol": "BTC-EUR",
-      "entry_time": "2026-11-24T05:15:59.770891+00:00",
-      "entry_price": 55496.81,
-      "current_price": 54500.0,
-      "peak_price": 55598.93,
-      "trough_price": 54500.0,
-      "value_eur": 128.61,
-      "initial_value_eur": 128.61,
-      "fee_paid": 0.13,
-      "tp1_done": false,
-      "invalidation": 53554.42,
-      "entry_reasoning": "1d macro is OVERSOLD (RSI\u202f22.4) and downtrend, while 5m candles have posted higher lows and a clear bullish reversal candle at 05:00 after the dip, and the price is near the mid Bollinger band on the 15m timeframe, aligning for a pull\u2011back entry."
-    }
-  ],
+  "current_cash_eur": 447.1627340508004,
+  "positions": [],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -2022,13 +2007,30 @@
       "mfe_pct": 5.13,
       "mae_pct": 0.0,
       "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 58400.00"
+    },
+    {
+      "symbol": "BTC-EUR",
+      "entry_time": "2026-11-24T05:15:59.770891+00:00",
+      "exit_time": "2026-11-24T10:52:50.978224+00:00",
+      "entry_price": 55496.81,
+      "exit_price": 54318.98,
+      "pnl_eur": -2.73,
+      "pnl_pct": -2.12,
+      "fee_paid": 0.26,
+      "net_pnl_eur": -2.99,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.18,
+      "mae_pct": -2.12,
+      "reasoning": "5m candles show a clear lower high + lower low pattern, breaking the bullish reversal thesis; 1d trend is still down (7d -5.35%, 21d -24.12%) and daily RSI oversold but not enough to justify holding. The entry thesis is structurally invalidated, so early exit is warranted."
     }
   ],
   "total_trades": 138,
-  "win_rate": 40.87591240875913,
-  "total_pnl_eur": -49.85,
-  "total_pnl_percent": -9.97,
-  "total_fees_paid_eur": 30.880000000000045,
+  "win_rate": 40.57971014492754,
+  "total_pnl_eur": -52.84,
+  "total_pnl_percent": -10.57,
+  "total_fees_paid_eur": 31.010000000000044,
   "last_digest_date": "2026-11-24",
   "last_hold_email_ts": 1795517159.3919652,
   "cb_date": "2026-11-24",
@@ -2037,6 +2039,6 @@
   "cooldowns": {
     "SOL-EUR": "2026-11-23T19:45:58.398263+00:00",
     "ETH-EUR": "2026-11-20T23:31:15.192924+00:00",
-    "BTC-EUR": "2026-11-23T20:46:07.208026+00:00"
+    "BTC-EUR": "2026-11-24T14:52:50.978258+00:00"
   }
 }
