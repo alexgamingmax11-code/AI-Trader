@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 317.85796453057463,
+  "current_cash_eur": 228.23796453057463,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-11-25T08:16:03.202712+00:00",
       "entry_price": 53795.98,
-      "current_price": 54912.71,
+      "current_price": 54899.49,
       "peak_price": 54912.71,
       "trough_price": 52457.34,
       "value_eur": 127.2,
@@ -16,6 +16,20 @@
       "tp1_done": false,
       "invalidation": 51913.12,
       "entry_reasoning": "5m candles show a clear higher\u2011high/higher\u2011low bullish structure after price touched the lower Bollinger band (BB%b 0.20) and 1d daily RSI is oversold at 18, aligning a pull\u2011back entry on the down\u2011trend macro with a reversal signal."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-25T21:45:55.417450+00:00",
+      "entry_price": 64.51,
+      "current_price": 64.51,
+      "peak_price": 64.51,
+      "trough_price": 64.51,
+      "value_eur": 89.53,
+      "initial_value_eur": 89.53,
+      "fee_paid": 0.09,
+      "tp1_done": false,
+      "invalidation": 61.28,
+      "entry_reasoning": "15m shows a medium-term UP trend (+1.95%) with price holding higher structure (21:35 close 64.54 > 21:30 close 64.43), while 5m volume spikes (367, 259) confirm the move despite 15m RSI being OVERBOUGHT; this aligns with the 'pullback entry' logic for a continuation in an uptrend, unlike BTC/ETH which are in DN macro trends."
     }
   ],
   "closed_trades": [
@@ -2058,11 +2072,11 @@
       "reasoning": "The entry thesis for a bullish BB-bounce is broken as 5m candles show consecutive lower lows (62.67 -> 62.65 -> 62.59 -> 62.50) with expanding volume on the final drop, confirming structural weakness against the flat-up 15m trend assumption."
     }
   ],
-  "total_trades": 140,
+  "total_trades": 141,
   "win_rate": 40.28776978417266,
   "total_pnl_eur": -54.81,
   "total_pnl_percent": -10.96,
-  "total_fees_paid_eur": 31.320000000000043,
+  "total_fees_paid_eur": 31.410000000000043,
   "last_digest_date": "2026-11-25",
   "last_hold_email_ts": 1795642288.4547899,
   "cb_date": "2026-11-25",
