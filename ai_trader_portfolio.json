@@ -1,13 +1,13 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 293.7707103119509,
+  "current_cash_eur": 383.263448492078,
   "positions": [
     {
       "symbol": "BTC-EUR",
       "entry_time": "2026-11-25T08:16:03.202712+00:00",
       "entry_price": 53795.98,
-      "current_price": 55010.01,
+      "current_price": 55060.19,
       "peak_price": 55625.37,
       "trough_price": 52457.34,
       "value_eur": 63.6,
@@ -22,20 +22,6 @@
       "tp1_fee_eur": 0.14,
       "tp1_net_pnl_eur": 1.86,
       "tp1_sold_value_eur": 63.6
-    },
-    {
-      "symbol": "SOL-EUR",
-      "entry_time": "2026-11-25T21:45:55.417450+00:00",
-      "entry_price": 64.51,
-      "current_price": 64.516,
-      "peak_price": 64.992,
-      "trough_price": 63.888,
-      "value_eur": 89.53,
-      "initial_value_eur": 89.53,
-      "fee_paid": 0.09,
-      "tp1_done": false,
-      "invalidation": 61.28,
-      "entry_reasoning": "15m shows a medium-term UP trend (+1.95%) with price holding higher structure (21:35 close 64.54 > 21:30 close 64.43), while 5m volume spikes (367, 259) confirm the move despite 15m RSI being OVERBOUGHT; this aligns with the 'pullback entry' logic for a continuation in an uptrend, unlike BTC/ETH which are in DN macro trends."
     }
   ],
   "closed_trades": [
@@ -2076,20 +2062,37 @@
       "mfe_pct": 0.0,
       "mae_pct": -2.01,
       "reasoning": "The entry thesis for a bullish BB-bounce is broken as 5m candles show consecutive lower lows (62.67 -> 62.65 -> 62.59 -> 62.50) with expanding volume on the final drop, confirming structural weakness against the flat-up 15m trend assumption."
+    },
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-25T21:45:55.417450+00:00",
+      "exit_time": "2026-11-26T17:45:58.652331+00:00",
+      "entry_price": 64.51,
+      "exit_price": 64.548,
+      "pnl_eur": 0.05,
+      "pnl_pct": 0.06,
+      "fee_paid": 0.18,
+      "net_pnl_eur": -0.13,
+      "tp1_done": false,
+      "tp1_price": null,
+      "tp1_net_pnl_eur": 0.0,
+      "mfe_pct": 0.75,
+      "mae_pct": -0.96,
+      "reasoning": "[OVERLAY] STALL EXIT: 20h old at +0.1% \u2014 thesis dead, freeing capital"
     }
   ],
   "total_trades": 141,
-  "win_rate": 40.28776978417266,
-  "total_pnl_eur": -52.95,
-  "total_pnl_percent": -10.16,
-  "total_fees_paid_eur": 31.480000000000043,
+  "win_rate": 40.0,
+  "total_pnl_eur": -53.080000000000005,
+  "total_pnl_percent": -10.33,
+  "total_fees_paid_eur": 31.570000000000043,
   "last_digest_date": "2026-11-26",
-  "last_hold_email_ts": 1795711558.6491303,
+  "last_hold_email_ts": 1795715166.9555387,
   "cb_date": "2026-11-26",
   "cb_day_start_value": 447.64995661428503,
   "last_failure_email_ts": 1795714282.4065144,
   "cooldowns": {
-    "SOL-EUR": "2026-11-25T09:31:16.509410+00:00",
+    "SOL-EUR": "2026-11-26T21:45:58.652356+00:00",
     "ETH-EUR": "2026-11-20T23:31:15.192924+00:00",
     "BTC-EUR": "2026-11-24T14:52:50.978258+00:00"
   }
