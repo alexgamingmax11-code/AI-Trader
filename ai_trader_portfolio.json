@@ -1,8 +1,23 @@
 {
   "initialized_at": "2026-07-29T08:35:00.000Z",
   "starting_capital_eur": 500,
-  "current_cash_eur": 450.00620082877055,
-  "positions": [],
+  "current_cash_eur": 359.91620082877057,
+  "positions": [
+    {
+      "symbol": "SOL-EUR",
+      "entry_time": "2026-11-28T10:46:01.662460+00:00",
+      "entry_price": 64.733,
+      "current_price": 64.733,
+      "peak_price": 64.733,
+      "trough_price": 64.733,
+      "value_eur": 90.0,
+      "initial_value_eur": 90.0,
+      "fee_paid": 0.09,
+      "tp1_done": false,
+      "invalidation": 61.5,
+      "entry_reasoning": "5m candle hit lower\u2011band zone (BB%b\u22480.14) then bounced higher, 15m shows oversold RSI (39.4) and price in lower band, and daily macro is near the 30\u2011day low, aligning a bounce entry with the daily range extreme."
+    }
+  ],
   "closed_trades": [
     {
       "symbol": "BTC-EUR",
@@ -2094,11 +2109,11 @@
       "reasoning": "[OVERLAY] TRAILING STOP: -2.0% from post-TP1 peak 56382.99"
     }
   ],
-  "total_trades": 142,
+  "total_trades": 143,
   "win_rate": 40.845070422535215,
   "total_pnl_eur": -49.99000000000001,
   "total_pnl_percent": -10.0,
-  "total_fees_paid_eur": 31.830000000000044,
+  "total_fees_paid_eur": 31.920000000000044,
   "last_digest_date": "2026-11-28",
   "last_hold_email_ts": 1795861887.93824,
   "cb_date": "2026-11-28",
